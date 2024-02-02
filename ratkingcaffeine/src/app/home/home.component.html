@@ -1,6 +1,40 @@
-<div>
-    <h1>Welcome to the Home Page!</h1>
-    <p>This is a simple Angular app demonstrating routing.</p>
-    <a routerLink="/about">Go to About Page</a>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<div class="slideshow-container">
+    <div class="mySlides fade">
+        <div class="numbertext">1 / 3</div>
+        <img src="assets/4-1000x400-sarahjulianne.com.jpg" style="width:100%">
+        <div class="text">Caption Text</div>
+      </div>
+      
+      <div class="mySlides fade">
+        <div class="numbertext">2 / 3</div>
+        <img src="assets/4-1000x400-sarahjulianne.com.jpg" style="width:100%">
+        <div class="text">Caption Two</div>
+      </div>
+      
+      <div class="mySlides fade">
+        <div class="numbertext">3 / 3</div>
+        <img src="assets/4-1000x400-sarahjulianne.com.jpg" style="width:100%">
+        <div class="text">Caption Three</div>
+      </div>
+      
+      <a class="prev" (click)="plusSlides(-1)">❮</a> 
+      <a class="next" (click)="plusSlides(+1)">❯</a>
 </div>
-  
+<br>
+<div style="text-align:center">
+    <span class="dot" (click)="currentSlide(1)" #dot1></span> 
+    <span class="dot" (click)="currentSlide(2)" #dot2></span> 
+    <span class="dot" (click)="currentSlide(3)" #dot3></span> 
+</div>
+    
+
+</body>
+</html> 
