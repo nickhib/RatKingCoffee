@@ -27,14 +27,25 @@
       
       <a class="prev" (click)="plusSlides(-1)">❮</a> 
       <a class="next" (click)="plusSlides(+1)">❯</a>
-</div>
-<br>
+    </div>
 <div style="text-align:center">
     <span class="dot" (click)="currentSlide(1)" #dot1></span> 
     <span class="dot" (click)="currentSlide(2)" #dot2></span> 
     <span class="dot" (click)="currentSlide(3)" #dot3></span> 
 </div>
-    
+<div class="product-row-container">
+  <!-- Product items -->
+  <div class="product-item">
+      <img src="product1.jpg" style="width:100%">
+      <div class="text">Product 1</div>
+  </div>
+  <div class="product-item">
+      <img src="product2.jpg" style="width:100%">
+      <div class="text">Product 2</div>
+  </div>
+  <!-- Add more product items as needed -->
+</div>
+
 
 </body>
 </html> 

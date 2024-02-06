@@ -80,6 +80,35 @@ img {vertical-align: middle;}
   animation-name: fade;
   animation-duration: 1.5s;
 }
+.product-list-container {
+  max-width: 100%;
+  margin: auto;
+}
+
+.product-item {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px; /* Optional padding between products */
+  border: 1px solid #ccc; /* Optional border for each product */
+  margin-bottom: 10px; /* Optional margin between products */
+}
+ /* Add your CSS styles here */
+ .product-row-container {
+  display: flex;
+  max-width: 100%;
+  margin: auto;
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+}
+
+.product-item {
+  flex: 0 0 auto; /* Allow items to shrink or grow based on content */
+  width: 150px; /* Adjust the width of each product item */
+  height: 200px;
+  box-sizing: border-box;
+  padding: 10px; /* Optional padding between products */
+  border: 1px solid #ccc; /* Optional border for each product */
+  margin-right: 10px; /* Optional margin between products */
+}
 
 @keyframes fade {
   from {opacity: .4} 
