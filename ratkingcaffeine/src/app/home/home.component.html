@@ -25,16 +25,45 @@
         <div class="text">Caption Three</div>
       </div>
       
-      <a class="prev" (click)="plusSlides(-1)">❮</a> 
-      <a class="next" (click)="plusSlides(+1)">❯</a>
+      <a class="prev" (click)="plusSlides(-1)"></a> 
+      <a class="next" (click)="plusSlides(+1)"></a>
     </div>
 <div style="text-align:center">
     <span class="dot" (click)="currentSlide(1)" #dot1></span> 
     <span class="dot" (click)="currentSlide(2)" #dot2></span> 
     <span class="dot" (click)="currentSlide(3)" #dot3></span> 
 </div>
+
+
+<div class="carousel-container" (mousedown)="startDrag($event)" (mousemove)="drag($event)" (mouseup)="endDrag()">
+<mat-grid-list cols="4" rowHeight="2:1" class="custom-grid-list" >
+  <mat-grid-tile *ngFor="let product of products">
+    <img mat-card-image src="assets/White-coffee-bag-mockup.jpg" alt="Jimmy" width="100%">
+  </mat-grid-tile>
+
+  <mat-grid-tile *ngFor="let product of products" rowHeight="1">
+    <mat-card style="height: 100%; width: 100%">
+      <mat-card-content>
+        <a routerLink="/product">{{ product.name }}</a>
+        <p>{{ product.description }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="addToCart(product)">Add to Cart</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+</div>
+
+
+
+
+
+
+
+
 <div class="product-row-container">
-  <!-- Product items -->
+  <!-- Product items
   <div class="product-item">
       <img src="product1.jpg" style="width:100%">
       <div class="text">Product 1</div>
@@ -43,6 +72,7 @@
       <img src="product2.jpg" style="width:100%">
       <div class="text">Product 2</div>
   </div>
+  
   <!-- Add more product items as needed -->
 </div>
 

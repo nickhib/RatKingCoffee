@@ -99,6 +99,69 @@ img {vertical-align: middle;}
   margin: auto;
   overflow-x: auto; /* Enable horizontal scrolling if needed */
 }
+.grid-tile-content {
+  position: relative;
+  height: 100%;
+}
+
+.mat-card-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8); /* Optional: Add a semi-transparent background */
+}
+.custom-grid-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Adjust the number of columns as needed */
+  gap: 16px 8px; /* Adjust the values based on your desired spacing (vertical horizontal) */
+}
+
+.mat-grid-tile {
+  border-right: 1px solid black; /* Set the right border color and width */
+  border-bottom: 1px solid black; /* Set the bottom border color and width */
+  margin: 0 0 8px 16px; /* Adjust the value based on your desired horizontal and vertical spacing */
+}
+.carousel-container {
+  display: flex;
+  overflow: hidden;
+  width: 80%; /* Adjust the width based on your design */
+  margin: auto;
+  cursor: grab;
+}
+
+.custom-grid-list {
+  flex: 1;
+}
+
+.mat-grid-tile {
+  margin: 0 16px; /* Adjust the horizontal spacing between items */
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Animation */
+@keyframes carousel {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.dragging {
+  cursor: grabbing;
+}
+
+.carousel-container.dragging .custom-grid-list {
+  animation: none;
+}
+
+
+
+
+
+
+
 
 .product-item {
   flex: 0 0 auto; /* Allow items to shrink or grow based on content */
