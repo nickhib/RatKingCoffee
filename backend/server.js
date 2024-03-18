@@ -172,12 +172,224 @@ app.get('/api/data', (req, res) => {
 
 
 
-  //console.log(req.body);//error checking 
+  //////////////////////////product//////////////////////////////////////////
   app.post('/api/product', (req, res) => {
+    const {
+      name,
+      description,
+      SKU,
+      category_id,
+      inventory_id,
+      price,
+      discount_id,
+      created_at,
+      modified_at,
+      deleted_at
+  } = req.body;// declare the attributes in the body as required 
+    //then i will make the sql command = sql;
+    const sql = `
+    INSERT INTO product (
+      name, description, SKU, category_id, inventory_id, price, discount_id, created_at, modified_at, deleted_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const values = [name, description, SKU, category_id, inventory_id, price, discount_id, created_at, modified_at, deleted_at];
+    data.run(sql, values, function(err) {
+      if (err) {
+          console.error('Error inserting product:', err.message);
+          return res.status(500).send(err.message); // Send an error response
+      }
 
+    const productid = this.lastID;
+    data.get('SELECT * FROM product WHERE id = ?', [productid], (err, row) => {
+      if (err) {
+        return res.status(500).send(err.message);
+      }
 
-
+      res.status(201).json(row);
+    });
+  })
   });
+  app.get('/api/product/:id', (req, res) => {
+    const productId = req.params.id; // Extract the product ID from the URL parameters
+
+    
+    // SQL query to select a product by its ID
+    //simple sql query 
+    const sql = `
+    SELECT *
+    FROM product
+    WHERE id = ?
+    `;
+
+    data.get(sql, [productId], (err, row) => {
+        if (err) {
+            console.error('Error retrieving product:', err.message);
+            return res.status(500).send(err.message);
+        }
+        if (!row) {
+            return res.status(404).send('Product not found');
+        }
+        res.status(200).json(row);
+    });
+  });
+  //////////////////////////////////////product category/////////////////////////////
+  app.post('/api/product_category', (req, res) => {
+    const {
+      name,
+      description,
+      created_at,
+      modified_at,
+      deleted_at
+  } = req.body;
+
+  const sql = `
+  INSERT INTO product_category (
+    name, description, created_at, modified_at, deleted_at
+  ) VALUES (?, ?, ?, ?, ?)
+`;
+const values = [name, description, created_at, modified_at, deleted_at];
+
+data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM product_category WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+    });
+  });
+})
+///////////////////////////product_inventory////////////////////////////////////////////
+app.post('/api/product_inventory', (req, res) => {
+  const {
+    quantity,
+    description,
+    created_at,
+    modified_at,
+    deleted_at
+} = req.body;
+const sql = `
+  INSERT INTO product_inventory (
+    quantity, description, created_at, modified_at, deleted_at
+  ) VALUES (?, ?, ?, ?, ?)
+`;
+const values = [quantity, description, created_at, modified_at, deleted_at];
+
+data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM product_inventory WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+    });
+  });
+})
+
+/////////////////////////////////////////////discount //////////////////////////////////////
+app.post('/api/discount', (req, res) => {
+  const {
+    name,
+    description,
+    discount_precent,
+    active,
+    created_at,
+    modified_at,
+    deleted_at
+} = req.body;
+const sql = `
+  INSERT INTO discount (
+    name,description,discount_precent,active,created_at,modified_at,deleted_at
+  ) VALUES (?, ?, ?, ?, ?,? , ?)
+`;
+const values = [ name,description,discount_precent,active,created_at,modified_at,deleted_at];
+
+data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM discount WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+    });
+  });
+})
+
+//////////////////////////order detials ////////////////////////////////////////
+app.post('/api/order_details', (req, res) => {
+  const {
+    user_id,
+    total,
+    payment_id,
+    created_at,
+    modified_at
+  } = req.body;
+  const sql = `
+  INSERT INTO order_details (
+    user_id, total, payment_id, created_at, modified_at
+  ) VALUES (?, ?, ?, ?, ?)
+`;
+const values = [user_id, total, payment_id, created_at, modified_at];
+
+
+ // console.log(req.body);//error checking 
+ data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM order_details WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+  });
+});
+});
+
+////////////////////////////////order items///////////////////////////////////////////
+app.post('/api/order_items', (req, res) => {
+  const {
+    order_id, 
+    product_id, 
+    quantity,
+    created_at,
+    modified_at
+  } = req.body;
+  const sql = `
+  INSERT INTO order_items (
+    order_id, product_id, quantity, created_at, modified_at
+  ) VALUES (?, ?, ?, ?, ?)
+`;
+const values = [order_id, product_id, quantity, created_at, modified_at];
+ // console.log(req.body);//error checking 
+ data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM order_items WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+  });
+});
+});
+  /////////////////////////////////////user ////////////////////////////////
   app.post('/api/user', (req, res) => {
     const {
       username,
@@ -192,7 +404,7 @@ app.get('/api/data', (req, res) => {
       return res.status(400).json({ error: 'Missing required fields.' });
     }
     const sql = `
-    INSERT INTO products (
+    INSERT INTO users (
       username, password, first_name, last_name, telephone, created_at, modified_at
     ) VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
@@ -215,7 +427,161 @@ app.get('/api/data', (req, res) => {
     });
   });
 });
+///////////////////////////////shopping details /////////////////////////////
+app.post('/api/shopping_session', (req, res) => {
+  const {
+    user_id,
+    total,
+    created_at,
+    modified_at
+  } = req.body;
+  
+  const sql = `
+  INSERT INTO shopping_session (
+    user_id, total, created_at, modified_at
+  ) VALUES (?, ?, ?, ?)
+`;
+const values = [user_id, total, created_at, modified_at];
 
+ data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM shopping_session WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+  });
+});
+});
+///////////////////////////////// cart_items  //////////////////////////////////////////
+
+app.post('/api/cart_item', (req, res) => {
+  const {
+    session_id,
+    product_id,
+    quantity,
+    created_at,
+    modified_at
+  } = req.body;
+  
+  const sql = `
+  INSERT INTO cart_item (
+    session_id, product_id, quantity, created_at, modified_at
+  ) VALUES (?, ?, ?, ?, ?)
+`;
+const values = [session_id, product_id, quantity, created_at, modified_at];
+
+ data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM shopping_session WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+  });
+});
+});
+
+/////////////////////////////////////////////// payment_details ////////////////////////////////////////////////////////
+app.post('/api/payment_details', (req, res) => {
+  const {
+    order_id,
+    amount,
+    provider,
+    status,
+    created_at,
+    modified_at
+  } = req.body;
+  
+  const sql = `
+  INSERT INTO payment_details (
+    order_id, amount, provider, status, created_at, modified_at
+  ) VALUES (?, ?, ?, ?, ?, ?)
+`;
+const values = [order_id, amount, provider, status, created_at, modified_at];
+
+ data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM payment_details WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+  });
+});
+});
+
+////////////////////////////////////user address //////////////////////////////////////////////////
+app.post('/api/user_address', (req, res) => {
+  const {
+    user_id,
+    address_line1,
+    address_line2,
+    city,
+    postal_code,
+    country,
+    telephone,
+    mobile
+  } = req.body;
+  
+  const sql = `
+  INSERT INTO user_address (
+    user_id, address_line1, address_line2, city, postal_code, country, telephone, mobile
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+`;
+const values = [user_id, address_line1, address_line2, city, postal_code, country, telephone, mobile];
+
+ data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  const Id = this.lastID;
+  data.get('SELECT * FROM user_address WHERE id = ?', [Id], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(201).json(row);
+  });
+});
+});
+//////////////////////////////////////user payment////////////////////////////////
+app.post('/api/user_payment', (req, res) => {
+  const {
+    user_id,
+    payment_type,
+    provider,
+    account_no,
+    expire
+  } = req.body;
+  
+  const sql = `
+  INSERT INTO user_payment (
+    user_id, payment_type, provider, account_no, expire
+  ) VALUES (?, ?, ?, ?, ?)
+`;
+const values = [user_id, payment_type, provider, account_no, expire];
+
+ data.run(sql, values, function (err) {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+  res.status(201).send("User payment added successfully");
+ 
+});
+});
 
 const server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
