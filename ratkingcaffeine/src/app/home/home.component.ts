@@ -1,4 +1,6 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Product } from '../models/product.model';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +8,24 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements AfterViewInit {
+  
+  constructor(private productService: ProductService) { }
+  products2: Product[] = [];
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this.productService.getProducts().subscribe(
+      products2 => {
+        this.products2 = products2;
+      },
+      error => {
+        console.error('Error fetching products:', error);
+      }
+    );
+  }
+
   products: any[] = [
     { name: 'Product 1', description: 'stuff', imageUrl: '' },
     { name: 'Product 2', description: 'Description 2', imageUrl: 'White-coffee-bag-mockup.jpg' },
@@ -87,4 +107,5 @@ export class HomeComponent implements AfterViewInit {
     slides[this.slideIndex - 1].style.display = "block";
     dots[this.slideIndex - 1].className += " active";
   }
+  
 }

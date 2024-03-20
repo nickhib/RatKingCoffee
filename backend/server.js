@@ -1,6 +1,9 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
-
+const cors = require('cors');
+const corsOptions = {
+  origin: 'http://localhost:4200',
+};
 const app = express();
 const port = 3000;
 
@@ -21,6 +24,17 @@ data.serialize(() => {//set up database tables
       console.error(err.message);
     } else {
       console.log('product created successfully.');
+    }
+  });
+  data.run('\
+  CREATE TABLE IF NOT EXISTS home_products (\
+  id INTEGER PRIMARY KEY AUTOINCREMENT,\
+  product_id INT,\
+  FOREIGN KEY (product_id) REFERENCES product(id))', (err) => {
+    if (err) {
+      console.error('Error creating home_products table:', err.message);
+    } else {
+      console.log('home_products table created successfully');
     }
   });
   data.run('\
@@ -156,7 +170,7 @@ data.serialize(() => {//set up database tables
     }
   });
 });
-
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get('/api/data', (req, res) => {
@@ -208,29 +222,63 @@ app.get('/api/data', (req, res) => {
     });
   })
   });
-  app.get('/api/product/:id', (req, res) => {
-    const productId = req.params.id; // Extract the product ID from the URL parameters
-
-    
-    // SQL query to select a product by its ID
-    //simple sql query 
+  app.get('/api/product', (req, res) => {
+    // SQL query to select all products
     const sql = `
     SELECT *
     FROM product
-    WHERE id = ?
     `;
-
-    data.get(sql, [productId], (err, row) => {
+    data.all(sql, [], (err, rows) => { 
         if (err) {
-            console.error('Error retrieving product:', err.message);
+            console.error('Error retrieving products:', err.message);
             return res.status(500).send(err.message);
         }
-        if (!row) {
-            return res.status(404).send('Product not found');
+        if (rows.length === 0) {
+            return res.status(404).send('No products found');
         }
-        res.status(200).json(row);
+        res.status(200).json(rows);
     });
+});
+/////////////////////////////////////home-products ////////////////////////////////////////////////////////
+app.post('/api/home-products', (req, res) => {
+  const { product_id } = req.body; // Assuming product_id is sent in the request body
+
+  // Perform the database insertion operation
+  const sql = `
+    INSERT INTO home_products (product_id)
+    VALUES (?)
+  `;
+  data.run(sql, [product_id], function(err) {
+    if (err) {
+      console.error('Error inserting into home_products:', err.message);
+      return res.status(500).send('Failed to add product to home products');
+    }//status 500 means internal server error 
+    console.log('Product added to home products');
+    res.status(201).send('Product added to home products');
+    //http status code 201 means Created. "send" will send a response back to the client with a specified payload
   });
+});
+
+//use the get request to get disired information. this is using express.js
+app.get('/api/home-products', (req, res) => {//will use sql commands to get the information needed. select all in home_products
+  const sql = `
+  SELECT p.id, p.name, p.description, p.price
+  FROM home_products hp
+  JOIN product p ON hp.product_id = p.id
+  `;
+  data.all(sql, [], (err, rows) => { 
+      if (err) {
+          console.error('Error retrieving home products:', err.message);
+          return res.status(500).send(err.message);
+      }
+      if (rows.length === 0) {
+          return res.status(404).send('No home products found');
+      }
+      res.status(200).json(rows);
+  });
+});
+
+
   //////////////////////////////////////product category/////////////////////////////
   app.post('/api/product_category', (req, res) => {
     const {
