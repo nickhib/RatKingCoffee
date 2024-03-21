@@ -10,6 +10,7 @@ import { Product } from '../models/product.model';
 export class ProductService {
 
   private apiUrl = 'http://localhost:3000/api/product';
+  /* putting httpclient in the constructor will just inject our Dependency of it for the class */
   constructor(private http: HttpClient) { }
 /// Product was defined in the product model this is to make sure that we received the disired results. 
   getProducts(): Observable<Product[]> {//a method to recieve the array of products asynchronously.
@@ -17,6 +18,13 @@ export class ProductService {
   }
   createProduct(product: Product): Observable<Product> {// will add a product to the database. 
     return this.http.post<Product>(this.apiUrl, product);
+  }
+  getProductById(id: number): Observable<Product> {
+    const url = `${this.apiUrl}/?id=${id}`;/* $ is used in template literals to perform string interpolation.
+    template literals are enclosed byu backticks (' ')  instead of single or double quotes 
+    when `${}` is used inside a template literal one can embed expressions or variables within the string.
+    this allows us to insert values dynamically into the string */ 
+    return this.http.get<Product>(url);
   }
   /* at a later date
    // Method to update an existing product

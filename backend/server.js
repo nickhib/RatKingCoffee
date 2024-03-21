@@ -224,6 +224,25 @@ app.get('/api/data', (req, res) => {
   });
   app.get('/api/product', (req, res) => {
     // SQL query to select all products
+    const productId = req.query.id;
+    if (productId) {//if given an id we will return a single product with the given id 
+      const sql = `
+          SELECT *
+          FROM product 
+          WHERE id = ?
+      `;
+      data.get(sql, [productId], (err, row) => { 
+          if (err) {
+              console.error('Error retrieving product:', err.message);
+              return res.status(500).send(err.message);
+          }
+          if (!row) {
+              return res.status(404).send('Product not found');
+          }
+          res.status(200).json(row);
+      });
+    }
+      else{//else we will return all products
     const sql = `
     SELECT *
     FROM product
@@ -238,8 +257,10 @@ app.get('/api/data', (req, res) => {
         }
         res.status(200).json(rows);
     });
+      }
 });
-/////////////////////////////////////home-products ////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// home-products ////////////////////////////////////////////////////////
 app.post('/api/home-products', (req, res) => {
   const { product_id } = req.body; // Assuming product_id is sent in the request body
 

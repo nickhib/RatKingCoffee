@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Product } from '../models/product.model';
 import { ProductService } from '../services/product.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -9,7 +9,7 @@ import { ProductService } from '../services/product.service';
 })
 export class HomeComponent implements AfterViewInit {
   
-  constructor(private productService: ProductService) { }
+  constructor(private router: Router ,private productService: ProductService) { }
   products2: Product[] = [];
   ngOnInit(): void {
     this.loadProducts();
@@ -25,6 +25,14 @@ export class HomeComponent implements AfterViewInit {
       }
     );
   }
+  goToProductDetail(productId: number): void {
+    this.router.navigate(['/product', productId]);
+  }
+
+
+
+
+
 
   products: any[] = [
     { name: 'Product 1', description: 'stuff', imageUrl: '' },
