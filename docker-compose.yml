@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - '3000:3000'
+    volumes:
+      - './backend:/usr/src/backend'
+  angular:
+    build: ./ratkingcaffeine
+    ports:
+      - '4200:4200'
+    volumes:
+      - './ratkingcaffeine:/usr/src/app'
+    depends_on:
+      - backend

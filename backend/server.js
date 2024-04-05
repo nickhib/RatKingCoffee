@@ -2,7 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: 'http://localhost:4200', 
 };
 const app = express();
 const port = 3000;
@@ -172,6 +172,12 @@ data.serialize(() => {//set up database tables
 });
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200'); // Replace with your allowed origin
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS'); // Allow DELETE, POST, GET
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 app.get('/api/data', (req, res) => {
   data.all('SELECT * FROM data', (err, rows) => {
@@ -558,6 +564,38 @@ const values = [session_id, product_id, quantity, created_at, modified_at];
   });
 });
 });
+app.get('/api/cart_item', (req, res) => {
+  const sql = `
+  SELECT cart_item.*, product.name AS product_name, product.price, product.description
+  FROM cart_item
+  JOIN product ON cart_item.product_id = product.id
+  `;
+  data.all(sql, [], (err, rows) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    // Send the response with the fetched data
+    res.status(200).json(rows);
+  });
+});
+app.delete('/api/cart_item/:id',(req, res) => {
+  console.log('Cart item deleted successfully');
+  const cartItemId = req.params.id;
+  const sqlDelete = `
+    DELETE FROM cart_item
+    WHERE id = ?
+  `;
+
+  data.run(sqlDelete, [cartItemId], (err) => {
+    if (err) {
+      console.error('Error deleting cart item:', err);
+      return res.status(500).send(err.message);
+    }
+    console.log('Cart item deleted successfully');
+    res.status(200).json({ message: 'Cart item deleted successfully.' });
+  });
+});
+
 
 /////////////////////////////////////////////// payment_details ////////////////////////////////////////////////////////
 app.post('/api/payment_details', (req, res) => {

@@ -12,6 +12,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CartComponent } from './cart/cart.component';
+import { FormsModule } from '@angular/forms';
+import { CheckOutPageComponent } from './check-out-page/check-out-page.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ProductsComponent } from './products/products.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +25,8 @@ import { CartComponent } from './cart/cart.component';
     NavigationComponent,
     ProductPageComponent,
     CartComponent,
+    CheckOutPageComponent,
+    ProductsComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +35,10 @@ import { CartComponent } from './cart/cart.component';
     MatGridListModule,
     MatCardModule,
     BrowserAnimationsModule,
-    NgbModule
+    NgbModule,
+    FormsModule,
+    MatStepperModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
