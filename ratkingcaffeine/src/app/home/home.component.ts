@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Product } from '../models/product.model';
+import { Product,homeProduct } from '../models/product.model';
 import { ProductService } from '../services/product.service';
 import { Router } from '@angular/router';
 @Component({
@@ -10,13 +10,13 @@ import { Router } from '@angular/router';
 export class HomeComponent implements AfterViewInit {
   
   constructor(private router: Router ,private productService: ProductService) { }
-  products2: Product[] = [];
+  products2: homeProduct[] = [];
   ngOnInit(): void {
     this.loadProducts();
   }
 
   loadProducts(): void {
-    this.productService.getProducts().subscribe(
+    this.productService.getHomeProducts().subscribe(
       products2 => {
         this.products2 = products2;
       },

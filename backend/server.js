@@ -29,7 +29,7 @@ data.serialize(() => {//set up database tables
   data.run('\
   CREATE TABLE IF NOT EXISTS home_products (\
   id INTEGER PRIMARY KEY AUTOINCREMENT,\
-  product_id INT,\
+  product_id INTEGER,\
   FOREIGN KEY (product_id) REFERENCES product(id))', (err) => {
     if (err) {
       console.error('Error creating home_products table:', err.message);
@@ -170,6 +170,7 @@ data.serialize(() => {//set up database tables
     }
   });
 });
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use((req, res, next) => {
@@ -228,6 +229,26 @@ app.get('/api/data', (req, res) => {
     });
   })
   });
+  app.get('/api/allproduct', (req, res) => {
+    // SQL query to retrieve the total count of products
+    const countSql = `
+        SELECT COUNT(*) AS totalProducts
+        FROM product
+    `;
+    data.get(countSql, (err, result) => {
+        if (err) {
+            console.error('Error retrieving total products:', err.message);
+            return res.status(500).send(err.message);
+        }
+        const totalProducts = result.totalProducts || 0; // Extract totalProducts from the result
+        res.status(200).json({ totalProducts });
+    });
+});
+
+
+
+
+
   app.get('/api/product', (req, res) => {
     // SQL query to select all products
     const productId = req.query.id;
@@ -269,13 +290,15 @@ app.get('/api/data', (req, res) => {
 ///////////////////////////////////// home-products ////////////////////////////////////////////////////////
 app.post('/api/home-products', (req, res) => {
   const { product_id } = req.body; // Assuming product_id is sent in the request body
+  console.log(req.body);
 
   // Perform the database insertion operation
   const sql = `
     INSERT INTO home_products (product_id)
     VALUES (?)
   `;
-  data.run(sql, [product_id], function(err) {
+  const values = [ product_id ];
+  data.run(sql, values, function(err) {
     if (err) {
       console.error('Error inserting into home_products:', err.message);
       return res.status(500).send('Failed to add product to home products');

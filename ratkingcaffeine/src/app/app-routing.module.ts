@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'product/:id', component: ProductPageComponent},
   { path: 'products', component: ProductsComponent},
+  { path: 'products/:page', component: ProductsComponent },
   { path: 'cart', component: CartComponent},
   { path: 'cart/checkout', component: CheckOutPageComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // Default route

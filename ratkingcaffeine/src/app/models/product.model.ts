@@ -13,7 +13,7 @@ export interface Product {
   }
 
   //a model interface to represent the structure of the home product data
-export interface HomeProduct {//can add more attributes as needed in the furture. 
+export interface homeProduct {//can add more attributes as needed in the furture. 
   id: number;
   name: string;
   description: string;
