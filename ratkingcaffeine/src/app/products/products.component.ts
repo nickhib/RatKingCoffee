@@ -13,27 +13,26 @@ export class ProductsComponent implements OnInit {
   currentPage: number = 1; 
   totalPages: number = 0;
   pageSize: number = 12; 
-  totalProductSubscription!: Subscription;
   constructor(private router: Router , private route: ActivatedRoute ,private productService: ProductService) { }
 
   ngOnInit(): void {
-    this.loadProducts(this.currentPage);
+    this.route.params.subscribe(params => {
+      this.currentPage = +params['page']; // '+' is used to convert string to number
+      this.loadProducts(this.currentPage);
+    });
 
-    this.totalProductSubscription = this.productService.getTotalProduct().subscribe(
-      totalPages => {
-        // Store the total number of pages
-        this.totalPages = totalPages;
-      },
-      error => {
-        console.error('Error fetching total pages:', error);
-      }
-    );
+this.productService.getTotalProduct().subscribe(
+  totalPages => {
+    this.totalPages = totalPages;
+  },
+  error => {
+    console.error('Error fetching total pages:', error);
+  }
+);
   }
   
   loadProducts(page: number): void {
-    const startId = (page - 1) * this.pageSize + 1;
-    const endId = startId + this.pageSize - 1;
-    this.productService.getrangeProducts(startId, endId).subscribe(
+    this.productService.getrangeProducts(page).subscribe(
       products2 => {
         this.products2 = products2;
       },
@@ -41,10 +40,12 @@ export class ProductsComponent implements OnInit {
         console.error('Error fetching products:', error);
       }
     );
+    console.log(this.products2);
   }
   
   goToProductDetail(productId: number): void {
-    this.router.navigate(['/product', productId]);
+    console.log(productId);
+    this.router.navigate(['/product/', productId]);
   }
   onPageChange(page: number): void {
     const nextPage = this.currentPage + page;
@@ -54,10 +55,16 @@ export class ProductsComponent implements OnInit {
     }
   }
   
-  ngOnDestroy(): void {
-    this.totalProductSubscription.unsubscribe();
-  }
+
   getPages(): number[] {
-    return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+    return Array.from({ length: (Math.ceil(this.totalPages/10) )}, (_, index) => index + 1);
   }
+  roundedTotalPages(): number {
+    return Math.ceil(this.totalPages / 10);
+  }
+  calculateNextPage(): number | null {
+    const roundedTotalPages = this.roundedTotalPages();
+    return this.currentPage === roundedTotalPages ? null : this.currentPage + 1;
+  }
+  
 }

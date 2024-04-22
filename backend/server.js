@@ -286,6 +286,30 @@ app.get('/api/data', (req, res) => {
     });
       }
 });
+
+app.get('/api/productRange/:pageNumber(\\d+)', (req, res) => {
+  // SQL query to select products for a specific page
+  const pageNumber = req.params.pageNumber;
+  const pageSize = 10;
+  const offset = (pageNumber - 1) * pageSize;
+  const sql = `
+    SELECT *
+    FROM product
+    LIMIT ${pageSize} OFFSET ${offset}
+  `;
+  
+  data.all(sql, (err, rows) => {
+    if (err) {
+      // Handle error
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+      return;
+    }
+    
+    res.json(rows);
+  });
+});
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// home-products ////////////////////////////////////////////////////////
 app.post('/api/home-products', (req, res) => {

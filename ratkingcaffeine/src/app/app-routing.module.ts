@@ -9,11 +9,11 @@ import { CheckOutPageComponent } from './check-out-page/check-out-page.component
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent },
-  { path: 'product/:id', component: ProductPageComponent},
-  { path: 'products', component: ProductsComponent},
+  { path: 'product/:id', component: ProductPageComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'cart/checkout', component: CheckOutPageComponent },
+  { path: 'products', component: ProductsComponent },
   { path: 'products/:page', component: ProductsComponent },
-  { path: 'cart', component: CartComponent},
-  { path: 'cart/checkout', component: CheckOutPageComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // Default route
 ];
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient , HttpParams} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,throwError } from 'rxjs';
 import { Product,homeProduct } from '../models/product.model';
-
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,23 +12,28 @@ export class ProductService {
   private apiUrl = 'http://localhost:3000/api/product';
   private apiUrl2 = 'http://localhost:3000/api/home-products';
   private apiUrl3 = 'http://localhost:3000/api/allproduct';
+  private apiUrl4 = 'http://localhost:3000/api/productRange/';
   /* putting httpclient in the constructor will just inject our Dependency of it for the class */
   constructor(private http: HttpClient) { }
 /// Product was defined in the product model this is to make sure that we received the disired results. 
   getProducts(): Observable<Product[]> {//a method to recieve the array of products asynchronously.
     return this.http.get<Product[]>(this.apiUrl);// products will remain empty if nothing is in it 
   }
-  getrangeProducts(startId: number, endId: number): Observable<Product[]> {//a method to recieve the array of products asynchronously.
-    let params = new HttpParams()
-    .set('startId', startId.toString())
-    .set('endId', endId.toString());
-    return this.http.get<Product[]>(this.apiUrl, { params: params });// products will remain empty if nothing is in it 
+  getrangeProducts(page: number): Observable<Product[]> {//a method to recieve the array of products asynchronously.
+    const url = `${this.apiUrl4}${page}`;
+    return this.http.get<Product[]>(url);// products will remain empty if nothing is in it 
   }
   createProduct(product: Product): Observable<Product> {// will add a product to the database. 
     return this.http.post<Product>(this.apiUrl, product);
   }
   getTotalProduct(): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl3}`);
+    return this.http.get<{ totalProducts: number }>('http://localhost:3000/api/allproduct').pipe(
+      map(response => response.totalProducts),
+      catchError(error => {
+        console.error('Error fetching total product:', error);
+        return throwError(error);
+      })
+    );
   }
   getProductById(id: number): Observable<Product> {
     const url = `${this.apiUrl}/?id=${id}`;/* $ is used in template literals to perform string interpolation.
