@@ -5,10 +5,22 @@
   .nav-container {
     display: flex;
     align-items: center;
-    background-color: #333;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, #817f7f, #424242);
+    position: sticky;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    padding: 10px 20px;
+    top: 0;
+    z-index: 1000;
     gap: 5vh;
   }
 
+#logo img {
+  margin-left: 10vh;
+    height: 40px; /* Adjust this to match your navigation bar’s height */
+    width: auto;  /* Maintains the image’s aspect ratio */
+    display: block; /* Removes any unwanted spacing below the image */
+}
   .home-anchor{
     margin-left: 4vh;
   }
@@ -20,4 +32,51 @@
     color: white;
     text-decoration: none;
   }
+
+
+
+  .nav-links {
+    display: flex;
+    /* flex enables flexbox layout */
+    gap: 30px;
+    /* adds a 30 pixel gab between child elements */
+}
+/* create a hover effect on link items through css */
+.nav-item {
+    font-family: 'Roboto', sans-serif;
+    /* sets the font for the text inside nav-item elements  */
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-item:hover {
+    color: #deb314;
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #deb314;
+    bottom: -4px;
+    left: 0;
+    transition: width 0.3s ease;
+}
+
+.nav-item:hover::after {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+}
   

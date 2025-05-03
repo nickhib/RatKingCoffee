@@ -6,10 +6,15 @@ import { ProductPageComponent } from './product-page/product-page.component';
 import { ProductsComponent } from './products/products.component';
 import { CartComponent } from './cart/cart.component';
 import { CheckOutPageComponent } from './check-out-page/check-out-page.component';
-import { LoginComponent } from './login/login.component';
+import { AccountComponent } from './account/account.component';
+import { SignupComponent } from './account/signup/signup.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'account', 
+    component: AccountComponent,
+    children: [
+      { path: 'signup', component: SignupComponent},
+    ] },
   { path: 'about', component: AboutComponent },
   { path: 'product/:id', component: ProductPageComponent },
   { path: 'cart', component: CartComponent },
