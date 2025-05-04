@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-check-out-page',
-  templateUrl: './check-out-page.component.html',
-  styleUrls: ['./check-out-page.component.css']
+    selector: 'app-check-out-page',
+    templateUrl: './check-out-page.component.html',
+    styleUrls: ['./check-out-page.component.css'],
+    standalone: false
 })
 export class CheckOutPageComponent {
   firstFormGroup!: FormGroup;

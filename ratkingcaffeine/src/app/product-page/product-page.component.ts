@@ -6,9 +6,10 @@ import { Order } from '../models/order.model';
 import { OrderService } from '../services/order.service';
 
 @Component({
-  selector: 'app-product-page',
-  templateUrl: './product-page.component.html',
-  styleUrls: ['./product-page.component.css',]
+    selector: 'app-product-page',
+    templateUrl: './product-page.component.html',
+    styleUrls: ['./product-page.component.css',],
+    standalone: false
 })
 export class ProductPageComponent implements OnInit {
   

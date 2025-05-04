@@ -3,9 +3,10 @@ import { Product,homeProduct } from '../models/product.model';
 import { ProductService } from '../services/product.service';
 import { Router } from '@angular/router';
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    standalone: false
 })
 export class HomeComponent implements AfterViewInit {
   
