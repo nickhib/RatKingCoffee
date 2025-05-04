@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { faHome, faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'app-navigation',
     templateUrl: './navigation.component.html',
@@ -7,5 +7,7 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class NavigationComponent {
-
+  faHome = faHome;
+  faUser = faUser;
+  faShoppingCart = faShoppingCart;
 }
