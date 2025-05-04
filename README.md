@@ -1,4 +1,4 @@
-# ecommerce-full-stack
+# ecommerce-full-stack - under development
 
 Next steps: implement O Auth
 
