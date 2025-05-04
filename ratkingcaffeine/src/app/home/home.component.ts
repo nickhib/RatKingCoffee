@@ -15,7 +15,7 @@ export class HomeComponent implements AfterViewInit {
   ngOnInit(): void {
     this.loadProducts();
   }
-
+  currentYear = new Date().getFullYear();
   loadProducts(): void {
     this.productService.getHomeProducts().subscribe(
       products2 => {
