@@ -18,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProductsComponent } from './products/products.component';
 import { LoginComponent } from './login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgOptimizedImage } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +40,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserAnimationsModule,
     FormsModule,
     MatStepperModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgOptimizedImage
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,27 +3,27 @@
    <div id = "navigation-container" class="nav-container">
     <div id="logo" class="">
         <a routerLink="/home">
-            <img src="assets/ratking.png" alt="Sarah Julianne Logo">
+            <img [ngSrc]="mainLogo" height="40" width="25" alt="RatKingLogo">
         </a>
     </div>
     <div id="filler" class="nav-space">
 
     </div>
         <div id="home" class="home-anchor" class="nav-links">
-        <a routerLink="/home" class="nav-item"><p>Home</p></a>
+        <a [routerLink]="homePage" class="nav-item"><p>Home</p></a>
         </div>
         <div class="nav-links">
-        <a routerLink="/products/1" class="nav-item"><p>Products</p></a>
+        <a [routerLink]="productsPage" class="nav-item"><p>Products</p></a>
         </div>
         <div class="nav-links">
-        <a routerLink="/about" class="nav-item"><p>About</p></a>
+        <a [routerLink]="aboutPage" class="nav-item"><p>About</p></a>
     </div>
     <div id="filler" class="nav-space">
 
     </div>
     <div>
-        <a  href="/cart" role="button" style="margin-right: 4vh; margin-top: 5px; margin-bottom: 5px;"><fa-icon [icon]="faShoppingCart"> </fa-icon> Cart</a>
-        <a  href="/cart" role="button" style="margin-right: 4vh; margin-top: 5px; margin-bottom: 5px;"><fa-icon [icon]="faUser"></fa-icon> Account</a>
+        <a  href="/cart" role="button" class="nav-item user_features"><fa-icon [icon]="faShoppingCart"> </fa-icon> Cart</a>
+        <a  href="/cart" role="button" class="nav-item user_features"><fa-icon [icon]="faUser"></fa-icon> Account</a>
     </div>
     </div>
   

@@ -53,6 +53,16 @@
     transition: color 0.3s ease;
 }
 
+
+
+.user_features {
+
+  margin-right: 4vh; 
+  margin-top: 5px; 
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
 .nav-item:hover {
     color: #deb314;
 }
