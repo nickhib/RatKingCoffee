@@ -4,12 +4,18 @@ import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
 import { Order } from '../models/order.model';
 import { OrderService } from '../services/order.service';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-product-page',
     templateUrl: './product-page.component.html',
+    imports: [
+    BrowserModule,
+    FormsModule,
+    ],
     styleUrls: ['./product-page.component.css',],
-    standalone: false
+    standalone: true
 })
 export class ProductPageComponent implements OnInit {
   
@@ -48,26 +54,24 @@ export class ProductPageComponent implements OnInit {
   {
     this.currentvalue++;
   }
-  addToCart(Product_id: number)
-  {
-    const orderitem: Order = {
-      session_id: 123,
-      product_id: Product_id,
-      quantity: this.currentvalue, // Assuming you have a default quantity or you get it from somewhere
-      created_at: this.currentDate, // Replace with the actual timestamp or date when the item is added to the cart
-      modified_at: this.currentDate // Replace with the actual timestamp or date when the item is modified
+addToCart(Product_id?: number) {
+  if (Product_id === undefined) return; // Skip if undefined
 
-    }
-    this.orderService.addCartItem(orderitem).subscribe(
-      (response) => {
-        console.log('Item added to cart successfully:', response);
-        // Optionally, you can handle the success response here
-      },
-      (error) => {
-        console.error('Error adding item to cart:', error);
-        // Optionally, you can handle the error here
-      }
-    );
+  const orderitem: Order = {
+    session_id: 123,
+    product_id: Product_id,
+    quantity: this.currentvalue,
+    created_at: this.currentDate,
+    modified_at: this.currentDate,
+  };
 
+ this.orderService.addCartItem(orderitem).subscribe(
+  (response) => {
+    console.log('Item added to cart successfully:', response);
+  },
+  (error) => {
+    console.error('Error adding item to cart:', error);
   }
+);
+}
 }

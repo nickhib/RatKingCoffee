@@ -1,22 +1,36 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Product,homeProduct } from '../models/product.model';
-import { ProductService } from '../services/product.service';
+//import { ProductService } from '../services/product.service';
+import { CommonModule } from '@angular/common';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
+    imports: [
+      CommonModule,
+          CommonModule,
+    MatStepperModule,
+    MatInputModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    
+    ],
     styleUrls: ['./home.component.css'],
-    standalone: false
+    standalone: true
 })
 export class HomeComponent implements AfterViewInit {
-  
-  constructor(private router: Router ,private productService: ProductService) { }
-  products2: homeProduct[] = [];
-  ngOnInit(): void {
+  constructor(private router: Router){};
+  //constructor(private router: Router ,private productService: ProductService) { }
+  //products2: homeProduct[] = [];
+  /*ngOnInit(): void {
     this.loadProducts();
-  }
+  }*/
   currentYear = new Date().getFullYear();
-  loadProducts(): void {
+  /*loadProducts(): void {
     this.productService.getHomeProducts().subscribe(
       products2 => {
         this.products2 = products2;
@@ -25,7 +39,7 @@ export class HomeComponent implements AfterViewInit {
         console.error('Error fetching products:', error);
       }
     );
-  }
+  }*/
   goToProductDetail(productId: number): void {
     this.router.navigate(['/product', productId]);
   }

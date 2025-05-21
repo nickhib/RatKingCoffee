@@ -45,10 +45,10 @@
         </button>
       </div>
       <div style = "margin-top: 50px;margin-left: 100px; flex: 1;" *ngIf="product">
-        <h2 style = "margin-left: 10px;">{{ product.name }}</h2>
-        <p style = "margin-left: 10px;">${{ product.price }}</p>
+        <h2 style = "margin-left: 10px;">{{ product?.name }}</h2>
+        <p style = "margin-left: 10px;">${{ product?.price }}</p>
         <hr style = " width: 50%;">
-        <p style = "margin-right: 10px; height: 100px;">{{ product.description }}</p>
+        <p style = "margin-right: 10px; height: 100px;">{{ product?.description }}</p>
         <hr style = " width: 50%;">
         <div class="d-flex align-items-center mb-3">
         <div class="input-group mb-3">
@@ -61,7 +61,7 @@
             <button id="increment_quantity" (click) ="increment()"class="btn btn-outline-secondary" type="button">&plus;</button>
           </div>
         </div>
-        <button class="btn btn-primary" type="button" (click) = "addToCart(product.id)">add to Cart</button>
+        <button class="btn btn-primary" type="button" (click) = "addToCart(product?.id)">add to Cart</button>
         </div>
         
 

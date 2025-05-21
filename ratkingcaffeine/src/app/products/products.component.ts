@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
     selector: 'app-products',
     templateUrl: './products.component.html',
     styleUrls: ['./products.component.css'],
-    standalone: false
+    standalone: true
 })
 export class ProductsComponent implements OnInit {
   products2: Product[] = [];

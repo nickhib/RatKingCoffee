@@ -1,16 +1,56 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { ProductPageComponent } from './product-page/product-page.component';
-import { ProductsComponent } from './products/products.component';
-import { CartComponent } from './cart/cart.component';
-import { CheckOutPageComponent } from './check-out-page/check-out-page.component';
-import { AccountComponent } from './account/account.component';
-import { SignupComponent } from './account/signup/signup.component';
-const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'account', 
+
+import {  Routes } from '@angular/router';
+
+//import { CartComponent } from './cart/cart.component';
+//import { CheckOutPageComponent } from './check-out-page/check-out-page.component';
+
+export const routes: Routes = [
+  { path: 'home', loadComponent:() => import('./home/home.component').then(mod=>mod.HomeComponent) },
+    {
+    path: 'account',
+    loadComponent: () => import('./account/account.component').then(mod => mod.AccountComponent),
+    children: [
+      {
+        path: 'signup',
+        loadComponent: () => import('./account/signup/signup.component').then(mod => mod.SignupComponent)
+      }
+    ]
+  },
+  {
+    path: 'about',
+    loadComponent: () => import('./about/about.component').then(mod => mod.AboutComponent)
+  },
+  {
+    path: 'product/:id',
+    loadComponent: () => import('./product-page/product-page.component').then(mod => mod.ProductPageComponent)
+  },
+  /*
+  {
+    path: 'cart',
+    loadComponent: () => import('./cart/cart.component').then(mod => mod.CartComponent)
+  },
+  {
+    path: 'cart/checkout',
+    loadComponent: () => import('./check-out-page/check-out-page.component').then(mod => mod.CheckOutPageComponent)
+  },*/
+  {
+    path: 'products',
+    loadComponent: () => import('./products/products.component').then(mod => mod.ProductsComponent)
+  },
+  {
+    path: 'products/:page',
+    loadComponent: () => import('./products/products.component').then(mod => mod.ProductsComponent)
+  },
+ // {
+ //   path: '',
+ ///   redirectTo: '/home',
+ //   pathMatch: 'full'
+//  }
+  
+];
+/*
+
+{ path: 'account', 
     component: AccountComponent,
     children: [
       { path: 'signup', component: SignupComponent},
@@ -22,10 +62,5 @@ const routes: Routes = [
   { path: 'products', component: ProductsComponent },
   { path: 'products/:page', component: ProductsComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // Default route
-];
+*/
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
