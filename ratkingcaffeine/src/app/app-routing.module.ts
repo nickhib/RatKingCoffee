@@ -41,11 +41,11 @@ export const routes: Routes = [
     path: 'products/:page',
     loadComponent: () => import('./products/products.component').then(mod => mod.ProductsComponent)
   },
- // {
- //   path: '',
- ///   redirectTo: '/home',
- //   pathMatch: 'full'
-//  }
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  }
   
 ];
 /*

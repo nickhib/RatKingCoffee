@@ -7,17 +7,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SlideshowComponent } from '../slideshow/slideshow.component';
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     imports: [
-      CommonModule,
-          CommonModule,
+    CommonModule,
+    CommonModule,
     MatStepperModule,
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    
+    SlideshowComponent,
     ],
     styleUrls: ['./home.component.css'],
     standalone: true
@@ -29,7 +30,7 @@ export class HomeComponent implements AfterViewInit {
   /*ngOnInit(): void {
     this.loadProducts();
   }*/
-  currentYear = new Date().getFullYear();
+  currentYear = new Date().getFullYear();// get current year
   /*loadProducts(): void {
     this.productService.getHomeProducts().subscribe(
       products2 => {
@@ -100,35 +101,10 @@ export class HomeComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
-    this.showSlides(this.slideIndex);
   }
 
-  plusSlides(n: number) {
-    this.showSlides(this.slideIndex += n);
-  }
 
-  currentSlide(n: number) {
-    this.showSlides(this.slideIndex = n);
-  }
 
-  showSlides(n: number) {
-    let i;
-    const slides = document.getElementsByClassName("mySlides") as HTMLCollectionOf<HTMLElement>;
-    const dots = [this.dot1.nativeElement, this.dot2.nativeElement, this.dot3.nativeElement];
 
-    if (n > slides.length) { this.slideIndex = 1; }
-    if (n < 1) { this.slideIndex = slides.length; }
 
-    for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-    }
-
-    for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-    }
-
-    slides[this.slideIndex - 1].style.display = "block";
-    dots[this.slideIndex - 1].className += " active";
-  }
-  
 }

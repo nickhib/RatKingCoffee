@@ -1,16 +1,7 @@
 * {box-sizing: border-box}
 body {font-family: Verdana, sans-serif; margin:0}
-.mySlides {display: none}
 img {vertical-align: middle;}
 
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1000px;
-  height: 400px;
-  position: relative;
-  margin: auto;
-  border: 2px solid red;
-}
 
 /* Next & previous buttons */
 .prev, .next {
@@ -121,13 +112,7 @@ img {vertical-align: middle;}
   border-bottom: 1px solid black; /* Set the bottom border color and width */
   margin: 0 0 8px 16px; /* Adjust the value based on your desired horizontal and vertical spacing */
 }
-.carousel-container {
-  display: flex;
-  overflow: hidden;
-  width: 80%; /* Adjust the width based on your design */
-  margin: auto;
-  cursor: grab;
-}
+
 
 .custom-grid-list {
   flex: 1;
@@ -138,24 +123,10 @@ img {vertical-align: middle;}
   transition: transform 0.5s ease-in-out;
 }
 
-/* Animation */
-@keyframes carousel {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
 
 .dragging {
   cursor: grabbing;
 }
-
-.carousel-container.dragging .custom-grid-list {
-  animation: none;
-}
-
 
 
 
