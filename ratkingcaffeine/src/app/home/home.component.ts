@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SlideshowComponent } from '../slideshow/slideshow.component';
+import { HighlightedItemsComponent } from '../highlighted-items/highlighted-items.component';
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -19,6 +20,7 @@ import { SlideshowComponent } from '../slideshow/slideshow.component';
     MatFormFieldModule,
     ReactiveFormsModule,
     SlideshowComponent,
+    HighlightedItemsComponent,
     ],
     styleUrls: ['./home.component.css'],
     standalone: true

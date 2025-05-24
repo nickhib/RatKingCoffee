@@ -4,8 +4,6 @@ import { timer, Subscription } from 'rxjs';
 
 interface Slides {
   title: string;
-  rating: number;
-  status: string;
   description: string;
   imageUrl: string;
 }
@@ -25,17 +23,13 @@ export class SlideshowComponent implements OnInit, OnDestroy {
   constructor(private cdRef: ChangeDetectorRef) {}
 slides: Slides[] = [
 {
-      title: "The Duke's Son: Re",
-      rating: 90,
-      status: "Ongoing",
-      description: "A National Treasure—a hero who rightfully deserves everyone’s respect...",
+      title: "Ethiopian Sunrise Blend: 95%",
+      description: "A vibrant, fruity coffee with floral notes, perfect for a refreshing morning boost...",
       imageUrl: "assets/image1.jpg"
 },
 {
-      title: "The Duke's Son: Re",
-      rating: 90,
-      status: "Ongoing",
-      description: "A National Treasure—a hero who rightfully deserves everyone’s respect...",
+      title: "Colombian Dark Roast: 88%",
+      description: "Rich and bold, this full-bodied brew is ideal for espresso lovers and afternoon pick-me-ups...",
       imageUrl: "assets/image2.jpg"
 },
 ];
