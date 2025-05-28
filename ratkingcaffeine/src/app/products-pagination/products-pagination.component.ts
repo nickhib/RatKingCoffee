@@ -1,10 +1,7 @@
 import { Component , OnInit} from '@angular/core';
-import { Product } from '../models/product.model';
-import { ProductsPaginationComponent } from '../products-pagination/products-pagination.component';
-import { ProductFilterComponent } from '../product-filter/product-filter.component';
-import { ProductService } from '../services/product.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {PageEvent,MatPaginatorModule} from '@angular/material/paginator';
+import { start } from '@popperjs/core';
+import { CommonModule } from '@angular/common';
 interface products {
   title: string;
   description: string;
@@ -21,23 +18,22 @@ interface products {
   sku?: string;
 }
 @Component({
-    selector: 'app-products',
-    templateUrl: './products.component.html',
-    imports: [
-      ProductsPaginationComponent,
-      ProductFilterComponent,
-    ],
-    styleUrls: ['./products.component.css'],
-    standalone: true
+  selector: 'app-products-pagination',
+  imports: [
+    MatPaginatorModule,
+    CommonModule,
+  ],
+  templateUrl: './products-pagination.component.html',
+  styleUrl: './products-pagination.component.css'
 })
-export class ProductsComponent implements OnInit {
-  currentYear = new Date().getFullYear();
-  pageIndex: number =1;
+export class ProductsPaginationComponent implements OnInit {
+
+
   testProducts: products[] = [
   {
     title: "Espresso Roast",
     description: "Rich, caramelly espresso blend with a bold flavor profile.",
-    imageUrl: "https://example.com/images/espresso.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 12.99,
     category: "Whole Bean",
     id: "coffee001",
@@ -52,7 +48,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "French Roast",
     description: "Dark roasted with smoky, bold undertones.",
-    imageUrl: "https://example.com/images/french-roast.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 13.49,
     category: "Ground",
     id: "coffee002",
@@ -67,7 +63,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Colombian Medium Roast",
     description: "Smooth and balanced with hints of caramel and cocoa.",
-    imageUrl: "https://example.com/images/colombian.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 11.99,
     category: "Whole Bean",
     id: "coffee003",
@@ -82,7 +78,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Cold Brew Blend",
     description: "Specially crafted blend for smooth cold brews.",
-    imageUrl: "https://example.com/images/cold-brew.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 14.99,
     category: "Ground",
     id: "coffee004",
@@ -97,7 +93,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Vanilla Flavored Coffee",
     description: "Medium roast with natural vanilla flavoring.",
-    imageUrl: "https://example.com/images/vanilla.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 13.99,
     category: "Flavored",
     id: "coffee005",
@@ -112,7 +108,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Hazelnut Blend",
     description: "Nutty and sweet with a warm hazelnut finish.",
-    imageUrl: "https://example.com/images/hazelnut.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 12.49,
     category: "Flavored",
     id: "coffee006",
@@ -127,7 +123,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Italian Roast",
     description: "Intensely dark roasted for a full-bodied, bold cup.",
-    imageUrl: "https://example.com/images/italian.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 13.25,
     category: "Whole Bean",
     id: "coffee007",
@@ -142,7 +138,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Breakfast Blend",
     description: "Mild and smooth, perfect for your morning routine.",
-    imageUrl: "https://example.com/images/breakfast.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 11.49,
     category: "Ground",
     id: "coffee008",
@@ -157,7 +153,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Decaf House Blend",
     description: "Same great flavor without the caffeine.",
-    imageUrl: "https://example.com/images/decaf.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 12.75,
     category: "Decaf",
     id: "coffee009",
@@ -172,7 +168,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Pumpkin Spice",
     description: "Limited edition seasonal favorite with warm spices.",
-    imageUrl: "https://example.com/images/pumpkin.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 14.50,
     category: "Flavored",
     id: "coffee010",
@@ -187,7 +183,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Guatemalan Single Origin",
     description: "Bright acidity with hints of chocolate and spice.",
-    imageUrl: "https://example.com/images/guatemala.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 15.99,
     category: "Single Origin",
     id: "coffee011",
@@ -202,7 +198,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Ethiopian Light Roast",
     description: "Floral notes with bright citrus and tea-like body.",
-    imageUrl: "https://example.com/images/ethiopia.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 16.49,
     category: "Single Origin",
     id: "coffee012",
@@ -217,7 +213,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Mocha Java Blend",
     description: "Classic blend with rich body and earthy undertones.",
-    imageUrl: "https://example.com/images/mocha-java.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 13.99,
     category: "Blends",
     id: "coffee013",
@@ -232,7 +228,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Caramel Drizzle",
     description: "Sweet caramel flavor in a smooth, medium roast base.",
-    imageUrl: "https://example.com/images/caramel.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 12.99,
     category: "Flavored",
     id: "coffee014",
@@ -247,7 +243,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Sumatra Dark Roast",
     description: "Earthy and herbal with a rich, lingering finish.",
-    imageUrl: "https://example.com/images/sumatra.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 14.25,
     category: "Single Origin",
     id: "coffee015",
@@ -262,7 +258,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Toffee Nut Crunch",
     description: "Toffee nut flavor with sweet, roasted notes.",
-    imageUrl: "https://example.com/images/toffee.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 13.75,
     category: "Flavored",
     id: "coffee016",
@@ -277,7 +273,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Dark Chocolate Mocha",
     description: "Decadent blend with dark chocolate notes.",
-    imageUrl: "https://example.com/images/mocha.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 14.75,
     category: "Flavored",
     id: "coffee017",
@@ -292,7 +288,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Organic Peruvian Roast",
     description: "Smooth and clean with nutty, cocoa tones. Certified organic.",
-    imageUrl: "https://example.com/images/peru.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 15.49,
     category: "Organic",
     id: "coffee018",
@@ -307,7 +303,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Instant Coffee Pack",
     description: "Convenient single-serve instant coffee sticks.",
-    imageUrl: "https://example.com/images/instant.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 10.99,
     category: "Instant",
     id: "coffee019",
@@ -322,7 +318,7 @@ export class ProductsComponent implements OnInit {
   {
     title: "Holiday Spice Blend",
     description: "Warm blend of cinnamon, nutmeg, and clove flavors.",
-    imageUrl: "https://example.com/images/holiday.jpg",
+    imageUrl: "assets/image3.jpg",
     price: 13.25,
     category: "Seasonal",
     id: "coffee020",
@@ -337,66 +333,41 @@ export class ProductsComponent implements OnInit {
 ];
 
 
-    ngOnInit(): void 
-    {
+  length = this.testProducts.length;
+  pageSize = 10;
+  pageIndex = 0;
+   hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  disabled = false;
+  startIndex = 1;
+  endIndex = 10 ;
+  pageSizeOptions = [5, 10, 25];
+  pageEvent: PageEvent = {
+    pageIndex: 0,
+    pageSize: 10,
+    length: 50,
+    
+  };
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.updatePaginationProducts();
+  }
+  displayedProducts: products[] = [];
+  updatePaginationProducts() {
+    this.startIndex = (this.pageIndex*this.pageSize);
+    this.endIndex = (this.pageIndex+1)*this.pageSize;
+    //slice should take a range of products.
+    this.displayedProducts = this.testProducts.slice(this.startIndex, this.endIndex);
+  }
+  ngOnInit(){
+  this.startIndex = (this.pageIndex*this.pageSize);
+    this.endIndex = (this.pageIndex+1)*this.pageSize;
+    this.displayedProducts = this.testProducts.slice(this.startIndex, this.endIndex);
+}
 
-    };
-  /*products2: Product[] = [];
-  currentPage: number = 1; 
-  totalPages: number = 0;
-  pageSize: number = 12; 
-  constructor(private router: Router , private route: ActivatedRoute ,private productService: ProductService) { }
 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.currentPage = +params['page']; // '+' is used to convert string to number
-      this.loadProducts(this.currentPage);
-    });
-
-this.productService.getTotalProduct().subscribe(
-  totalPages => {
-    this.totalPages = totalPages;
-  },
-  error => {
-    console.error('Error fetching total pages:', error);
-  }
-);
-  }
-  
-  loadProducts(page: number): void {
-    this.productService.getrangeProducts(page).subscribe(
-      products2 => {
-        this.products2 = products2;
-      },
-      error => {
-        console.error('Error fetching products:', error);
-      }
-    );
-    console.log(this.products2);
-  }
-  
-  goToProductDetail(productId: number): void {
-    console.log(productId);
-    this.router.navigate(['/product/', productId]);
-  }
-  onPageChange(page: number): void {
-    const nextPage = this.currentPage + page;
-    if (nextPage >= 1 && nextPage <= this.totalPages) {
-      this.currentPage = nextPage;
-      this.loadProducts(this.currentPage);
-    }
-  }
-  
-
-  getPages(): number[] {
-    return Array.from({ length: (Math.ceil(this.totalPages/10) )}, (_, index) => index + 1);
-  }
-  roundedTotalPages(): number {
-    return Math.ceil(this.totalPages / 10);
-  }
-  calculateNextPage(): number | null {
-    const roundedTotalPages = this.roundedTotalPages();
-    return this.currentPage === roundedTotalPages ? null : this.currentPage + 1;
-  }
-*/  
 }

@@ -1,4 +1,38 @@
 
+
+  <!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+  <!-- paginator from angular material has issues with flex box so switch to grid instead -->
+<div class="page-wrapper" >
+  <div>
+      <app-product-filter></app-product-filter>
+  </div>
+
+ <div >
+    <app-products-pagination></app-products-pagination>
+  </div>
+
+
+</div>
+<footer>
+  <footer>© {{ currentYear }} RatKingCaffeine</footer>
+</footer>
+</body>
+</html> 
+  
+  
+  
+  
+  
+
+
+
+<!---
 <div class="card mb-3" style="max-width: 540px;"*ngFor="let product of products2">
     <div class="row g-0"(click)="goToProductDetail(product.id)">
       <div class="col-md-4">
@@ -27,4 +61,4 @@
       </li>
     </ul>
   </nav>
-  
+-->

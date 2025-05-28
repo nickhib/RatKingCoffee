@@ -1,0 +1,24 @@
+html,body {
+  font-family: Verdana
+   sans-serif;
+   top: 0;
+   margin:0;
+   background-color: rgb(40, 40, 40);
+   z-index: 0;
+  }
+  footer {
+  z-index: 1;
+  color: white;
+   background-color: rgb(40, 40, 40);
+}
+.page-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  background-color: rgb(40, 40, 40);
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+

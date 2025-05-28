@@ -18,6 +18,7 @@ import { BrowserModule } from '@angular/platform-browser';
     standalone: true
 })
 export class ProductPageComponent implements OnInit {
+
   
   openModal() {
     const modalImage = document.querySelector('#modalImage') as HTMLImageElement;
