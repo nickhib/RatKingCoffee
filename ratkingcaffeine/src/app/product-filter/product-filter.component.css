@@ -1,0 +1,37 @@
+h2 {
+    color: white;
+}
+.filter_section {
+    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* space between items */
+}
+.filter_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.filter_wrapper {
+    width: 21rem;
+}
+.filter-title {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  text-align: left;
+}
+
+.filter-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #444;
+  cursor: pointer;
+}
+
+.filter-options {
+    padding-left: 10px;
+}

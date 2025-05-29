@@ -1,1 +1,22 @@
-<p style="color: white;">product-filter works!</p>
+
+<div class="filter_wrapper">
+    <div class="filter_header">
+    <h2>FILTERS</h2>
+    <button (click)="clearFilters()">CLEAR</button>
+    </div>
+    <div  *ngFor ="let filter of filters" style="color: white;" >
+        <span>{{ filter.label}}</span> <span (click) ="toggleFilter(filter)">{{ filter.expanded ? '-' : '+' }}</span>
+    <!--$ event contains type = Type of the event so "change"., target=	The DOM element that triggered the event , target.checked = whether the checkbox is checked , target.value =The value of the input -->
+    <div *ngIf="filter.expanded">
+        <!--ngModel has two way binding this means if we change the value here it changes in typescript logic and vice versa very useful-->
+        <label *ngFor="let option of filter.options">
+            <input type="checkbox"
+            [(ngModel)]="filter.selected[option]"
+            (change)="toggleSelected(filter, option, $event)"
+            />
+            {{option}}
+        </label>
+
+    </div>
+    </div>
+</div>
