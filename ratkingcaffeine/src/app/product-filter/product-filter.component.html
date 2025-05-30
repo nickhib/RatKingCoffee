@@ -4,19 +4,30 @@
     <h2>FILTERS</h2>
     <button (click)="clearFilters()">CLEAR</button>
     </div>
+    <hr>
     <div  *ngFor ="let filter of filters" style="color: white;" >
-        <span>{{ filter.label}}</span> <span (click) ="toggleFilter(filter)">{{ filter.expanded ? '-' : '+' }}</span>
+        <div class="label-wrapper">
+        <span>{{ filter.label}}</span> 
+        <span class="toggle-icon" [class.expanded]="filter.expanded" (click) ="toggleFilter(filter)">{{ filter.expanded ? '-' : '+' }}</span>
+        </div>
     <!--$ event contains type = Type of the event so "change"., target=	The DOM element that triggered the event , target.checked = whether the checkbox is checked , target.value =The value of the input -->
-    <div *ngIf="filter.expanded">
+    <!-- below i use angular binding for animation in css -->
+    <div class="filter-options"
+  [class.expanded]="filter.expanded"
+  [style.maxHeight]="filter.expanded ? '400px' : '0'" >
         <!--ngModel has two way binding this means if we change the value here it changes in typescript logic and vice versa very useful-->
-        <label *ngFor="let option of filter.options">
+        <div class="checkbox_wrapper">
+        <div *ngFor="let option of filter.options" >
+        <label class="checkbox2">
             <input type="checkbox"
             [(ngModel)]="filter.selected[option]"
             (change)="toggleSelected(filter, option, $event)"
             />
-            {{option}}
+           <span> {{option}}</span>
         </label>
-
+        </div>
+</div>
     </div>
+    <hr>
     </div>
 </div>

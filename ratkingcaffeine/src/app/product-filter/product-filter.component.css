@@ -1,28 +1,27 @@
 h2 {
     color: white;
 }
-.filter_section {
-    margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* space between items */
-}
+
 .filter_header {
     display: flex;
     justify-content: space-between;
+    flex-direction: row;
     align-items: center;
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.filter_header h2 {
+  margin: 0;
+}
+.filter_header button {
+    background-color: rgb(40, 40, 40);
+    color: white;
+    border: rgb(40, 40, 40);;
 }
 .filter_wrapper {
     width: 21rem;
 }
-.filter-title {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  font-weight: bold;
-  color: white;
-  text-align: left;
-}
+
 
 .filter-item {
   display: flex;
@@ -31,7 +30,49 @@ h2 {
   border-bottom: 1px solid #444;
   cursor: pointer;
 }
-
+.toggle-icon {
+  font-size: 24px;
+  display: inline-block;
+  /* sets the transition of the symbol so the change doesnt seem instant*/
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.toggle-icon.expanded {
+  padding-bottom: 20px;
+  transform: rotate(360deg); /* rotates the symbol  */
+}
 .filter-options {
     padding-left: 10px;
+    overflow: hidden;
+     transition: max-height 0.3s ease, padding 0.3s ease;
 }
+.checkbox_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 16px;
+}
+/*changing the distance between label and checkbox*/
+label input[type="checkbox"] {
+  margin-right: 16px; 
+  border-radius: 12px;
+}
+
+hr {
+  color: white;
+  background-color: white;
+  height: 3px;
+}
+.label-wrapper {
+  display: flex;
+  flex-direction: row;
+  /* space-between will push them as far apart as possible */
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.plus {
+  right: 10px;
+}
+

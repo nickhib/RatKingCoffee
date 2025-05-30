@@ -335,7 +335,7 @@ export class ProductsPaginationComponent implements OnInit {
 
   length = this.testProducts.length;
   pageSize = 10;
-  pageIndex = 0;
+  pageIndex = 0; 
    hidePageSize = false;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
