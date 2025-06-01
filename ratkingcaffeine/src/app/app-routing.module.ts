@@ -21,7 +21,7 @@ export const routes: Routes = [
     loadComponent: () => import('./about/about.component').then(mod => mod.AboutComponent)
   },
   {
-    path: 'product/:id',
+    path: 'products/:id',
     loadComponent: () => import('./product-page/product-page.component').then(mod => mod.ProductPageComponent)
   },
   /*
@@ -37,10 +37,7 @@ export const routes: Routes = [
     path: 'products',
     loadComponent: () => import('./products/products.component').then(mod => mod.ProductsComponent)
   },
-  {
-    path: 'products/:page',
-    loadComponent: () => import('./products/products.component').then(mod => mod.ProductsComponent)
-  },
+
   {
     path: '',
     redirectTo: '/home',

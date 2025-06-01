@@ -1,25 +1,21 @@
 import { Component,OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../services/product.service';
-import { Product } from '../models/product.model';
-import { Order } from '../models/order.model';
-import { OrderService } from '../services/order.service';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-
 @Component({
     selector: 'app-product-page',
     templateUrl: './product-page.component.html',
     imports: [
-    BrowserModule,
+    CommonModule,
     FormsModule,
     ],
     styleUrls: ['./product-page.component.css',],
     standalone: true
 })
 export class ProductPageComponent implements OnInit {
-
+ngOnInit(): void {
   
+  }
+/*  
   openModal() {
     const modalImage = document.querySelector('#modalImage') as HTMLImageElement;
     const mainPhoto = document.querySelector('#carouselExampleCaptions .carousel-item.active img') as HTMLImageElement;
@@ -74,5 +70,5 @@ addToCart(Product_id?: number) {
     console.error('Error adding item to cart:', error);
   }
 );
-}
+}*/
 }

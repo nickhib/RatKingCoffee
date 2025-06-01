@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,Input, Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormsModule,FormGroup, FormControl, NonNullableFormBuilder, CheckboxRequiredValidator } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 interface Filter {
@@ -16,35 +16,21 @@ interface Filter {
   styleUrl: './product-filter.component.css'
 })
 export class ProductFilterComponent {
-  filters: Filter [] = [
-    {
-      label: 'Product Type',
-      options: ['Coffee Bag', 'Coffee Rounds', 'Ready to Drink','Bundle','Bags','Other'],
-      expanded: false,
-      selected: {} 
-    },
-    {
-      label: 'Roast Style',
-      options: ['Dark Roast', 'Medium Roast', 'Light Roast'],
-      expanded: false,
-      selected: {} 
-    },
-    {
-      label: 'Texture',
-      options: ['Ground', 'Whole Bean', 'Rounds','On-the-go','Ready to Drink'],
-      expanded: false,
-      selected: {} 
-    },
+@Input() filters: Filter[] = [];//takes data from parent component.
+@Output() filtersChange = new EventEmitter<Filter[]>();
 
-  ];
   toggleFilter(filter: any) 
   {
     filter.expanded = !filter.expanded;
+  }
+  filterhasChange() {
+     this.filtersChange.emit([...this.filters]);
   }
   toggleSelected(filter: any, option: string,  event: Event) {
       const inputElement = event.target as HTMLInputElement;
       const checked = inputElement.checked;
       filter.selected[option] = checked;
+      this.filterhasChange();
   }
   clearFilters() {
     this.filters.forEach(filter => {
@@ -53,5 +39,6 @@ export class ProductFilterComponent {
         filter.selected[option] = false;
       });
     });
+    this.filterhasChange();
   }
 }

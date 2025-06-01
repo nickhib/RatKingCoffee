@@ -22,6 +22,6 @@ export class NavigationComponent {
   //property binding variables. 
   mainLogo = "./assets/ratking.png";
   aboutPage = "/about";
-  productsPage = "/products/1";
+  productsPage = "/products";
   homePage = "/home";
 }

@@ -15,11 +15,18 @@
                aria-label="Select page">
 </mat-paginator>
 <div>
+<div *ngIf="displayedProducts.length === 0">
+    <div>
+        <h3 style="color: white;">  No products found.</h3>
+    </div>
+</div>
     <div *ngFor="let product of displayedProducts" class="card" >
+         <a [routerLink]="['/products', product.id]">
        <div class="cardleft">
         <img [src]="product.imageUrl" alt="">
         <h3 style="color: white;">{{ product.title }}</h3>
         </div> 
+        </a>
         <div class="cardright">
             <h2 style="color: white;">Product Discription</h2>
             <p>{{ product.description}}</p>

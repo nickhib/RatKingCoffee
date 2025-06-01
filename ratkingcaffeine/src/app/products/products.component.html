@@ -10,11 +10,14 @@
   <!-- paginator from angular material has issues with flex box so switch to grid instead -->
 <div class="page-wrapper" >
   <div>
-      <app-product-filter></app-product-filter>
+      <app-product-filter 
+      [filters]="filters"
+      (filtersChange)="filterUpdated($event)"
+      ></app-product-filter>
   </div>
 
  <div >
-    <app-products-pagination></app-products-pagination>
+    <app-products-pagination [testProducts]="testProducts" [filters]="filters"></app-products-pagination>
   </div>
 
 
