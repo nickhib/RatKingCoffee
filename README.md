@@ -11,7 +11,7 @@ There have been a lot of updates!
   ![image](https://github.com/user-attachments/assets/e079491d-236f-45fb-a29d-39fa56a28500)
   Adding in animations here and there,<br>
 Next steps: <br>
-more ui overhauls:
-  user, profile, cart, product page, about
-Implement O Auth for users
+more ui overhauls:<br>
+  user, profile, cart, product page, about<br>
+Implement O Auth for users<br>
 Redesign api and integrate it back into the stack
