@@ -1,0 +1,10 @@
+<div>
+<div *ngIf="testProducts">
+    <div *ngFor="let product of testProducts">
+  <h1>{{ product.title }}</h1>
+  <p>${{ product.price }}</p>
+  <p>{{ product.description }}</p>
+  </div>
+</div>
+
+</div>

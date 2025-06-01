@@ -1,32 +1,9 @@
 import { Component, Input , OnInit,OnChanges, SimpleChanges} from '@angular/core';
 import {PageEvent,MatPaginatorModule} from '@angular/material/paginator';
-import { start } from '@popperjs/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Product, Filter } from '../models/product.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-interface products {
-  title: string;
-  description: string;
-  imageUrl: string;
-  price: number;
-  category?: string; 
-  id?: string;
-  rating?: number;
-  stock?: number;  
-  isAvailable?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-  discountPercentage?: number;
-  sku?: string;
-}
-interface Filter {
-  label: string;
-  options: string[];
-  expanded: boolean;
-  selected: {
-    [optionName: string]: boolean;
-  };
-}
+
 @Component({
   selector: 'app-products-pagination',
   imports: [
@@ -39,8 +16,8 @@ interface Filter {
 })
 export class ProductsPaginationComponent implements OnInit,OnChanges {
 
-// consider using signals instead. 
-  @Input() testProducts: products[] = [];
+//uses model to export product interface, then we import it here and use it like so
+  @Input() testProducts: Product[] = [];
   @Input() filters: Filter[] = [];
 
   length = this.testProducts.length;
@@ -66,7 +43,7 @@ export class ProductsPaginationComponent implements OnInit,OnChanges {
     this.pageIndex = e.pageIndex;
     this.updatePaginationProducts();
   }
-  displayedProducts: products[] = [];
+  displayedProducts: Product[] = [];
   updatePaginationProducts() {
     this.startIndex = (this.pageIndex*this.pageSize);
     this.endIndex = (this.pageIndex+1)*this.pageSize;

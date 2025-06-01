@@ -1,5 +1,5 @@
 import { Component ,Input, Output, EventEmitter} from '@angular/core';
-import { FormBuilder, FormsModule,FormGroup, FormControl, NonNullableFormBuilder, CheckboxRequiredValidator } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 interface Filter {
   label: string;
