@@ -4,7 +4,7 @@ There have been a lot of updates!
 2. Changed all components to be standalone and split up features for a more modular design
 3. Rehaul of home page design: 
   ui/ux has changed. adopting a new, simple, and sleek design. 
-  ![image](https://github.com/user-attachments/assets/e5b5b555-5b9e-4889-af8d-1a931d58396d)
+  ![image](https://github.com/user-attachments/assets/07537c28-0d33-4a95-ac39-f10227b98114)
 
 4. Rehaul of product page design:
   ui/ux has changed. adopting a new, simple, and sleek design. making use of a working filter.
