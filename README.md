@@ -8,7 +8,8 @@ There have been a lot of updates!
 
 4. Rehaul of product page design:<br>
   ui/ux has changed. adopting a new, simple, and sleek design. making use of a working filter.<br>
-  ![image](https://github.com/user-attachments/assets/e079491d-236f-45fb-a29d-39fa56a28500)
+  ![image](https://github.com/user-attachments/assets/9752f4aa-e8f6-4fe9-8087-fbcaa7ce04f6)
+
   Adding in animations here and there,<br>
 Next steps: <br>
 more ui overhauls:<br>
