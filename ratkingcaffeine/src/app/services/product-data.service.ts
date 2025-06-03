@@ -330,6 +330,11 @@ private products: Product[] =[
 getProducts() {
   return this.products;
 }
+getProduct(id: string)
+{
+  return this.products.find(item => item.id === id);
+}
+
 getFilter() {
   return this.filters;
 }
