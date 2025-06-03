@@ -1,12 +1,18 @@
-# ecommerce-full-stack - under development
-current branch should work<br>
-<br>
-Currently updating the whole design of the site, please refer to the branch "standalone-update" for: <br>
-Working with updated Angular and following best practices for binding, standalone component usage, and modular, more maintainable architecture.<br>
-<br>
-This also includes a rehaul of ui for homepage, product page, and more.<br>
-This version will be merged when the redesign of api is done. Or when all features are updated. 
+# ecommerce-full-stack - under development,
+There have been a lot of updates!
+1. Updated to the most recent Angular version.
+2. Changed all components to be standalone and split up features for a more modular design
+3. Rehaul of home page design: 
+  ui/ux has changed. adopting a new, simple, and sleek design. 
+  ![image](https://github.com/user-attachments/assets/07537c28-0d33-4a95-ac39-f10227b98114)
 
+4. Rehaul of product page design:<br>
+  ui/ux has changed. adopting a new, simple, and sleek design. making use of a working filter.<br>
+  ![image](https://github.com/user-attachments/assets/9752f4aa-e8f6-4fe9-8087-fbcaa7ce04f6)
 
-Next steps: implement O Auth
-redesign api 
+  Adding in animations here and there,<br>
+Next steps: <br>
+more ui overhauls:<br>
+  user, profile, cart, product page, about<br>
+Implement O Auth for users<br>
+Redesign api and integrate it back into the stack
