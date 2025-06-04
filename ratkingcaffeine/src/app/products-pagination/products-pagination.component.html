@@ -23,7 +23,7 @@
     <div *ngFor="let product of displayedProducts" class="card" >
          <a [routerLink]="['/products', product.id]">
        <div class="cardleft">
-        <img [src]="product.imageUrl" alt="">
+        <img [src]="product.imageUrl[0]" alt="">
         <h3 style="color: white;">{{ product.title }}</h3>
         </div> 
         </a>

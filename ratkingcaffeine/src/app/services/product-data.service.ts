@@ -29,7 +29,7 @@ private products: Product[] =[
  {
     title: "Espresso Roast",
     description: "Rich, caramelly espresso blend with a bold flavor profile.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg","assets/image3.jpg","assets/duke-son.jpg"],
     price: 12.99,
     category: "Whole Bean",
     id: "coffee001",
@@ -44,7 +44,7 @@ private products: Product[] =[
   {
     title: "French Roast",
     description: "Dark roasted with smoky, bold undertones.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 13.49,
     category: "Ground",
     id: "coffee002",
@@ -59,7 +59,7 @@ private products: Product[] =[
   {
     title: "Colombian Medium Roast",
     description: "Smooth and balanced with hints of caramel and cocoa.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 11.99,
     category: "Whole Bean",
     id: "coffee003",
@@ -74,7 +74,7 @@ private products: Product[] =[
   {
     title: "Cold Brew Blend",
     description: "Specially crafted blend for smooth cold brews.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 14.99,
     category: "Ground",
     id: "coffee004",
@@ -89,7 +89,7 @@ private products: Product[] =[
   {
     title: "Vanilla Flavored Coffee",
     description: "Medium roast with natural vanilla flavoring.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 13.99,
     category: "Flavored",
     id: "coffee005",
@@ -104,7 +104,7 @@ private products: Product[] =[
   {
     title: "Hazelnut Blend",
     description: "Nutty and sweet with a warm hazelnut finish.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 12.49,
     category: "Flavored",
     id: "coffee006",
@@ -119,7 +119,7 @@ private products: Product[] =[
   {
     title: "Italian Roast",
     description: "Intensely dark roasted for a full-bodied, bold cup.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 13.25,
     category: "Whole Bean",
     id: "coffee007",
@@ -134,7 +134,7 @@ private products: Product[] =[
   {
     title: "Breakfast Blend",
     description: "Mild and smooth, perfect for your morning routine.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 11.49,
     category: "Ground",
     id: "coffee008",
@@ -149,7 +149,7 @@ private products: Product[] =[
   {
     title: "Decaf House Blend",
     description: "Same great flavor without the caffeine.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 12.75,
     category: "Decaf",
     id: "coffee009",
@@ -164,7 +164,7 @@ private products: Product[] =[
   {
     title: "Pumpkin Spice",
     description: "Limited edition seasonal favorite with warm spices.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 14.50,
     category: "Flavored",
     id: "coffee010",
@@ -179,7 +179,7 @@ private products: Product[] =[
   {
     title: "Guatemalan Single Origin",
     description: "Bright acidity with hints of chocolate and spice.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 15.99,
     category: "Single Origin",
     id: "coffee011",
@@ -194,7 +194,7 @@ private products: Product[] =[
   {
     title: "Ethiopian Light Roast",
     description: "Floral notes with bright citrus and tea-like body.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 16.49,
     category: "Single Origin",
     id: "coffee012",
@@ -209,7 +209,7 @@ private products: Product[] =[
   {
     title: "Mocha Java Blend",
     description: "Classic blend with rich body and earthy undertones.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 13.99,
     category: "Blends",
     id: "coffee013",
@@ -224,7 +224,7 @@ private products: Product[] =[
   {
     title: "Caramel Drizzle",
     description: "Sweet caramel flavor in a smooth, medium roast base.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 12.99,
     category: "Flavored",
     id: "coffee014",
@@ -239,7 +239,7 @@ private products: Product[] =[
   {
     title: "Sumatra Dark Roast",
     description: "Earthy and herbal with a rich, lingering finish.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 14.25,
     category: "Single Origin",
     id: "coffee015",
@@ -254,7 +254,7 @@ private products: Product[] =[
   {
     title: "Toffee Nut Crunch",
     description: "Toffee nut flavor with sweet, roasted notes.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 13.75,
     category: "Flavored",
     id: "coffee016",
@@ -269,7 +269,7 @@ private products: Product[] =[
   {
     title: "Dark Chocolate Mocha",
     description: "Decadent blend with dark chocolate notes.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 14.75,
     category: "Whole Bean",
     id: "coffee017",
@@ -284,7 +284,7 @@ private products: Product[] =[
   {
     title: "Organic Peruvian Roast",
     description: "Smooth and clean with nutty, cocoa tones. Certified organic.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 15.49,
     category: "Dark Roast",
     id: "coffee018",
@@ -299,7 +299,7 @@ private products: Product[] =[
   {
     title: "Instant Coffee Pack",
     description: "Convenient single-serve instant coffee sticks.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 10.99,
     category: "Ready to Drink",
     id: "coffee019",
@@ -314,7 +314,7 @@ private products: Product[] =[
   {
     title: "Holiday Spice Blend",
     description: "Warm blend of cinnamon, nutmeg, and clove flavors.",
-    imageUrl: "assets/image3.jpg",
+    imageUrl: ["assets/image3.jpg"],
     price: 13.25,
     category: "Dark Roast",
     id: "coffee020",

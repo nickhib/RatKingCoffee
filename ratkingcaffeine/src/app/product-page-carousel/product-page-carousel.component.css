@@ -2,5 +2,111 @@ p {
     color: white;
 }
 h1 {
+    font-size: 1cm;
+    line-height: 1;
     color: white;
+    margin: 0;
+}
+.feature_wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 6vw;
+}
+.carousel-wrapper {
+    position: relative;
+    border-radius: 20px;
+    height: 75vh;
+    width: 32vw;
+    background-color: rgb(70, 70, 70);
+    border: 1px solid black;
+
+}
+.carousel-wrapper img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    display: block;
+    z-index: 0;
+}
+.imageContainer {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    gap: 1vw;
+    bottom: 10px;
+}
+.images {
+    height: 7vh;
+    width: 2.5vw;
+    background-color:rgb(183, 183, 183);
+}
+.imageActive {
+    border: 1px solid black;
+}
+.productinfo-wrapper {
+    line-height: 1.2;
+
+    width: 15cm;
+    max-width: 52vw;
+}
+.productinfo-wrapper h2 {
+color: white;
+padding-top: 1vh;
+
+}
+.productinfo-wrapper hr {
+    color: white;
+    width: 100%;
+}
+.productinfo-wrapper p {
+    height: 40vh;
+}
+.button-wrapper {
+    display: flex;
+    width: 5.5vw;
+    height: 4vh;
+    align-items: center;
+}
+.quantity-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 5px;
+    justify-content: space-between;
+    width: 100%;
+    
+}
+.button-wrapper input {
+    width: 2vw;
+    height: 4vh;
+    text-align: center;
+}
+.button-wrapper button {
+    border-start-end-radius: 10px;
+    width: 2vw;
+    height: 4vh;
+    font-size: 20px;
+    color: white;
+    background-color:  rgb(40, 40, 40);
+    border: white;
+}
+.add-to-cart {
+    padding-top: 5px;
+    height: 2vh;
+    width: 100%;
+}
+.add-to-cart button {
+    height: 6vh;
+    width: 100%;
+    border: 1px solid white;
+    background-color:  rgb(40, 40, 40);
+    color: white;
+}
+.add-to-cart button:hover {
+    background-color:  white;
+    color: rgb(40, 40, 40);;
 }

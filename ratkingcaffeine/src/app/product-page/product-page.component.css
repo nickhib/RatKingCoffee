@@ -3,3 +3,17 @@
     height: 100%;
     width: 100%;
 }
+
+.carousel-additives {
+    padding-top: 10vh;
+    padding-left: 3vw;
+    padding-bottom: 5vh;
+}
+.check {
+    background-color: aqua;
+    height: 10px;
+    width: 10px;
+}
+hr {
+    color: white;
+}

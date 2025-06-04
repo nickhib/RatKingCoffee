@@ -16,10 +16,24 @@ export class ProductPageCarouselComponent implements OnInit, OnChanges {
   testProduct?: Product;
   currentDate: string;
   productId: string = "";
+  currentIndex = 0;
+  quantity = 1;
+  increaseQuantity(){
+    this.quantity+=1;
+  }
+  decreaseQuantity(){
+    if(this.quantity > 1)
+      this.quantity-=1;
+  }
 constructor(private route: ActivatedRoute,private productData: ProductDataService) 
    {
     this.currentDate  = new Date().toISOString();
    }
+
+skipToImage(indexnumber: number)
+{
+  this.currentIndex = indexnumber;
+}
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
