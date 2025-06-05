@@ -1,9 +1,10 @@
-import { Component, Input,OnInit } from '@angular/core';
+import { Component, Input,OnInit, } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../models/product.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductPageCarouselComponent } from '../product-page-carousel/product-page-carousel.component';
+import { ProductPageReviewsComponent } from '../product-page-reviews/product-page-reviews.component';
 interface products {
   title: string;
   description: string;
@@ -26,12 +27,14 @@ interface products {
     FormsModule,
     CommonModule,
     ProductPageCarouselComponent ,
+    ProductPageReviewsComponent
     ],
     styleUrls: ['./product-page.component.css',],
     standalone: true
 })
 export class ProductPageComponent implements OnInit {
 @Input() testProducts: products[] = [];
+productId: string | null = null;
   
 
   
@@ -49,8 +52,8 @@ export class ProductPageComponent implements OnInit {
     this.currentDate  = new Date().toISOString();
    }
   ngOnInit(): void {
-    const productId = this.route.snapshot.paramMap.get('id');
-    console.log(productId);
+    this.productId = this.route.snapshot.paramMap.get('id');
+    console.log(this.productId);
    
     }
   }

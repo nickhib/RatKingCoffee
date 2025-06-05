@@ -1,0 +1,43 @@
+.reviews-Container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgb(40, 40, 40);
+}
+.reviews-Container h1 {
+    text-align: center;
+    color: white;
+}
+.rating-Snapshot-Wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.rating-Snapshot-Wrapper .group1 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 30vw;
+}
+.prograss-bar-outer {
+    width: 100%;
+  height: 1vh;
+  background-color: rgb(152, 152, 152);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(152, 152, 152,0.2);
+}
+.prograss-bar-inner {
+  height: 100%;
+  background-color: white;
+  width: 25%;
+}
+.progress-bar-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1vw;
+}

@@ -21,3 +21,14 @@ export interface Filter {
     [optionName: string]: boolean;
   };
 }
+export interface Review {
+  rating: number;
+  comment: string;
+  reviewer: string;
+  date: string;
+}
+
+export interface Coffee {
+  id: string;
+  reviews: Review[];
+}
