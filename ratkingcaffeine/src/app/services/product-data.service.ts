@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Product, Filter, Coffee } from '../models/product.model';
+import { Product, Filter, Coffee,Review } from '../models/product.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -432,15 +432,57 @@ coffees: Coffee[] = [
     ]
   }
 ];
-get_Total_Reviews_Count(score: number, id: string){
+getSortedReviews(id: string, sort: string) {//Sort by in pagination review component
+  const coffee =this.coffees.find(index => index.id === id);
+    if (coffee){
+      if(sort === "rating")
+      {
+        const reviewCopy =  coffee.reviews.slice();
+        return reviewCopy.sort((a, b) => b.rating - a.rating);
+        //sorts based on greater rating
+        
+      }
+      else if(sort === "date")
+      {
+        const reviewCopy =  coffee.reviews.slice();
+        return reviewCopy.sort((a, b) => { 
+          const timeA = new Date(a.date).getTime();//determines the number of milliseconds since the epoch 
+          const timeB = new Date(b.date).getTime();//sorts based off that
+          return timeB - timeA;
+        });
+      }
+      else {
+        const reviewCopy =  coffee.reviews.slice();
+        //this sorts A-Z, localeCompare returns a number based on if the string comes before or after.
+        //make sure both a and b are lowercase because this could effect the ascii
+        return reviewCopy.sort((a, b) => a.reviewer.toLowerCase().localeCompare(b.reviewer.toLowerCase()));
+      }
+    }
+  return [];
+}
+get_Total_Reviews_per_score(score: number, id: string){
   const coffee =this.coffees.find(index => index.id === id);
   if (coffee)
    return coffee.reviews.filter(index => index.rating ===score).length;
   return 0;
 }
+get_Total_Reviews (id: string)
+{
+  const coffee =this.coffees.find(index => index.id === id);
+  if (coffee)
+    return coffee.reviews.length;
+  return 0;
+}
+getReviewsById(id: string) {
+  const coffee =this.coffees.find(index => index.id === id);
+  if (coffee)
+    return coffee.reviews;
+  return [];
+}
 getProducts() {
   return this.products;
 }
+
 getProduct(id: string)
 {
   return this.products.find(item => item.id === id);
@@ -451,3 +493,4 @@ getFilter() {
 }
   constructor() { }
 }
+

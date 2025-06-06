@@ -12,6 +12,7 @@ h1 {
     flex-direction: row;
     justify-content: center;
     gap: 6vw;
+    background-color: rgb(40, 40, 40);
 }
 .carousel-wrapper {
     position: relative;

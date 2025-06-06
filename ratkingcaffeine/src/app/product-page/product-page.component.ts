@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductPageCarouselComponent } from '../product-page-carousel/product-page-carousel.component';
 import { ProductPageReviewsComponent } from '../product-page-reviews/product-page-reviews.component';
+import { ProductPageReviewsPaginationComponent } from '../product-page-reviews-pagination/product-page-reviews-pagination.component';
 interface products {
   title: string;
   description: string;
@@ -27,7 +28,8 @@ interface products {
     FormsModule,
     CommonModule,
     ProductPageCarouselComponent ,
-    ProductPageReviewsComponent
+    ProductPageReviewsComponent,
+    ProductPageReviewsPaginationComponent
     ],
     styleUrls: ['./product-page.component.css',],
     standalone: true

@@ -1,9 +1,11 @@
 <div class="reviews-Container">
+    <hr>
     <div>
         <h1>Customer Reviews</h1>
     </div>
     <div class="rating-Snapshot-Wrapper">
         <div class="group1">
+            <h2>All Ratings!</h2>
             <div class="progress-bar-wrapper">
                 <div>
                     <h3 style="color: white;">5☆</h3>
@@ -65,7 +67,22 @@
                 </div>
             </div>
         </div>
-        <div></div>
+        <div class="group2">
+            <h2>average Rating</h2>
+            <div class="progress-bar-wrapper">
+                <div>
+                    <h3 style="color: white;">{{average}}☆</h3>
+                </div>
+                <div class="prograss-bar-outer">
+                    <div class="prograss-bar-inner" [style.width.%] ="averagePercentage">
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: white;">{{totalReviews}}</h3>
+                </div>
+            </div>
+        </div>
     </div>
+    <hr> 
 
 </div>
