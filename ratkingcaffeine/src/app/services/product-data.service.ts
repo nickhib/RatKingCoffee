@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Product, Filter, Coffee,Review } from '../models/product.model';
+import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -432,6 +433,8 @@ coffees: Coffee[] = [
     ]
   }
 ];
+private reviewsChanged = new Subject<string>();
+reviewsChanged$ = this.reviewsChanged.asObservable();
 getSortedReviews(id: string, sort: string) {//Sort by in pagination review component
   const coffee =this.coffees.find(index => index.id === id);
     if (coffee){
@@ -486,6 +489,16 @@ getProducts() {
 getProduct(id: string)
 {
   return this.products.find(item => item.id === id);
+}
+addReview(id:string ,rev: Review)
+{
+  const coffee =this.coffees.find(index => index.id === id);
+  if (coffee)
+    {
+    coffee.reviews.push(rev);
+    console.log(coffee.reviews);
+    this.reviewsChanged.next(id);
+  }
 }
 
 getFilter() {

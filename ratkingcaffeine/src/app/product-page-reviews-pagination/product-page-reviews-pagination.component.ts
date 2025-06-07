@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {PageEvent,MatPaginatorModule} from '@angular/material/paginator';
 import { Product,Filter ,Review} from '../models/product.model';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 @Component({
   selector: 'app-product-page-reviews-pagination',
   imports: [
@@ -14,7 +15,7 @@ import { Product,Filter ,Review} from '../models/product.model';
   styleUrl: './product-page-reviews-pagination.component.css'
 })
 export class ProductPageReviewsPaginationComponent implements OnInit,OnChanges{
-  constructor(private route: ActivatedRoute,private productDataService: ProductDataService) {}
+  constructor(private route: ActivatedRoute,private productDataService: ProductDataService,public dialog: MatDialog) {}
   reviews: Review[] =[];
   totalReviews: number = 0;
   length = 0;
@@ -46,10 +47,6 @@ onSortChange(newSortValue: string) {
     if(this.productItem)
       this.reviews = this.productDataService.getSortedReviews(this.productItem,this.currentSort); 
   }
-  getrating(){
-
-  }
-
   ngOnInit(): void {
      const productId = this.route.snapshot.paramMap.get('id');
      
@@ -59,10 +56,25 @@ onSortChange(newSortValue: string) {
       this.totalReviews = this.productDataService.get_Total_Reviews(productId);
       this.length = this.totalReviews;
       this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
-     }
+      this.productDataService.reviewsChanged$.subscribe(changedProductId => {
+      if (changedProductId === productId) {
+          this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
+      }
+     });
+    }
      
   };
+  
   ngOnChanges(changes: SimpleChanges): void {
+      const productId = this.route.snapshot.paramMap.get('id');
+     
+     this.productItem = productId;
+     if(productId)
+     {
+      this.totalReviews = this.productDataService.get_Total_Reviews(productId);
+      this.length = this.totalReviews;
+      this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
+     }
 
   };
 }

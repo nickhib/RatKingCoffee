@@ -4,13 +4,12 @@
   <div class="paginator-title">
     <h3>User Reviews</h3>
     <label for="sort">Sort by:</label>
-<select id="sort" #sortSelect (change)="onSortChange(sortSelect.value)" >
-  <option value="rating">Rating</option>
-  <option value="date" selected>Date</option>
-  <option value="reviewer">Reviewer</option>
-</select>
+    <select id="sort" #sortSelect (change)="onSortChange(sortSelect.value)" >
+        <option value="rating">Rating</option>
+        <option value="date" selected>Date</option>
+        <option value="reviewer">Reviewer</option>
+    </select>
   </div>
-    
     <mat-paginator #paginator
                class="pagination"
                (page)="handlePageEvent($event)"
@@ -22,16 +21,15 @@
                [hidePageSize]="hidePageSize"
                [pageIndex]="pageIndex"
                aria-label="Select page">
-</mat-paginator>
+    </mat-paginator>
 </div>
 <div>
-<div *ngIf="reviews.length === 0">
-    <div>
-        <h3 style="color: white;">  No Reviews found.</h3>
+    <div *ngIf="reviews.length === 0">
+        <div>
+            <h3 style="color: white;">  No Reviews found.</h3>
+        </div>
     </div>
-</div>
     <div *ngFor="let product of reviews"  >
-       
         <div class="card">
             <div class="title">
                 <h3 style="color: white;">{{ product.reviewer }}</h3>
@@ -53,7 +51,6 @@
             </div>
         </div>
     </div>
-
       <mat-paginator #paginator
                class="pagination"
                (page)="handlePageEvent($event)"

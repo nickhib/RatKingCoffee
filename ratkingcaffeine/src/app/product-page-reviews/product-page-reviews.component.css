@@ -30,6 +30,11 @@
   overflow: hidden;
   box-shadow: inset 0 1px 3px rgba(152, 152, 152,0.2);
 }
+.group2 button {
+    background-color: rgb(40, 40, 40);
+    color: white;
+    border: rgb(40, 40, 40);
+}
 .prograss-bar-inner {
   height: 100%;
   background-color: white;

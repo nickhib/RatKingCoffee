@@ -1,0 +1,24 @@
+<button class="exit-popup" mat-icon-button (click)="dialogRef.close()">
+  ✕
+</button>
+<div class="dialog-wrapper">
+<h2>Write a Review</h2>
+
+<form (ngSubmit)="submit()">
+    <div class="form-wrapper">
+  <label>Rating:</label>
+  <input type="number" [(ngModel)]="data.rating" name="rating" min="1" max="5" required />
+
+  <label>Comment:</label>
+  <textarea [(ngModel)]="data.comment" name="comment" required></textarea>
+
+
+  <label>Your Name:</label>
+  <input type="text" [(ngModel)]="data.reviewer" name="reviewer" required />
+    
+ 
+    <button type="submit">Submit</button>
+    </div>
+
+</form>
+</div>

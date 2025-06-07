@@ -1,9 +1,11 @@
 import { Component , Input,OnInit} from '@angular/core';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { ProductDataService } from '../services/product-data.service';
+import { Review } from '../models/product.model';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { WriteReviewFormDialogComponent } from '../write-review-form-dialog/write-review-form-dialog.component';
 @Component({
   selector: 'app-product-page-reviews',
   imports: [
@@ -14,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './product-page-reviews.component.css'
 })
 export class ProductPageReviewsComponent implements OnInit{
-  constructor(private route: ActivatedRoute,private productDataService: ProductDataService) {}
+  constructor(private route: ActivatedRoute,private productDataService: ProductDataService,private dialog: MatDialog) {}
   fiveStar: number = 0;
   fourStar: number = 0;
   threeStar: number = 0;
@@ -29,10 +31,8 @@ export class ProductPageReviewsComponent implements OnInit{
   twoStarPercent: number = 0;
   oneStarPercent: number = 0;
 
-
-
-  ngOnInit(): void {
-     const productId = this.route.snapshot.paramMap.get('id');
+  getreviews(){
+         const productId = this.route.snapshot.paramMap.get('id');
      if(productId)
      {
       this.fiveStar= this.productDataService.get_Total_Reviews_per_score(5,productId) ?? 5;
@@ -56,9 +56,39 @@ export class ProductPageReviewsComponent implements OnInit{
       }
      }
 
-  
+  }
+
+  ngOnInit(): void {
+     this.getreviews();
   };
 //get_Total_Reviews_Count(score: number, id: string)
 
+
+openReviewForm(): void {
+    const dialogRef = this.dialog.open(WriteReviewFormDialogComponent, {
+      data: {}, // optionally pass data here
+      panelClass: 'dialog-wrapper'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      console.log(result);
+      if (result) {
+        const currentDate = new Date();
+        const newReview: Review = {
+          rating: result.rating,
+          comment: result.comment,
+          reviewer: result.reviewer,
+          date: currentDate.toISOString().split('T')[0]
+        }
+        const productId = this.route.snapshot.paramMap.get('id');
+        if(productId)
+        this.productDataService.addReview(productId ,newReview);
+        this.getreviews();
+        // toISOString().split('T')[0] should convert into two parts
+        // time comes in something like this "2025-06-06T22:04:00.000Z" we split at T
+      }
+    });
+  }
 
 }

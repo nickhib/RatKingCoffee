@@ -37,14 +37,6 @@ interface products {
 export class ProductPageComponent implements OnInit {
 @Input() testProducts: products[] = [];
 productId: string | null = null;
-  
-
-  
-  openModal() {
-    const modalImage = document.querySelector('#modalImage') as HTMLImageElement;
-    const mainPhoto = document.querySelector('#carouselExampleCaptions .carousel-item.active img') as HTMLImageElement;
-    modalImage.src = mainPhoto.src;
-  }
   currentDate: string;
   
   product: Product | undefined;
