@@ -1,13 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHome, faUser, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { RouterModule } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
-
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatBadgeModule} from '@angular/material/badge';
+import { CartService } from '../services/cart.service';
 @Component({
     selector: 'app-navigation',
     templateUrl: './navigation.component.html',
     imports: [
+      MatIconModule,
+      MatButtonModule,
+      MatBadgeModule,
       FontAwesomeModule,
       RouterModule,
       NgOptimizedImage,
@@ -15,13 +21,25 @@ import { NgOptimizedImage } from '@angular/common';
     styleUrls: ['./navigation.component.css'],
     standalone: true
 ,})
-export class NavigationComponent {
+export class NavigationComponent implements OnInit {
+  quantity: number = 0;
+  constructor(private cartData: CartService) {}
   faHome = faHome;
   faUser = faUser;
+
   faShoppingCart = faShoppingCart;
+
+
   //property binding variables. 
   mainLogo = "./assets/ratking.png";
   aboutPage = "/about";
   productsPage = "/products";
   homePage = "/home";
+  cartPage = "/cart";
+  ngOnInit(): void {
+    this.cartData.cartChanged$.subscribe(() => {
+      this.quantity = this.cartData.getCartQuantity();
+    });
+    this.quantity = this.cartData.getCartQuantity();
+  }
 }

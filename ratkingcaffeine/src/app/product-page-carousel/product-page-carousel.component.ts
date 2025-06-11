@@ -2,6 +2,7 @@ import { Component, OnInit,Input,OnChanges, SimpleChanges } from '@angular/core'
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductDataService } from '../services/product-data.service';
+import { CartService } from '../services/cart.service';
 import { Product } from '../models/product.model';
 
 @Component({
@@ -25,15 +26,19 @@ export class ProductPageCarouselComponent implements OnInit, OnChanges {
     if(this.quantity > 1)
       this.quantity-=1;
   }
-constructor(private route: ActivatedRoute,private productData: ProductDataService) 
+  constructor(private route: ActivatedRoute,private productData: ProductDataService,private cartData: CartService) 
    {
     this.currentDate  = new Date().toISOString();
    }
-
-skipToImage(indexnumber: number)
-{
-  this.currentIndex = indexnumber;
-}
+  addToCart() {
+    const productId = this.route.snapshot.paramMap.get('id');
+    if(productId)
+    this.cartData.addToCart(productId, this.quantity)
+  }
+  skipToImage(indexnumber: number)
+  {
+    this.currentIndex = indexnumber;
+  }
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');

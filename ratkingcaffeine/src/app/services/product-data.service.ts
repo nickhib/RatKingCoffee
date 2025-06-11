@@ -434,7 +434,11 @@ coffees: Coffee[] = [
   }
 ];
 private reviewsChanged = new Subject<string>();
+// reviewsChanged is both an observable which mean one can subscribe to it and an observer one can push to it
+//every event pushed will be a string 
 reviewsChanged$ = this.reviewsChanged.asObservable();
+//the line above should convert the subject into a plain observable, consumers can sub to it but cant call next
+// this can enforce encapsulation, only the service emits events
 getSortedReviews(id: string, sort: string) {//Sort by in pagination review component
   const coffee =this.coffees.find(index => index.id === id);
     if (coffee){

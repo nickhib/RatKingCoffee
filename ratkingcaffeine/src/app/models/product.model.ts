@@ -32,3 +32,7 @@ export interface Coffee {
   id: string;
   reviews: Review[];
 }
+export interface shoppingCart {
+  id: string;
+  quantity: number;
+}

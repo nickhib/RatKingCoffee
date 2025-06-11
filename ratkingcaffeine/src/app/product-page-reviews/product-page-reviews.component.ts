@@ -50,7 +50,7 @@ export class ProductPageReviewsComponent implements OnInit{
         this.threeStarPercent = (this.threeStar / this.totalReviews)*100;
         this.twoStarPercent = (this.twoStar / this.totalReviews)*100;
         this.oneStarPercent = (this.oneStar / this.totalReviews)*100;
-        this.average = ((totalScore/maxScore)*5);
+        this.average = Math.round(((totalScore/maxScore)*5) * 100) / 100;
         this.averagePercentage = ((totalScore/maxScore)*100)
         
       }
