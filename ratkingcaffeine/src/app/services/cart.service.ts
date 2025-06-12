@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { shoppingCart } from '../models/product.model';
+import { shoppingCart,fullCartItems } from '../models/product.model';
 import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,9 @@ export class CartService {
   getCartQuantity(): number {
     return this.cart.reduce((sum, item) => sum + item.quantity, 0);
   }
-  
-  
+  getCart()
+  {
+    return this.cart;
+  }
   constructor() { }
 }

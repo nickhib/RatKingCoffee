@@ -36,3 +36,11 @@ export interface shoppingCart {
   id: string;
   quantity: number;
 }
+export interface fullCartItems {
+  id: string;
+  quantity: number;
+  title: string;
+  price: number;
+  imageUrl: string;
+  description?: string;
+}
