@@ -30,14 +30,18 @@ hr {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 60%;
-    gap: 2vw;
+    justify-content: center;
+    width: 100%;
+    padding-left: 4vw;
+    gap: 1vw;
 }
-.title-wrapper .item {
-    flex: 1;
-}
-.title-wrapper .item2 {
+
+.item2
+{
     flex: 2;
+}
+.item {
+     flex: 1;
 }
 
 .title-wrapper h3 {
@@ -61,15 +65,18 @@ below is from the review portion
     padding-bottom: 2vh;
     gap: 1vw;
 }
-
-.title .item {
-    flex: 1;
-}
-.title .item2 {
-    flex: 2;
+.product-portion {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-sizing: border-box;
+    align-items: center;
+    width: 30vw;
+    gap: 1vw;
 }
 .title p {
     color: white;
+    margin: 0;
 }
 .card-wrapper {
     width: 100%;
@@ -90,6 +97,7 @@ below is from the review portion
 }
 h3 {
     color: white;
+    margin: 0;
 }
 .empty-cart 
 {
@@ -98,11 +106,51 @@ h3 {
 }
 .checkout-wrapper {
     width: 75%;
+    display: flex;
+    justify-content: end;
     margin: 0 auto;
 }
 .sub-Total
 {
-    text-align: right;
+    border: 2px solid white;
+    border-radius: 2vh;
+    color: white;
+    background-color: rgb(30, 30, 30);
+    height: 10vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+}
+.sub-Total:hover {
+    background-color:  white ;
+    color: black;
 }
 
+/* */
+.button-wrapper {
+    flex: 1;
+    width: 5.5vw;
+    height: 4vh;
+}
+.quantity-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-left: 5px;
+    justify-content: space-between;
+    width: 100%;
+    
+}
+.button-wrapper input {
+    width: 2vw;
+    height: 4vh;
+    text-align: center;
+}
+.button-wrapper button {
+    border-start-end-radius: 10px;
+    width: 2vw;
+    height: 4vh;
+    font-size: 20px;
+    color: white;
+    background-color:  rgb(30, 30, 30);
+    border: white;
+}
 

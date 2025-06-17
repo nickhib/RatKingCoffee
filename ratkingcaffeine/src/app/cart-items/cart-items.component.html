@@ -4,11 +4,11 @@
         <h1>Shopping Cart</h1>
     </div>
         <div class="title-wrapper">
-        <h3 class="item2">product</h3>
-        <h3 class="item"> price</h3>
-        <h3 class="item">quantity</h3>
-        <h3 class="item">total</h3>
-    </div>
+            <h3 class="item2">product</h3>
+            <h3 class="item"> price</h3>
+            <h3 class="item">quantity</h3>
+            <h3 class="item">total</h3>
+        </div>
     <hr>
     <div class ="card-wrapper">
         <div *ngIf="fullCart.length > 0; else empty">
@@ -17,16 +17,20 @@
             
             <div class="title">
                 <div class="item2">
-                <div class="title">
-                    <img [src]="product.imageUrl" alt="">
-                    <div class="title-details">
+                    <div class="product-portion">
+                        <img [src]="product.imageUrl" alt="">
+                        <div class="title-details">
                             <h3 style="color: white; margin: 0;">{{ product.title }}</h3>
                             <p>{{product.description}}</p>
+                        </div>
                     </div>
                 </div>
-                </div>
                 <h3 class="item">{{ product.price }}</h3>
-                <h3 class="item">{{ product.quantity }}</h3>
+                <div class="button-wrapper">
+                    <button (click)="decreaseQuantity(product)" [disabled]="product.quantity <= 1">-</button>
+                    <input type="text" [(ngModel)]="product.quantity" min="1">
+                    <button (click)="increaseQuantity(product)">+</button>
+                </div>
                 <h3 class="item">{{ (product.price * product.quantity) }} </h3>
             </div>
 
@@ -44,7 +48,8 @@
 
     </div>
     <div class="checkout-wrapper">
-
-        <h3 class="sub-Total">Sub-Total: {{total}}</h3>
+        <a [routerLink]="checkOutPage">
+        <button class="sub-Total">Checkout - SubTotal: ${{total}} </button>
+        </a>
     </div>
 </div>

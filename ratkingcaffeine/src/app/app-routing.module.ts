@@ -28,6 +28,10 @@ export const routes: Routes = [
     path: 'cart',
     loadComponent: () => import('./cart-page/cart-page.component').then(mod => mod.CartPageComponent)
   },
+    {
+    path: 'checkout',
+    loadComponent: () => import('./checkout-page/checkout-page.component').then(mod => mod.CheckoutPageComponent)
+  },
   /*
   {
     path: 'cart',
