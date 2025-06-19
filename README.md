@@ -35,6 +35,6 @@ The application will collect payment information, process it, and then return an
   Adding in animations here and there,<br>
 Next steps: <br>
 more ui overhauls:<br>
-  user, profile, cart, product page, about<br>
-Implement O Auth for users<br>
-Redesign api and integrate it back into the stack
+deal with potential bugs with UI, such as sizing<br>
+Update api / redesign it to work with Stripe and all other functions of the website.<br>
+Integrate Woocommerce, send receipts to users' emails on purchase<br>
