@@ -26,7 +26,6 @@ constructor(private productData: ProductDataService, private cartData: CartServi
 
 
    ngOnInit(): void {
-    this.cart = this.cartData.getCart();
     this.refreshEnrichedCart()
     for( const item of this.fullCart)
     {
@@ -42,39 +41,21 @@ constructor(private productData: ProductDataService, private cartData: CartServi
   }
   increaseQuantity(product: any){
     product.quantity= Number(product.quantity) +1;
+    this.cartData.addToCart(product.id, 1);
     this.updateSubTotal();
     //this should change the quantity of the original array as well. 
   }
   decreaseQuantity(product: any){
     if(product.quantity > 1){
       product.quantity= Number(product.quantity) -1;
+      this.cartData.addToCart(product.id, -1);
       this.updateSubTotal();
     }
   }
 
 
 private refreshEnrichedCart() {
-  this.fullCart = this.cart.map(productItem => {
-    const productData = this.productData.getProduct(productItem.id);
-    if (!productData) {
-      return {
-        id: productItem.id,
-        quantity: productItem.quantity,
-        title: 'Unknown Product',
-        price: 0,
-        imageUrl: '',
-        description: 'Product data not available'
-      };
-    }
-    return {
-      id: productItem.id,
-      quantity: productItem.quantity,
-      title: productData.title,
-      price: productData.price,
-      imageUrl: productData.imageUrl[0],
-      description: productData.description,
-    };
-  });
+  this.fullCart = this.cartData.fillcart();
 }
 
 }

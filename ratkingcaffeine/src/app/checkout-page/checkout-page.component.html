@@ -3,7 +3,7 @@
     
   <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
   <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
+    <form [formGroup]="firstFormGroup" (ngSubmit)="onContinueAsGuest()">
       <ng-template matStepLabel>Continue as Guest</ng-template>
      
       <mat-label>Enter your Email</mat-label>
@@ -16,7 +16,7 @@
     </form>
   </mat-step>
    <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
+    <form [formGroup]="secondFormGroup" (ngSubmit)="onShipTo()">
       <ng-template matStepLabel>Ship to</ng-template>
       <mat-label>First name</mat-label>
       <mat-form-field style="width: 100%;">
@@ -68,10 +68,11 @@
       </div>
     </form>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup" (ngSubmit)="onSubmit()">
     <ng-template matStepLabel>Shipping Method</ng-template>
     <mat-radio-group formControlName="shippingMethod" class="shipping-options" >
-  <mat-radio-button *ngFor="let method of shippingOptions"  class="shipping-option">
+  <mat-radio-button *ngFor="let method of shippingOptions" [value]="method.value" class="shipping-option">
     <div class="shipping-label">
 
       <div class="shipping-wrapper">
@@ -83,66 +84,34 @@
   </mat-radio-button>
 </mat-radio-group>
 
-<button mat-raised-button color="accent" class="submit-button">SUBMIT</button>
-    <button matButton matStepperPrevious>Back</button>
-    <button matButton matStepperNext>Next</button>
+<button  matStepperNext >Submit</button>
+</form>
   </mat-step>
     <mat-step>
     <ng-template matStepLabel>Payment</ng-template>
-      <form [formGroup]="checkoutForm" (ngSubmit)="onPay()">
-    <label>
-      Name
-      <input formControlName="name" placeholder="Name on card" />
-    </label>
-    <div *ngIf="checkoutForm.get('name')?.invalid && checkoutForm.get('name')?.touched">
-      Name is required.
-    </div>
-    <label>
-      Email
-      <input formControlName="email" placeholder="Email" />
-    </label>
-    <div *ngIf="checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched">
-      Valid email is required.
-    </div>
-
-
-<div #paymentElement></div>
+      <form >
+    <div #paymentElement></div>
     <div *ngIf="cardError" class="error-message">{{ cardError }}</div>
 
-    <!-- Show any general error -->
     <div *ngIf="generalError" class="error-message">{{ generalError }}</div>
 
-    <button type="submit" [disabled]="isProcessing || !checkoutForm.valid">
-      {{ isProcessing ? 'Processing…' : 'Pay ' + (total | currency) }}
+    <button type="submit" (click)="onPay($event)">
+      {{      isProcessing
+       ? 'Processing…'
+       : paymentSucceeded
+         ? 'Payment succeeded!'
+         : 'Pay ' + (total | currency) }}
     </button>
   </form>
-    <button matButton matStepperPrevious>Back</button>
-  </mat-step>
-</mat-stepper>
-
-<div class="checkout-container">
-  <h2>Checkout</h2>
-
-  <!-- Cart summary (you fill in based on your CartService) -->
-  <div *ngIf="cartItems?.length">
-    <div *ngFor="let item of cartItems">
-      <!-- Display item name, quantity, price, etc. -->
-      {{ item.name }} x {{ item.quantity }}: {{ item.price | currency }}
-    </div>
-    <div>
-      <strong>Total: {{ total | currency }}</strong>
-    </div>
-  </div>
-  <div *ngIf="!cartItems?.length">
-    <p>Your cart is empty.</p>
-  </div>
-
-  <!-- Billing form -->
-
-
-
-  <div *ngIf="paymentSucceeded" class="success-message">
-    Payment succeeded! Thank you.
+  <div 
+  *ngIf="isProcessing" 
+  class="loading-overlay"
+>
+  <div class="spinner">
+    <mat-spinner diameter="70"></mat-spinner>
+    <p>Processing your payment, please wait…</p>
   </div>
 </div>
+  </mat-step>
+</mat-stepper>
 </div>

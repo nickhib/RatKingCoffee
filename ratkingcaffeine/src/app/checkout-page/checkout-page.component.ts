@@ -4,7 +4,8 @@ import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, NgZ
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StripeService } from '../services/stripe.service';
-import { environment } from '../../environments/environment';
+import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 import { Stripe, StripeElements, StripeAddressElement,StripeCardCvcElement, StripeCardNumberElement, StripeCardExpiryElement, StripePaymentElement,Appearance } from '@stripe/stripe-js';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../services/cart.service'; 
@@ -13,7 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @Component({
   standalone: true,
   selector: 'app-checkout-page',
@@ -24,7 +25,8 @@ import {MatRadioModule} from '@angular/material/radio';
     MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './checkout-page.component.html',
   styleUrl: './checkout-page.component.css',
@@ -37,7 +39,6 @@ export class CheckoutPageComponent implements OnInit{
   @ViewChild('cardNumberElement') cardNumberElement!: ElementRef;
   @ViewChild('expireElement') expireElement!: ElementRef;
   @ViewChild('paymentElement') paymentElement!: ElementRef;
-  checkoutForm!: FormGroup;
   stripe!: Stripe | null;
   elements!: StripeElements | null;
   cvc!: StripeCardCvcElement | null;
@@ -69,6 +70,9 @@ clientSecret: string | null = null;
     zipCodeCtrl: ['', [Validators.required]],
     phoneNumber: [''],
   });
+  thirdFormGroup = this._formBuilder.group({
+    shippingMethod: ['', Validators.required]
+   })
   shippingOptions = [
   {
     value: 'economy',
@@ -87,27 +91,53 @@ clientSecret: string | null = null;
     price: 32.94,
   }
 ];
-shippingchoice: any;
 
   constructor(
-    private fb: FormBuilder,
     private stripeService: StripeService,
-    private http: HttpClient,
-    private ngZone: NgZone,
+    private router: Router,
     private cartService: CartService
   ) { }
+  onShipTo(){
+    if(this.secondFormGroup.valid){
+    console.log("Form Values:", this.secondFormGroup.value);
+    }
+    else{
+      console.log("Second form group is invalid")
+    }
+  }
+  onContinueAsGuest()
+  {
+    if(this.firstFormGroup.valid){
+      console.log("Form Values:", this.firstFormGroup.value);
+    }
+    else{
+      console.log("first form group invalid")
+    }
+
+  }
+  onSubmit(){
+    //show shipping choice
+    if(this.thirdFormGroup.valid)
+    {
+      console.log("Form Values:", this.thirdFormGroup.value);
+    }
+    else{
+      console.log("third form group invalid")
+    }
+    const selectedOption = this.shippingOptions.find(option => option.value === this.thirdFormGroup.value.shippingMethod);
+    if(selectedOption)
+    this.total += selectedOption.price;
+
+  }
 
   ngOnInit() {
-    this.checkoutForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      address: ['', Validators.required]
-    });
-    this.cartItems = this.cartService.getCart(); 
-    this.total = 24.99;     
+
+    this.cartItems = this.cartService.getFullCart(); 
+    this.total = this.cartService.getCashTotal();     
   }
 
   async ngAfterViewInit() {
+
     const appearance: Appearance = {
       theme: 'stripe',
       variables: {
@@ -135,10 +165,87 @@ shippingchoice: any;
       return;
     }
     this.elements = this.stripe.elements({ clientSecret: clientSecret, appearance});
+    this.payment = this.elements.create('payment');
+    this.payment.mount(this.paymentElement.nativeElement);
+  }
+
+  ngOnDestroy() {
+ 
+  }
+
+  async onPay(event: Event) {
+    event.preventDefault();//prevent page from reloading from form alternatively can get rid of form 
+
+    if (!this.stripe || !this.elements) return;
+
+    this.isProcessing = true;
+
+    try {
+      console.log("ASd");
+      await this.elements.submit();//validate the form fields and collect any data required for wallets 
+      const result = await this.stripe.confirmPayment({//
+        elements: this.elements,
+        confirmParams: {
+          return_url: 'http://localhost:4200/home',  // change as needed
+          payment_method_data: {
+      billing_details: {
+        name: `${this.secondFormGroup.value.firstNameCtrl! ?? ' '}' '${this.secondFormGroup.value.lastNameCtrl ?? ' '}`,
+        email: this.firstFormGroup.value.EmailCtrl,
+        phone: this.secondFormGroup.value.phoneNumber,
+        address: {
+          line1: this.secondFormGroup.value.Addressline1Ctrl,
+          city: this.secondFormGroup.value.cityCtrl,
+          state: this.secondFormGroup.value.StateCtrl,
+          postal_code: this.secondFormGroup.value.zipCodeCtrl,
+          country: this.secondFormGroup.value.countryOrRegionCtrl
+        }
+      }
+    },
+    shipping: {
+      name: `${this.secondFormGroup.value.firstNameCtrl! ?? ' '}' '${this.secondFormGroup.value.lastNameCtrl ?? ' '}`,
+      address: {
+        line1: `${this.secondFormGroup.value.Addressline1Ctrl}`,
+        city: `${this.secondFormGroup.value.cityCtrl}`,
+        state: `${this.secondFormGroup.value.StateCtrl}`,
+        postal_code: `${this.secondFormGroup.value.zipCodeCtrl}`,
+        country: `${this.secondFormGroup.value.countryOrRegionCtrl}`
+      }
+    }
+        },
+       redirect: 'if_required',
+      });
+
+      if(result.paymentIntent&&result.paymentIntent.status ==="succeeded")
+      {
+        console.log("payment succeded");
+        this.paymentSucceeded = true;
+        this.isProcessing = false;
+        setTimeout(() => {
+        alert('Payment successful!');
+        this.router.navigate(['/home']);
+}, 10);
+      }
+    if (result.error) {
+      console.error('Payment failed:', result.error.message);
+      this.isProcessing = false;
+      setTimeout(() => { alert(result.error.message)} , 10);
+    }
+  } catch (err: any) {
+    console.error('Unexpected error:', err);
+    this.isProcessing = false;
+            setTimeout(() => {
+  alert('Something went wrong!');
+}, 10);
+  }
+
+  }
+}
+
+
+
    /* this.address = this.elements.create('address',{ 
       mode : 'shipping',
       allowedCountries: ['US'],
-   
     } );
     if(this.addressInfo)
     this.address.mount(this.addressInfo.nativeElement);
@@ -148,16 +255,3 @@ shippingchoice: any;
     this.cvc.mount(this.cvcElement.nativeElement);
     this.expireDate = this.elements.create('cardExpiry');
     this.expireDate.mount(this.expireElement.nativeElement);*/
-    this.payment = this.elements.create('payment');
-    this.payment.mount(this.paymentElement.nativeElement);
-  }
-
-  ngOnDestroy() {
- 
-  }
-
-  async onPay() {
-
-  }
-
-}

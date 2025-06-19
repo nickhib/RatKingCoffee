@@ -13,9 +13,13 @@ export class StripeService {
     return await this.stripePromise;
   }
   async createPaymentIntentMock(): Promise<{ clientSecret: string }> {
-  // Fake value you'd get from a real backend
+     /*
+     please produce client secret from stripe cli
+     ./stripe payment_intents create   --amount=100   --currency=usd
+     output should have client secrete you can replace pi_xxxxxxxxx with
+     */
   return Promise.resolve({
-    clientSecret: 'pi_xxxxxxxxxxxxxxxxxxxx', // use real one when ready
+    clientSecret: 'pi_xxxxxxxxx',
   });
 }
 }
