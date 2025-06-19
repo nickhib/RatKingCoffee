@@ -22,7 +22,7 @@ adopting Angular Material components such as mat-stepper. Collects email for gue
 The application will collect payment information, process it, and then return an alert if it succeeds. The user will be redirected to the home on success.<br>
 ![image](https://github.com/user-attachments/assets/589afca9-9d31-480e-b857-96c6108267fc)<br>
 ![image](https://github.com/user-attachments/assets/528e1d3c-75a9-4b1c-b2eb-0c11f250f652)<br>
-![image](https://github.com/user-attachments/assets/30e2b7da-d86b-44c5-b75e-1c982fe28707)<br>
+![image](https://github.com/user-attachments/assets/3c379e5a-85d0-4279-9eaa-543015ecc2d4)<br>
 ![image](https://github.com/user-attachments/assets/5b750f4c-a119-4d5d-845b-c3ed756fa97e)<br>
 
 
