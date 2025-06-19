@@ -1,0 +1,156 @@
+
+html, body {
+  background-color: rgb(40,40,40);
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+.page-wrapper {
+    background-color: rgb(40,40,40);
+}
+
+.cart-wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(40,40,40);
+    align-items: center;
+    width: 75%;
+    margin: 0 auto;
+}
+hr {
+    color: white;
+     width: 100%; 
+}
+.cart-wrapper h1 {
+    color: white;
+    padding-top: 4vh;
+    text-align: center;
+}
+.title-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-left: 4vw;
+    gap: 1vw;
+}
+
+.item2
+{
+    flex: 2;
+}
+.item {
+     flex: 1;
+}
+
+.title-wrapper h3 {
+    color: white;
+}
+
+
+
+
+/* 
+below is from the review portion
+*/
+
+.title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2vh;
+    padding-left: 1vw;
+    padding-bottom: 2vh;
+    gap: 1vw;
+}
+.product-portion {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-sizing: border-box;
+    align-items: center;
+    width: 30vw;
+    gap: 1vw;
+}
+.title p {
+    color: white;
+    margin: 0;
+}
+.card-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(40,40,40);
+    margin-bottom: 4vh;
+}
+.card  {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1vw;
+    margin-bottom: 2vh;
+    background-color: rgb(30, 30, 30);
+}
+.card img {
+    object-fit: contain;
+}
+h3 {
+    color: white;
+    margin: 0;
+}
+.empty-cart 
+{
+    color: white;
+    text-align: center;
+}
+.checkout-wrapper {
+    width: 75%;
+    display: flex;
+    justify-content: end;
+    margin: 0 auto;
+}
+.sub-Total
+{
+    border: 2px solid white;
+    border-radius: 2vh;
+    color: white;
+    background-color: rgb(30, 30, 30);
+    height: 10vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+}
+.sub-Total:hover {
+    background-color:  white ;
+    color: black;
+}
+
+/* */
+.button-wrapper {
+    flex: 1;
+    width: 5.5vw;
+    height: 4vh;
+}
+.quantity-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding-left: 5px;
+    justify-content: space-between;
+    width: 100%;
+    
+}
+.button-wrapper input {
+    width: 2vw;
+    height: 4vh;
+    text-align: center;
+}
+.button-wrapper button {
+    border-start-end-radius: 10px;
+    width: 2vw;
+    height: 4vh;
+    font-size: 20px;
+    color: white;
+    background-color:  rgb(30, 30, 30);
+    border: white;
+}
+

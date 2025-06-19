@@ -1,0 +1,46 @@
+<div>
+<div *ngIf="testProduct">
+  <div class="feature_wrapper">
+  <div class="carousel-wrapper">
+    <img [src]="testProduct.imageUrl[currentIndex]" alt="">
+    <div class="imageContainer"  >
+      <div class="images" 
+      *ngFor="let image of testProduct.imageUrl; let i = index"
+      (click)="skipToImage(i);"
+      [class.imageActive]=" i === currentIndex"
+      >
+        <img [src]="testProduct.imageUrl[i]" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="productinfo-wrapper">
+    <h1>{{testProduct.title}}</h1>
+    <h2>${{testProduct.price}}</h2>
+    <hr>
+    <p>{{testProduct.description}}</p>
+     <hr>
+     <div class="quantity-wrapper">
+      <div>
+        <h2>Quantity</h2>
+      </div>
+      <div class="button-wrapper">
+     <button (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+     <input type="text" [value]="quantity">
+     <button (click)="increaseQuantity()">+</button>
+     </div>
+     
+     </div>
+     <div class="add-to-cart">
+      <button (click)="addToCart()">Add To Cart</button>
+     </div>
+
+  </div>
+
+
+
+
+  </div>
+
+</div>
+
+</div>

@@ -1,0 +1,66 @@
+<div class="feature-wrapper">
+
+<div class="paginator-wrapper">
+  <div class="paginator-title">
+    <h3>User Reviews</h3>
+    <label for="sort">Sort by:</label>
+    <select id="sort" #sortSelect (change)="onSortChange(sortSelect.value)" >
+        <option value="rating">Rating</option>
+        <option value="date" selected>Date</option>
+        <option value="reviewer">Reviewer</option>
+    </select>
+  </div>
+    <mat-paginator #paginator
+               class="pagination"
+               (page)="handlePageEvent($event)"
+               [length]="length"
+               [pageSize]="pageSize"
+               [disabled]="disabled"
+               [showFirstLastButtons]="showFirstLastButtons"
+               [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+               [hidePageSize]="hidePageSize"
+               [pageIndex]="pageIndex"
+               aria-label="Select page">
+    </mat-paginator>
+</div>
+<div>
+    <div *ngIf="reviews.length === 0">
+        <div>
+            <h3 style="color: white;">  No Reviews found.</h3>
+        </div>
+    </div>
+    <div *ngFor="let product of reviews"  >
+        <div class="card">
+            <div class="title">
+                <h3 style="color: white;">{{ product.reviewer }}</h3>
+                <h3 style="color: white;">{{ product.date }}</h3>
+            </div>
+            <div class="title2">
+                <div class="progress-bar-wrapper">
+                    <div>
+                        <h3 style="color: white;">{{ product.rating }}☆</h3>
+                    </div>
+                    <div class="prograss-bar-outer">
+                        <div class="prograss-bar-inner" [style.width.%] =" product.rating/5 *100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comments">
+                <p>{{product.comment}}</p>
+            </div>
+        </div>
+    </div>
+      <mat-paginator #paginator
+               class="pagination"
+               (page)="handlePageEvent($event)"
+               [length]="length"
+               [pageSize]="pageSize"
+               [disabled]="disabled"
+               [showFirstLastButtons]="showFirstLastButtons"
+               [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+               [hidePageSize]="hidePageSize"
+               [pageIndex]="pageIndex"
+               aria-label="Select page">
+        </mat-paginator>
+</div>

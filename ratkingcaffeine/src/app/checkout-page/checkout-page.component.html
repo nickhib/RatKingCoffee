@@ -1,0 +1,117 @@
+<div class="page-wrapper">
+
+    
+  <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup" (ngSubmit)="onContinueAsGuest()">
+      <ng-template matStepLabel>Continue as Guest</ng-template>
+     
+      <mat-label>Enter your Email</mat-label>
+      <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="Email" formControlName="EmailCtrl" required>
+      </mat-form-field>
+      <div>
+        <button matButton matStepperNext>Continue</button>
+      </div>
+    </form>
+  </mat-step>
+   <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup" (ngSubmit)="onShipTo()">
+      <ng-template matStepLabel>Ship to</ng-template>
+      <mat-label>First name</mat-label>
+      <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="First name" formControlName="firstNameCtrl" required>
+      </mat-form-field>
+      <mat-label>Last name</mat-label>
+        <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="Last name" formControlName="lastNameCtrl" required>
+      </mat-form-field>
+      <mat-label>country or region</mat-label>
+       <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="country or region" formControlName="countryOrRegionCtrl" required>
+      </mat-form-field>
+      <mat-label>Address Line 1</mat-label>
+       <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="Address line 1" formControlName="Addressline1Ctrl" required>
+      </mat-form-field>
+        <mat-label>Address Line 2</mat-label>
+       <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="Address line 2" formControlName="Addressline2Ctrl" >
+      </mat-form-field>
+      <mat-label>city</mat-label>
+       <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="City" formControlName="cityCtrl" required>
+      </mat-form-field>
+    <div class="zip_state">
+    </div>
+      <div class="zip_state">
+        <div class="state">
+        <mat-label>State</mat-label>
+       <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="State" formControlName="StateCtrl" required>
+      </mat-form-field>
+      </div>
+      <div class="zipcode">
+      <mat-label >ZIP code</mat-label>
+       <mat-form-field style="width: 100%;">
+        
+        <input  matInput placeholder="Zip code" formControlName="zipCodeCtrl" required>
+      </mat-form-field>
+      </div>
+      </div>
+      <mat-label>Phone number</mat-label>
+           <mat-form-field style="width: 100%;">
+        <input  matInput placeholder="Phone number" formControlName="phoneNumber" >
+      </mat-form-field>
+      <div>
+        <button matButton matStepperNext>Continue</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup" (ngSubmit)="onSubmit()">
+    <ng-template matStepLabel>Shipping Method</ng-template>
+    <mat-radio-group formControlName="shippingMethod" class="shipping-options" >
+  <mat-radio-button *ngFor="let method of shippingOptions" [value]="method.value" class="shipping-option">
+    <div class="shipping-label">
+
+      <div class="shipping-wrapper">
+        <div >{{ method.label }}</div>
+        <div >{{ method.price | currency }}</div>
+      </div>
+      
+    </div>
+  </mat-radio-button>
+</mat-radio-group>
+
+<button  matStepperNext >Submit</button>
+</form>
+  </mat-step>
+    <mat-step>
+    <ng-template matStepLabel>Payment</ng-template>
+      <form >
+    <div #paymentElement></div>
+    <div *ngIf="cardError" class="error-message">{{ cardError }}</div>
+
+    <div *ngIf="generalError" class="error-message">{{ generalError }}</div>
+
+    <button type="submit" (click)="onPay($event)">
+      {{      isProcessing
+       ? 'Processing…'
+       : paymentSucceeded
+         ? 'Payment succeeded!'
+         : 'Pay ' + (total | currency) }}
+    </button>
+  </form>
+  <div 
+  *ngIf="isProcessing" 
+  class="loading-overlay"
+>
+  <div class="spinner">
+    <mat-spinner diameter="70"></mat-spinner>
+    <p>Processing your payment, please wait…</p>
+  </div>
+</div>
+  </mat-step>
+</mat-stepper>
+</div>

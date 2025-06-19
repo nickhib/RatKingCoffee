@@ -1,0 +1,49 @@
+
+html, body {
+  background-color: rgb(40,40,40);
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+.page-wrapper {
+    background-color: rgb(40,40,40);
+    height: 100%;
+    width: 100%;
+}
+
+.cart-wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(40,40,40);
+    align-items: center;
+    height: 100%;
+    width: 75%;
+    margin: 0 auto;
+}
+hr {
+    color: white;
+     width: 100%; 
+}
+.cart-wrapper h1 {
+    color: white;
+    padding-top: 4vh;
+    text-align: center;
+}
+.title-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 60%;
+    gap: 2vw;
+}
+.title-wrapper .item {
+    flex: 1;
+}
+.title-wrapper .item2 {
+    flex: 2;
+}
+
+.title-wrapper h3 {
+    color: white;
+}

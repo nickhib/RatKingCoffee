@@ -56,11 +56,10 @@
 
 
 .user_features {
-
-  margin-right: 4vh; 
-  margin-top: 5px; 
-  margin-bottom: 5px;
-  font-size: 14px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  gap: 1vw;
 }
 
 .nav-item:hover {
@@ -89,4 +88,8 @@
         gap: 15px;
     }
 }
-  
+.cart_item {
+  position: absolute;
+  margin: 0;
+  color: white;
+}

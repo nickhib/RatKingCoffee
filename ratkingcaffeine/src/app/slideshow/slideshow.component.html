@@ -1,0 +1,20 @@
+
+
+      <div class="slideShowContainer">
+        <h1 >{{slides[currentIndex].title}}</h1>
+        <p>{{slides[currentIndex].description}}</p>
+        <div class="image-overlay">
+         <img [src]="slides[currentIndex].imageUrl" alt="">
+         </div>
+         <div>
+         </div>
+        <div class="dotContainter">
+            <span
+             *ngFor="let slide of slides; let i = index"
+      (click)="skipToSlide(i);"
+      [class.dotActive]=" i === currentIndex"
+      class="dot">
+            </span>
+          
+        </div>
+      </div>

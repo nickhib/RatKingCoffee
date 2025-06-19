@@ -1,0 +1,33 @@
+.pagination {
+    width: 100%;
+    background-color: rgb(40, 40, 40);;
+}
+.feature_wrapper {
+     background-color: rgb(40, 40, 40);
+}
+.card {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    height: 340px;
+    overflow: hidden;
+    border-radius: 12px;
+    background-color: rgb(40, 40, 40);
+    border: solid  rgb(40, 40, 40);;
+}
+.card:hover {
+    background-color: rgb(50, 50, 50);
+}
+.cardleft {
+    width: 180px;
+    color: white;
+}
+.cardright  {
+    display: flex;
+    flex-direction: column;
+    margin-right: 100px;
+    flex: 1;
+}
+.cardright * {
+    color: white;
+}

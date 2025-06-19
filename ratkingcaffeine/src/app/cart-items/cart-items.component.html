@@ -1,0 +1,55 @@
+<div class="page-wrapper">
+    <div class="cart-wrapper">
+    <div>
+        <h1>Shopping Cart</h1>
+    </div>
+        <div class="title-wrapper">
+            <h3 class="item2">product</h3>
+            <h3 class="item"> price</h3>
+            <h3 class="item">quantity</h3>
+            <h3 class="item">total</h3>
+        </div>
+    <hr>
+    <div class ="card-wrapper">
+        <div *ngIf="fullCart.length > 0; else empty">
+       <div *ngFor="let product of fullCart"  >
+        <div class="card">
+            
+            <div class="title">
+                <div class="item2">
+                    <div class="product-portion">
+                        <img [src]="product.imageUrl" alt="">
+                        <div class="title-details">
+                            <h3 style="color: white; margin: 0;">{{ product.title }}</h3>
+                            <p>{{product.description}}</p>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="item">{{ product.price }}</h3>
+                <div class="button-wrapper">
+                    <button (click)="decreaseQuantity(product)" [disabled]="product.quantity <= 1">-</button>
+                    <input type="text" [(ngModel)]="product.quantity" min="1">
+                    <button (click)="increaseQuantity(product)">+</button>
+                </div>
+                <h3 class="item">{{ (product.price * product.quantity) }} </h3>
+            </div>
+
+        </div>
+    </div>
+    </div>
+        <ng-template #empty>
+        <p class="empty-cart">You do not have any products in cart</p>
+        </ng-template>
+    </div>
+    <hr>
+
+
+
+
+    </div>
+    <div class="checkout-wrapper">
+        <a [routerLink]="checkOutPage">
+        <button class="sub-Total">Checkout - SubTotal: ${{total}} </button>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+h2 {
+    padding-left: 2vw;
+}
+
+.dialog-wrapper {
+    padding-top: 2vh;
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    height: 50vh;
+}
+.exit-popup
+{
+    background-color: inherit;
+    color: white;
+    border: inherit;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    width: 2vw;
+}
+.exit-popup:hover
+{
+    background-color: rgb(50,50,50);
+
+}
+form {
+    width: 100%;
+    height: 100%;
+}
+
+h2 {
+    color: white;
+}
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    height: 100%;
+    gap: 2vh;
+}
+.form-wrapper textarea {
+    background-color: rgb(50,50,50);
+    color: white;
+}
+.form-wrapper input {
+    background-color: rgb(50,50,50);
+    color: white;
+}
+.form-wrapper label {
+    color: white;
+}
+.form-wrapper button {
+    background-color: inherit;
+    border: inherit;
+    color: white;
+    width: 2vw;
+}
