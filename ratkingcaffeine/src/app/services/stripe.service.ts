@@ -19,7 +19,7 @@ export class StripeService {
      output should have client secrete you can replace pi_xxxxxxxxx with
      */
   return Promise.resolve({
-    clientSecret: 'pi_xxxxxxxxx',
+    clientSecret: 'pi_xxxxxxxxxxxxxxx',
   });
 }
 }
