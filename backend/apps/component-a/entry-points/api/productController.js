@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as ProductService from '../../domain/productService.js'
 const router = Router();
-router.get('/', async (req, res, next) => {
+router.get('/all-Products', async (req, res, next) => {
   try 
   {
     const products = await ProductService.getAllProducts();

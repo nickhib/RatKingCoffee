@@ -21,6 +21,7 @@ interface products {
   discountPercentage?: number;
   sku?: string;
 }
+// make api call to get individual products. instead of grabing from array
 @Component({
     selector: 'app-product-page',
     templateUrl: './product-page.component.html',

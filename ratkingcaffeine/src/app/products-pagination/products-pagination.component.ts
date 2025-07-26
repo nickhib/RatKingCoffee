@@ -82,7 +82,13 @@ ngOnChanges(changes: SimpleChanges): void {
   if (changes['filters']) {
     this.filterbyCategory();
   }
+  if (changes['testProducts']) {//check for changes since we are waiting for array to filled/ unwraping the observable
+      this.updateDisplayedProducts();
+  }
   console.log(this.length);
 }
+  updateDisplayedProducts(): void {
+    this.displayedProducts = [...this.testProducts];//use spread
+  }
 
 }

@@ -13,6 +13,21 @@ export interface Product {
   discountPercentage?: number;
   sku?: string;
 }
+export interface ApiProduct {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string[] | string;
+  price: number;
+  category: string;
+  rating: number;
+  stock: number;
+  isAvailable: boolean; 
+  createdAt?: string;
+  updatedAt?: string; 
+  discountPercentage: number;
+  sku: string;
+}
 export interface Filter {
   label: string;
   options: string[];

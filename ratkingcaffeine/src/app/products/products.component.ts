@@ -3,8 +3,8 @@ import { Product,Filter } from '../models/product.model';
 import { ProductsPaginationComponent } from '../products-pagination/products-pagination.component';
 import { ProductFilterComponent } from '../product-filter/product-filter.component';
 import { ProductDataService } from '../services/product-data.service';
-
-
+import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 @Component({
     selector: 'app-products',
     templateUrl: './products.component.html',
@@ -19,7 +19,7 @@ export class ProductsComponent implements OnInit {
   constructor(private productData: ProductDataService) {}
   currentYear = new Date().getFullYear();
   pageIndex: number =1;
-  testProducts: Product[]=[] ;
+  testProducts: Product[] = [];
   filters: Filter [] = [];
   filterUpdated(updatedFilters: Filter[])
   {
@@ -30,7 +30,11 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.testProducts =this.productData.getProducts();
+     this.productData.getProducts()
+      .pipe(take(1))            // complete after first value
+      .subscribe(arr => {
+        this.testProducts = arr;
+      });
     this.filters = this.productData.getFilter();
   };
 }
