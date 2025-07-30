@@ -2,62 +2,40 @@ import { Injectable } from '@angular/core';
 import { Product, Filter, Coffee,Review, ApiProduct} from '../models/product.model';
 import { HttpClient } from '@angular/common/http';
 import { Subject,Observable,of } from 'rxjs';
-import { map, shareReplay, catchError } from 'rxjs/operators';
+import { tap,map, shareReplay, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductDataService {
    private products: Product[] = [];
+   private productCache: ApiProduct[] | null = null;
   private baseUrl = 'http://localhost:3000/api/products/all-Products';
-   private products$: Observable<Product[]> = this.http
-    // 1. expect an object with “products” array
-    .get<{ products: ApiProduct[] }>(this.baseUrl)
-    .pipe(
-      // 2. pull out that array, then convert each item
-      map(({ products }) =>
-        products.map(api => this.transform(api))
-      ),
-      shareReplay({ bufferSize: 1, refCount: true }),
-      catchError(err => {
-        console.error('Error fetching products:', err);
-        return of([]);      // fallback: empty array
-      })
-    );
-  constructor(private http: HttpClient) {
-     this.http
-      .get<{ products: ApiProduct[] }>(this.baseUrl)
-      .pipe(
-        map(resp => resp.products.map(api => this.transform(api))),
-        catchError(() => of([]))
-      )
-      .subscribe(arr => (this.products = arr));
-   }
-  getProducts(): Observable<Product[]> {
-    return this.products$;
-  }
-
-  // Transform API data to Product format
-  private transform(apiProduct: ApiProduct): Product {
-    let images: string[] = [];
-  if (typeof apiProduct.imageUrl === 'string') {
-    try {
-      images = JSON.parse(apiProduct.imageUrl);
-    } catch {
-      console.warn('Could not parse imageUrl JSON:', apiProduct.imageUrl);
-      images = [];
+   
+  constructor(private http: HttpClient) {}
+   preFetchProducts(): void 
+   {
+    if(!this.productCache)
+    {
+      this.http.get<{products: ApiProduct []}>(this.baseUrl).pipe( 
+        map( response => response.products),
+        tap(products => this.productCache = products)
+      ).subscribe();
     }
-  } else {
-    images = apiProduct.imageUrl;
-  }
-
-    return {
-      ...apiProduct,
-      imageUrl:images,
-      createdAt: apiProduct.createdAt ? new Date(apiProduct.createdAt) : undefined, // Convert string to Date
-      updatedAt: apiProduct.updatedAt ? new Date(apiProduct.updatedAt) : undefined // Convert string to Date
-    };
-  }
+   }
+    getProducts(): Observable<ApiProduct []> 
+    {
+      if(this.productCache)
+      {
+        return of(this.productCache);
+      }
+      return this.http.get<{products: ApiProduct []}>(this.baseUrl).pipe( map( response => response.products));
+    }
+    clearProductCache(): void 
+    {
+      this.productCache = null;
+    }
+  
 filters: Filter [] = [
     {
       label: 'Product Type',

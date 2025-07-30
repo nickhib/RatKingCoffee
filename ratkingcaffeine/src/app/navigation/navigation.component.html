@@ -12,7 +12,7 @@
         <div id="home" class="home-anchor" class="nav-links">
         <a [routerLink]="homePage" class="nav-item"><p>Home</p></a>
         </div>
-        <div class="nav-links">
+        <div class="nav-links" (mouseenter)="onProductsHover()">
         <a [routerLink]="productsPage" class="nav-item"><p>Products</p></a>
         </div>
         <div class="nav-links">
