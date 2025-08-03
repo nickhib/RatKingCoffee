@@ -40,11 +40,15 @@ export class CartService {
   getCashTotal() {
     return this.fullCart.reduce((sum,item) => sum +(item.price*item.quantity), 0);
   }
-  fillcart(){
-    this.fullCart = this.cart.map(productItem => {
+  fillcart(){ 
+    this.fullCart = [];
+    this.cart.forEach(productItem => {
     const productData = this.productData.getProduct(productItem.id);
-    if (!productData) {
-      return {
+    productData.subscribe(productData => {
+      let cartitem;
+       if (!productData) {
+      cartitem = 
+       {
         id: productItem.id,
         quantity: productItem.quantity,
         title: 'Unknown Product',
@@ -53,7 +57,9 @@ export class CartService {
         description: 'Product data not available'
       };
     }
-    return {
+    else{
+      cartitem = 
+     {
       id: productItem.id,
       quantity: productItem.quantity,
       title: productData.title,
@@ -61,9 +67,12 @@ export class CartService {
       imageUrl: productData.imageUrl[0],
       description: productData.description,
     };
+  }
+    this.fullCart.push(cartitem);
+    });
+   
   });
 
     return this.fullCart;
-    
   }
 }

@@ -8,19 +8,26 @@ import { tap,map, shareReplay, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductDataService {
-   private products: Product[] = [];
-   private productCache: ApiProduct[] | null = null;
-  private baseUrl = 'http://localhost:3000/api/products/all-Products';
+  private products: Product[] = [];
+  private productCache: ApiProduct[] | null = null;
+   //$ is just part of the naming convention
+  private prefetch$: Observable<ApiProduct[]> | null = null;
+  private baseUrl = 'http://localhost:3000/api/products/';
    
   constructor(private http: HttpClient) {}
    preFetchProducts(): void 
    {
-    if(!this.productCache)
+    let baseUrl = this.baseUrl  += 'all-products';
+    if(!this.productCache && !this.prefetch$)
     {
-      this.http.get<{products: ApiProduct []}>(this.baseUrl).pipe( 
+      this.prefetch$ = this.http.get<{products: ApiProduct []}>(baseUrl).pipe( 
         map( response => response.products),
-        tap(products => this.productCache = products)
-      ).subscribe();
+        tap(products => {
+          this.productCache = products;
+        }
+      ),//to emit saved emited values to newly subscribed components
+      shareReplay(1)
+      );
     }
    }
     getProducts(): Observable<ApiProduct []> 
@@ -29,7 +36,11 @@ export class ProductDataService {
       {
         return of(this.productCache);
       }
-      return this.http.get<{products: ApiProduct []}>(this.baseUrl).pipe( map( response => response.products));
+      if(!this.prefetch$)
+      {
+        this.preFetchProducts();
+      }
+      return this.prefetch$!;
     }
     clearProductCache(): void 
     {
@@ -219,9 +230,19 @@ getReviewsById(id: string) {
   return [];
 }
 
-getProduct(id: string) : Product | undefined
+getProduct(id: string) : Observable<ApiProduct>
 {
-  return this.products.find(item => item.id === id);
+  console.log(this.products);
+  const found = this.productCache?.find(item => item.id === id);
+  const url = `${this.baseUrl}${id}`;
+  if(found)
+  {
+    return of(found);
+  }
+   return this.http.get<{ product: ApiProduct}>(url).pipe(
+    map(response => response.product), 
+  tap(data => console.log('Fetched product:', data),
+));
 }
 addReview(id:string ,rev: Review)
 {

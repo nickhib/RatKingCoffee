@@ -18,5 +18,12 @@ export async function fetchAll() {//get all products
 
 export async function fetchById(id) {
   const db = await getDatabase();
-  return db.get('SELECT * FROM products WHERE id = ?', [id]);
+  const rows = await db.get('SELECT * FROM products WHERE id = ?', [id]);
+  return {
+    ...rows,
+    imageUrl: JSON.parse(rows.imageUrl),
+    isAvailable: Boolean(rows.isAvailable),
+    createdAt: new Date(rows.createdAt),
+    updatedAt: new Date(rows.updatedAt),
+  }
 }

@@ -17,7 +17,7 @@ export interface ApiProduct {
   id: string;
   title: string;
   description: string;
-  imageUrl: string[] | string;
+  imageUrl: string[];
   price: number;
   category: string;
   rating: number;

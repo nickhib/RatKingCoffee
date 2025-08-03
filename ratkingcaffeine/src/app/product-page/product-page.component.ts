@@ -48,8 +48,6 @@ productId: string | null = null;
    }
   ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id');
-    console.log(this.productId);
-   
-    }
   }
+}
 
