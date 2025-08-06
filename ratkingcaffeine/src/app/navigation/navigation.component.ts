@@ -38,6 +38,7 @@ export class NavigationComponent implements OnInit {
   homePage = "/home";
   cartPage = "/cart";
   ngOnInit(): void {
+    this.cartData.initcart();
     this.cartData.cartChanged$.subscribe(() => {
       this.quantity = this.cartData.getCartQuantity();
     });
