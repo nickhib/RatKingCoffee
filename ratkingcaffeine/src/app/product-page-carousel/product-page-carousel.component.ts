@@ -31,9 +31,8 @@ export class ProductPageCarouselComponent implements OnInit, OnChanges {
     this.currentDate  = new Date().toISOString();
    }
   addToCart() {
-    const productId = this.route.snapshot.paramMap.get('id');
-    if(productId)
-      this.cartData.addToCart(productId, this.quantity)
+    if(this.testProduct)
+      this.cartData.addToCart(this.testProduct, this.quantity)
   }
   skipToImage(indexnumber: number)
   {

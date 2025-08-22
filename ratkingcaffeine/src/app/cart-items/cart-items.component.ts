@@ -1,5 +1,5 @@
 import { Component,OnInit } from '@angular/core';
-import { Product, shoppingCart ,fullCartItems } from '../models/product.model';
+import { Product, shoppingCartItems  } from '../models/product.model';
 import { ProductDataService } from '../services/product-data.service';
 import { CartService } from '../services/cart.service';
 import { CommonModule } from '@angular/common';
@@ -18,8 +18,7 @@ import { RouterModule } from '@angular/router';
 export class CartItemsComponent implements OnInit {
 
 constructor(private productData: ProductDataService, private cartData: CartService) {}
-  cart: shoppingCart[] =[];
-  fullCart: fullCartItems[] =[];
+  cart: shoppingCartItems[] =[];
   total: number = 0;
   quantity: number = 0;
   checkOutPage = "/checkout";
@@ -27,14 +26,14 @@ constructor(private productData: ProductDataService, private cartData: CartServi
 
    ngOnInit(): void {
     this.refreshEnrichedCart()
-    for( const item of this.fullCart)
+    for( const item of this.cart)
     {
       this.total = this.total +  (item.price * item.quantity);
     }
   };
   updateSubTotal() {
     this.total = 0;
-    for( const item of this.fullCart)
+    for( const item of this.cart)
     {
       this.total = this.total +  (item.price * item.quantity);
     }
@@ -52,10 +51,8 @@ constructor(private productData: ProductDataService, private cartData: CartServi
       this.updateSubTotal();
     }
   }
-
-
 private refreshEnrichedCart() {
-  this.fullCart = this.cartData.fillcart();
+  this.cart = this.cartData.getFullCart();
 }
 
 }

@@ -17,10 +17,10 @@ export class ProductDataService {
   constructor(private http: HttpClient) {}
    preFetchProducts(): void 
    {
-    let baseUrl = this.baseUrl  += 'all-products';
+    const url =  `${this.baseUrl}all-products`;
     if(!this.productCache && !this.prefetch$)
     {
-      this.prefetch$ = this.http.get<{products: ApiProduct []}>(baseUrl).pipe( 
+      this.prefetch$ = this.http.get<{products: ApiProduct []}>(url).pipe( 
         map( response => response.products),
         tap(products => {
           this.productCache = products;
@@ -234,7 +234,7 @@ getProduct(id: string) : Observable<ApiProduct>
 {
   console.log(this.products);
   const found = this.productCache?.find(item => item.id === id);
-  const url = `${this.baseUrl}${id}`;
+  const url = `${this.baseUrl}${id}`; 
   if(found)
   {
     return of(found);

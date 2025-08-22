@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import * as ProductService from '../../domain/productService.js'
 const router = Router();
+//with only 20 products returns an object of 6.5 kb.
+// it is not worth to compress before return. 
 router.get('/all-Products', async (req, res, next) => {
   try 
   {

@@ -47,11 +47,8 @@ export interface Coffee {
   id: string;
   reviews: Review[];
 }
-export interface shoppingCart {
-  id: string;
-  quantity: number;
-}
-export interface fullCartItems {
+
+export interface shoppingCartItems {
   id: string;
   quantity: number;
   title: string;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Product, shoppingCart ,fullCartItems } from '../models/product.model';
+import { ApiProduct, shoppingCartItems } from '../models/product.model';
 import { LocalStorageService } from './local-storage.service';
 import { ProductDataService } from '../services/product-data.service';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -16,8 +16,8 @@ i can also use behaviorsubject/ subject rxjs to multicast cart changes to reduce
 */
 export class CartService {
   constructor(private productData: ProductDataService,private localStorageService: LocalStorageService) {}
-  cart: shoppingCart[] =[];
-  fullCart: fullCartItems[] =[];
+  productitem?: ApiProduct;
+  cart: shoppingCartItems[] =[];
   /*
     BehaviorSubject needs an intial value so we have []. however when one subcribes they should receive the most recent 
     emited data making it always up to date.
@@ -25,12 +25,12 @@ export class CartService {
     in this way BehaviorSubject is better then Subject
     https://www.learnrxjs.io/learn-rxjs/subjects/behaviorsubject
   */
-  private cartSubject = new BehaviorSubject<shoppingCart[]>([]);
+  private cartSubject = new BehaviorSubject<shoppingCartItems[]>([]);
   cartChanged$ = this.cartSubject.asObservable();
   initcart() 
-  {
+  {//perhaps revisit refactor how local storage is updated. productPagecarousel / navigation
+    // there are two ways we can do this keep how is or change cart to contain the full item with quantity. 
     const savedCart = this.localStorageService.getItem('localCart');
-    const savedFilledCart = this.localStorageService.getItem('filledCart');
     if(!savedCart){
       console.warn('cart not found in local storage, attempting to sync cart with backend')
       //get cart from backend
@@ -38,26 +38,28 @@ export class CartService {
     }
     try {
       const parsedCart = JSON.parse(savedCart);
-      const parsedFilledCart = JSON.parse(savedFilledCart);
-      if(!Array.isArray(parsedCart))
+      if(!Array.isArray(parsedCart) )
       {
         throw new Error('Melformed cart data');
       }
-      this.fullCart = parsedFilledCart;
       this.cart = parsedCart;
     }
     catch(e)
     {
       console.warn('Error loaded parsed cart data may be melformed, attempting to sync with backend ',e);
-      //sync data with backend later
     }
   }
-  addToCart(productId: string, productQuantity: number){
-    const item: shoppingCart= {
-      id: productId,
+  addToCart(product: ApiProduct, productQuantity: number){
+
+    const item: shoppingCartItems = {  
+      id: product.id,
       quantity: productQuantity,
+      title: product.title,
+      price: product.price,
+      imageUrl: product.imageUrl[0],
+      description: product.description
     };
-    const exists = this.cart.find(item => item.id === productId);
+    const exists = this.cart.find(item => item.id === product.id);
     if(exists)
     {
       exists.quantity+= productQuantity;
@@ -68,6 +70,8 @@ export class CartService {
     }
     try{
       this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
+
+      console.log("yes");
     }
     catch(e)
     {
@@ -80,46 +84,9 @@ export class CartService {
   }
 
   getFullCart() {
-    return this.fullCart;
+    return this.cart;
   }
   getCashTotal() {
-    return this.fullCart.reduce((sum,item) => sum +(item.price*item.quantity), 0);
-  }
-  fillcart(){ 
-    this.fullCart = [];
-    this.cart.forEach(productItem => {
-    const productData = this.productData.getProduct(productItem.id);
-    productData.subscribe(productData => {
-      let cartitem;
-       if (!productData) {
-      cartitem = 
-       {
-        id: productItem.id,
-        quantity: productItem.quantity,
-        title: 'Unknown Product',
-        price: 0,
-        imageUrl: '',
-        description: 'Product data not available'
-      };
-    }
-    else{
-      cartitem = 
-     {
-      id: productItem.id,
-      quantity: productItem.quantity,
-      title: productData.title,
-      price: productData.price,
-      imageUrl: productData.imageUrl[0],
-      description: productData.description,
-    };
-  }
-    this.fullCart.push(cartitem);
-    });
-   
-  });
-    console.log("full cart",this.fullCart);
-    console.log(this.cart);
-    this.localStorageService.setItem('filledCart',JSON.stringify(this.fullCart));
-    return this.fullCart;
+    return this.cart.reduce((sum,item) => sum +(item.price*item.quantity), 0);
   }
 }

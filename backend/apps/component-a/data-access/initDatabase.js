@@ -326,6 +326,17 @@ const products = [
   ]);
     }
 }
+
+/*
+export interface shoppingCartItems {
+  id: string;
+  quantity: number;
+  title: string;
+  price: number;
+  imageUrl: string;
+  description?: string;
+}
+*/
 export async function initDb() {
   const db = await getDatabase();
     await db.exec(`
@@ -344,6 +355,20 @@ export async function initDb() {
         discountPercentage REAL,
         sku TEXT UNIQUE
     );
+      CREATE TABLE IF NOT EXISTS cart (
+        id TEXT PRIMARY KEY
+      );
+      CREATE TABLE IF NOT EXISTS cart_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cart_id TEXT,
+        product_id TEXT,
+        quantity INTEGER,
+        FOREIGN KEY (product_id) REFERENCES products(id)
+      );
     `);
-    defaultProducts();
+    /* can add not null to make sure the values arent null*/
+    await defaultProducts();
 }
+
+// may want to create a migrate system instead of running this every launch
+// could create a image table and for imagesurl just reference that.
