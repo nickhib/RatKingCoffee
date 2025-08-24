@@ -363,7 +363,8 @@ export async function initDb() {
         cart_id TEXT,
         product_id TEXT,
         quantity INTEGER,
-        FOREIGN KEY (product_id) REFERENCES products(id)
+        FOREIGN KEY (product_id) REFERENCES products(id),
+        UNIQUE(cart_id, product_id)
       );
     `);
     /* can add not null to make sure the values arent null*/

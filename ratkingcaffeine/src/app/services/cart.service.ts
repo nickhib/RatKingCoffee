@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { ApiProduct, shoppingCartItems } from '../models/product.model';
 import { LocalStorageService } from './local-storage.service';
 import { ProductDataService } from '../services/product-data.service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject , Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { CartItemsComponent } from '../cart-items/cart-items.component';
 import { F } from '@angular/cdk/a11y-module.d-DBHGyKoh';
 import { json } from 'express';
@@ -14,19 +15,36 @@ cart will need to be added to database based on cookies, if user deletes cookies
 
 i can also use behaviorsubject/ subject rxjs to multicast cart changes to reduce reliance on backend, however if this is not accessable  get from the backend the cart. i.e incase of local memory/ cookies wipe
 */
-export class CartService {
-  constructor(private productData: ProductDataService,private localStorageService: LocalStorageService) {}
+export class CartService 
+{
+  constructor(private productData: ProductDataService,private localStorageService: LocalStorageService,private http: HttpClient) {}
+
   productitem?: ApiProduct;
+
+  private baseUrl = 'http://localhost:3000/api/cart';
+
   cart: shoppingCartItems[] =[];
+
   /*
+
     BehaviorSubject needs an intial value so we have []. however when one subcribes they should receive the most recent 
+
     emited data making it always up to date.
-    
+
     in this way BehaviorSubject is better then Subject
     https://www.learnrxjs.io/learn-rxjs/subjects/behaviorsubject
+
   */
+
   private cartSubject = new BehaviorSubject<shoppingCartItems[]>([]);
   cartChanged$ = this.cartSubject.asObservable();
+  syncWithBackend(items: shoppingCartItems[]) : void 
+  {
+    this.http.post(`${this.baseUrl}/sync`, { items }).subscribe({
+      next: () => {},
+      error: (err) => console.error(err)
+    });
+  }
   initcart() 
   {//perhaps revisit refactor how local storage is updated. productPagecarousel / navigation
     // there are two ways we can do this keep how is or change cart to contain the full item with quantity. 
@@ -70,6 +88,7 @@ export class CartService {
     }
     try{
       this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
+      this.syncWithBackend(this.cart); 
 
       console.log("yes");
     }
