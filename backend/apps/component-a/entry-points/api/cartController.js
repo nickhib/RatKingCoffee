@@ -7,12 +7,11 @@ router.get('/', async (req,res,next)  =>
 { 
 try 
   {
-     await cartService.checkCookie(req,res);//can check if the cart is in the database
+     const cartId = await cartService.checkCookie(req,res);//can check if the cart is in the database
      
-     const cartId =req.cookies.cart_id;//grab from cookies
-     let cart = await cartService.fetchCart(req,res);
+     let cart = await cartService.fetchCart(cartId);
 
-     res.json({ cartId, items: cart });
+     return res.json({ cartId, items: cart });
   } 
   catch (err) 
   {

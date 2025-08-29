@@ -24,7 +24,8 @@ export class CartService
   private baseUrl = 'http://localhost:3000/api/cart';
 
   cart: shoppingCartItems[] =[];
-
+  fetchCart: Observable<shoppingCartItems[]> | null = null;
+//private prefetch$: Observable<ApiProduct[]> | null = null;
   /*
 
     BehaviorSubject needs an intial value so we have []. however when one subcribes they should receive the most recent 
@@ -45,13 +46,47 @@ export class CartService
       error: (err) => console.error(err)
     });
   }
+
+  /* 
+     preFetchProducts(): void 
+     {
+      const url =  `${this.baseUrl}all-products`;
+      if(!this.productCache && !this.prefetch$)
+      {
+        this.prefetch$ = this.http.get<{products: ApiProduct []}>(url).pipe( 
+          map( response => response.products),
+          tap(products => {
+            this.productCache = products;
+          }
+        ),//to emit saved emited values to newly subscribed components
+        shareReplay(1)
+        );
+      }
+     }
+
+  */
+    getcartWithBackend() :Observable<shoppingCartItems[]>
+  {
+     return this.http.get<shoppingCartItems[]>(`${this.baseUrl}/`);
+  }
   initcart() 
-  {//perhaps revisit refactor how local storage is updated. productPagecarousel / navigation
-    // there are two ways we can do this keep how is or change cart to contain the full item with quantity. 
+  {
     const savedCart = this.localStorageService.getItem('localCart');
     if(!savedCart){
       console.warn('cart not found in local storage, attempting to sync cart with backend')
-      //get cart from backend
+      console.log("grabbing cart from backend");
+      this.getcartWithBackend().subscribe({
+        next: (items) => {// emited item comes from next
+          console.log("gotCart",items);
+          this.cart = items;
+        },
+        error: (err) => {
+          console.log("failed to fetch cart",err);
+        },
+        complete:() => {
+          console.log("cart fetch complete");
+        }
+      });
       return;
     }
     try {
@@ -89,6 +124,17 @@ export class CartService
     try{
       this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
       this.syncWithBackend(this.cart); 
+      this.getcartWithBackend().subscribe({
+        next: (items) => {// emited item comes from next
+          console.log("gotCart",items);
+        },
+        error: (err) => {
+          console.log("failed to fetch cart",err);
+        },
+        complete:() => {
+          console.log("cart fetch complete");
+        }
+      });
 
       console.log("yes");
     }

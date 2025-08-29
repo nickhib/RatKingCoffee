@@ -39,6 +39,7 @@ export class ProductPageCarouselComponent implements OnInit, OnChanges {
     this.currentIndex = indexnumber;
   }
 
+
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
     if(productId) 
