@@ -37,7 +37,7 @@ export async function syncCart(req,cartId) {
 
 export async function getCart(cartId) {
   const db = await getDatabase();
-  let cartItems = await db.all("SELECT ci.product_id, ci.quantity, p.title,p.price, p.description, p.imageUrl FROM cart_items ci LEFT JOIN products p ON ci.product_id =p.id WHERE ci.cart_id=$cartId", {
+  let cartItems = await db.all("SELECT ci.product_id AS id, ci.quantity, p.title,p.price, p.description, p.imageUrl FROM cart_items ci LEFT JOIN products p ON ci.product_id =p.id WHERE ci.cart_id=$cartId", {
         $cartId: cartId,
      })
      console.log("got cart",cartItems);
