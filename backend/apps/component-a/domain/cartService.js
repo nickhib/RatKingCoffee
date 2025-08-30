@@ -7,9 +7,6 @@ export async function checkCookie(req,res){
 export async function fetchCart(cartId){
    return await Repo.getCart(cartId);
 }
-export async function addItemtoCart(req,res){
-  return await Repo.addToCart(req,res);
-}
-export async function syncitems(req){
-   return await Repo.syncCart(req);
+export async function syncitems(req,cartId){
+   return await Repo.syncCart(req,cartId);
 }

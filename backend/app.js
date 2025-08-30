@@ -9,7 +9,10 @@ import cookieParser from 'cookie-parser';
 const app = express();
 app.use(express.json());
 app.use(logRequests);
-app.use(cors()); // https://www.npmjs.com/package/cors
+app.use(cors({
+    origin: "http://localhost:4200",   // your Angular frontend URL
+    credentials: true                  // allow cookies / auth headers
+})); // https://www.npmjs.com/package/cors
 app.use(cookieParser());//https://www.npmjs.com/package/cookie-parser
 app.use(cookieHandler);//middleware to create cookie if user does not have one.
 

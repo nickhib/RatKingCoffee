@@ -41,33 +41,14 @@ export class CartService
   cartChanged$ = this.cartSubject.asObservable();
   syncWithBackend(items: shoppingCartItems[]) : void 
   {
-    this.http.post(`${this.baseUrl}/sync`, { items }).subscribe({
+    this.http.post(`${this.baseUrl}/sync`, { items },{ withCredentials: true } ).subscribe({
       next: () => {},
       error: (err) => console.error(err)
     });
   }
-
-  /* 
-     preFetchProducts(): void 
-     {
-      const url =  `${this.baseUrl}all-products`;
-      if(!this.productCache && !this.prefetch$)
-      {
-        this.prefetch$ = this.http.get<{products: ApiProduct []}>(url).pipe( 
-          map( response => response.products),
-          tap(products => {
-            this.productCache = products;
-          }
-        ),//to emit saved emited values to newly subscribed components
-        shareReplay(1)
-        );
-      }
-     }
-
-  */
     getcartWithBackend() :Observable<shoppingCartItems[]>
   {
-     return this.http.get<shoppingCartItems[]>(`${this.baseUrl}/`);
+     return this.http.get<shoppingCartItems[]>(`${this.baseUrl}/`,{ withCredentials: true });
   }
   initcart() 
   {
@@ -76,9 +57,9 @@ export class CartService
       console.warn('cart not found in local storage, attempting to sync cart with backend')
       console.log("grabbing cart from backend");
       this.getcartWithBackend().subscribe({
-        next: (items) => {// emited item comes from next
-          console.log("gotCart",items);
-          this.cart = items;
+        next: (response: any) => {// emited item comes from next
+          console.log("gotCart",response.items);
+          this.cart = response.items;
         },
         error: (err) => {
           console.log("failed to fetch cart",err);
@@ -112,6 +93,7 @@ export class CartService
       imageUrl: product.imageUrl[0],
       description: product.description
     };
+    console.log(this.cart);
     const exists = this.cart.find(item => item.id === product.id);
     if(exists)
     {
