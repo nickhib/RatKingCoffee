@@ -39,15 +39,13 @@ constructor(private productData: ProductDataService, private cartData: CartServi
     }
   }
   increaseQuantity(product: any){
-    product.quantity= Number(product.quantity) +1;
-    this.cartData.addToCart(product.id, 1);
+    this.cartData.addToCart(product, 1);
     this.updateSubTotal();
     //this should change the quantity of the original array as well. 
   }
   decreaseQuantity(product: any){
     if(product.quantity > 1){
-      product.quantity= Number(product.quantity) -1;
-      this.cartData.addToCart(product.id, -1);
+      this.cartData.addToCart(product, -1);
       this.updateSubTotal();
     }
   }

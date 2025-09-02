@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {NavigationComponent} from './navigation/navigation.component'
 import { RouterModule } from '@angular/router';
-
+import { CartService } from './services/cart.service';
 
 
 @Component({
@@ -15,5 +15,10 @@ import { RouterModule } from '@angular/router';
     standalone: true
 })
 export class AppComponent {
+  constructor(private cartData: CartService) {}
   title = 'ratkingcaffeine';
+  ngOnInit(): void {
+    console.log("initcart");
+    this.cartData.initcart();
+  }
 }

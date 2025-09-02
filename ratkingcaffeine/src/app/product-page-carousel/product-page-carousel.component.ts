@@ -31,8 +31,10 @@ export class ProductPageCarouselComponent implements OnInit, OnChanges {
     this.currentDate  = new Date().toISOString();
    }
   addToCart() {
-    if(this.testProduct)
-      this.cartData.addToCart(this.testProduct, this.quantity)
+    if(this.testProduct){
+      console.log("adding to cart page carousel", this.testProduct);
+      this.cartData.addToCart(this.testProduct, this.quantity);
+    }
   }
   skipToImage(indexnumber: number)
   {

@@ -24,7 +24,7 @@ export class CartService
   private baseUrl = 'http://localhost:3000/api/cart';
 
   cart: shoppingCartItems[] =[];
-  fetchCart: Observable<shoppingCartItems[]> | null = null;
+
 //private prefetch$: Observable<ApiProduct[]> | null = null;
   /*
 
@@ -53,12 +53,10 @@ export class CartService
   initcart() 
   {
     const savedCart = this.localStorageService.getItem('localCart');
-    console.log("savedcart",savedCart,this.cart);
     if(!savedCart){
       console.warn('cart not found in local storage, attempting to sync cart with backend');
       this.getcartWithBackend().subscribe({
         next: (response: any) => {// emited item comes from next
-          console.log("gotCart",response.items);
           this.cart = response.items;
         },
         error: (err) => {
@@ -66,6 +64,7 @@ export class CartService
         },
         complete:() => {
           console.log("cart fetch complete",this.cart);
+          this.cartSubject.next([...this.cart]);// updates subject so it can be emited to navigation.
           this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
         }
       });
@@ -85,9 +84,18 @@ export class CartService
     }
   }
   addToCart(product: ApiProduct, productQuantity: number){
+    //get product from backend
+    console.log("checking" , product , "checked");
+  
+  const exists = this.cart.find(item => item.id === product.id);
 
-
-    const item: shoppingCartItems = {  
+    if(exists)
+    {
+      exists.quantity+= productQuantity;
+    }
+    else//if it doesnt exist its pushing a item on cart then syncing with the backend
+    {
+      const item: shoppingCartItems = {
       id: product.id,
       quantity: productQuantity,
       title: product.title,
@@ -95,41 +103,16 @@ export class CartService
       imageUrl: product.imageUrl[0],
       description: product.description
     };
-    console.log("the cart",this.cart);
-    
-    const exists = this.cart.find(item => item.id === product.id);
-    console.log("before exists", exists , item);
-    if(exists)
-    {
-      exists.quantity+= productQuantity;
-    }
-    else//if it doesnt exist its pushing a item on cart then syncing with the backend
-    {
       this.cart.push(item);
     }
     try{
       this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
-      console.log("adding product after localstorage portion", this.cart);
-      this.getcartWithBackend().subscribe({
-        next: (items) => {// emited item comes from next
-          console.log(items);
-        },
-        error: (err) => {
-          console.log("failed to fetch cart",err);
-        },
-        complete:() => {
-          console.log("cart fetch complete",);
-        }
-      });
-
-      console.log("yes");
     }
     catch(e)
     {
       console.warn('Error local saving',e);
     }
     this.syncWithBackend(this.cart); 
-
     this.cartSubject.next([...this.cart]);
   }
   getCartQuantity(): number {
