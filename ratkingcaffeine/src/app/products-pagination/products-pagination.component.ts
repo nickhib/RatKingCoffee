@@ -2,6 +2,8 @@ import { Component, Input , OnInit,OnChanges, SimpleChanges} from '@angular/core
 import {PageEvent,MatPaginatorModule} from '@angular/material/paginator';
 import { Product, Filter, ApiProduct } from '../models/product.model';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../services/cart.service';
+import { ProductDataService } from '../services/product-data.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -15,6 +17,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './products-pagination.component.css'
 })
 export class ProductsPaginationComponent implements OnInit,OnChanges {
+  constructor(private cartData: CartService,private productService: ProductDataService) {}
 
 //uses model to export product interface, then we import it here and use it like so
   @Input() allProducts: ApiProduct[] = [];
@@ -73,11 +76,14 @@ export class ProductsPaginationComponent implements OnInit,OnChanges {
 
   }
   ngOnInit(){
-    console.log("pagination",this.allProducts);
-  this.startIndex = (this.pageIndex*this.pageSize);
+    this.startIndex = (this.pageIndex*this.pageSize);
     this.endIndex = (this.pageIndex+1)*this.pageSize;
     this.displayedProducts = this.allProducts.slice(this.startIndex, this.endIndex);
     this.length = this.allProducts.length;
+    this.productService.productChanged$.subscribe(() => {// user behaviorsubject to check when products change on change will change the length. this is because we use the backend to grab the product list
+      this.length = this.productService.getProductListLength();
+    });
+    this.length = this.productService.getProductListLength();
 }
 ngOnChanges(changes: SimpleChanges): void {
   if (changes['filters']) {

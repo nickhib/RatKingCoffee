@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Product, Filter, Coffee,Review, ApiProduct} from '../models/product.model';
 import { HttpClient } from '@angular/common/http';
-import { Subject,Observable,of } from 'rxjs';
+import { Subject,Observable,of,BehaviorSubject } from 'rxjs';
 import { tap,map, shareReplay, catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -10,8 +10,11 @@ import { tap,map, shareReplay, catchError } from 'rxjs/operators';
 export class ProductDataService {
   private products: Product[] = [];
   private productCache: ApiProduct[] | null = null;
+  private productSubject = new BehaviorSubject< ApiProduct[]>([]);
+  productChanged$ = this.productSubject.asObservable();
    //$ is just part of the naming convention
   private prefetch$: Observable<ApiProduct[]> | null = null;
+  
   private baseUrl = 'http://localhost:3000/api/products/';
    
   constructor(private http: HttpClient) {}
@@ -24,16 +27,23 @@ export class ProductDataService {
         map( response => response.products),
         tap(products => {
           this.productCache = products;
+          this.productSubject.next([...this.productCache]);
         }
       ),//to emit saved emited values to newly subscribed components
       shareReplay(1)
       );
     }
    }
+   getProductListLength() {
+    if(this.productCache)
+      return this.productCache?.length;
+    return 0;
+   }
     getProducts(): Observable<ApiProduct []> 
     {
       if(this.productCache)
       {
+        this.productSubject.next([...this.productCache]);
         return of(this.productCache);
       }
       if(!this.prefetch$)
@@ -232,12 +242,11 @@ getReviewsById(id: string) {
 
 getProduct(id: string) : Observable<ApiProduct>
 {
-  console.log(this.products);
   const found = this.productCache?.find(item => item.id === id);
   const url = `${this.baseUrl}${id}`; 
-  if(found)
+  if(found)//if we find it in cache just return else we will look it up. 
   {
-    return of(found);
+    return of(found);//returns item if its already in cache so we dont have to do a backend call. 
   }
    return this.http.get<{ product: ApiProduct}>(url).pipe(
     map(response => response.product), 
