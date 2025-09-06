@@ -305,7 +305,128 @@ const products = [
     sku: "SEA-HSP-020"
   }
 ];
+const reviews = [
+  {
+    id: "coffee001",
+    reviews: [
+      { rating: 4, comment: "Smooth and rich.", reviewer: "Alice", date: "2025-06-01" },
+      { rating: 5, comment: "Amazing flavor!", reviewer: "Bob", date: "2025-06-02" }
+    ]
+  },
+  {
+    id: "coffee002",
+    reviews: []
+  },
+  {
+    id: "coffee003",
+    reviews: [
+      { rating: 3, comment: "A bit too acidic.", reviewer: "Charlie", date: "2025-06-03" }
+    ]
+  },
+  {
+    id: "coffee004",
+    reviews: []
+  },
+  {
+    id: "coffee005",
+    reviews: [
+      { rating: 2, comment: "Not my favorite.", reviewer: "Diana", date: "2025-06-03" }
+    ]
+  },
+  {
+    id: "coffee006",
+    reviews: []
+  },
+  {
+    id: "coffee007",
+    reviews: [
+      { rating: 5, comment: "Perfect with breakfast!", reviewer: "Eli", date: "2025-06-04" },
+      { rating: 4, comment: "Really good balance.", reviewer: "Frank", date: "2025-06-04" }
+    ]
+  },
+  {
+    id: "coffee008",
+    reviews: []
+  },
+  {
+    id: "coffee009",
+    reviews: [
+      { rating: 3, comment: "Decent, not amazing.", reviewer: "Grace", date: "2025-06-05" }
+    ]
+  },
+  {
+    id: "coffee010",
+    reviews: []
+  },
+  {
+    id: "coffee011",
+    reviews: [
+      { rating: 4, comment: "Nice body and aroma.", reviewer: "Hannah", date: "2025-06-06" }
+    ]
+  },
+  {
+    id: "coffee012",
+    reviews: []
+  },
+  {
+    id: "coffee013",
+    reviews: []
+  },
+  {
+    id: "coffee014",
+    reviews: [
+      { rating: 2, comment: "Too strong for me.", reviewer: "Ian", date: "2025-06-07" }
+    ]
+  },
+  {
+    id: "coffee015",
+    reviews: []
+  },
+  {
+    id: "coffee016",
+    reviews: [
+      { rating: 5, comment: "Best I've ever had.", reviewer: "Jane", date: "2025-06-07" }
+    ]
+  },
+  {
+    id: "coffee017",
+    reviews: []
+  },
+  {
+    id: "coffee018",
+    reviews: [
+      { rating: 3, comment: "Okay taste, good price.", reviewer: "Kyle", date: "2025-06-08" }
+    ]
+  },
+  {
+    id: "coffee019",
+    reviews: []
+  },
+  {
+    id: "coffee020",
+    reviews: [
+      { rating: 4, comment: "Smooth with chocolate notes.", reviewer: "Laura", date: "2025-06-08" }
+    ]
+  }
+];
     const insert = `INSERT OR IGNORE INTO products (id ,title, description,imageUrl ,price,category,rating,stock, isAvailable, createdAt, updatedAt, discountPercentage , sku ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+
+    const reviewInsert = `INSERT OR IGNORE INTO reviews (id ,coffee_id, rating,comment ,reviewer,date) VALUES(?,?,?,?,?,?)`;
+
+    for(const r of reviews)
+    {
+  
+      for(const c of r.reviews){
+      await db.run(reviewInsert, [
+        c.id,
+        r.id,
+        c.rating,
+        c.comment,
+        c.reviewer,
+        c.date
+      ]);
+    }
+    }
 
     for(const p of products)
     {
@@ -326,7 +447,6 @@ const products = [
   ]);
     }
 }
-
 /*
 export interface shoppingCartItems {
   id: string;
@@ -365,6 +485,14 @@ export async function initDb() {
         quantity INTEGER,
         FOREIGN KEY (product_id) REFERENCES products(id),
         UNIQUE(cart_id, product_id)
+      );
+      CREATE TABLE IF NOT EXISTS reviews (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        coffee_id TEXT NOT NULL,
+        rating INTEGER NOT NULL,
+        comment TEXT,
+        reviewer TEXT,
+        date TEXT
       );
     `);
     /* can add not null to make sure the values arent null*/

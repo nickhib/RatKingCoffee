@@ -7,3 +7,8 @@ export async function getAllProducts() {
 export async function getProductById(id) {
   return Repo.fetchById(id);
 }
+export async function getAllReviews() {
+  const rows = await Repo.fetchReviews();
+  console.log(rows);
+  return rows;
+}

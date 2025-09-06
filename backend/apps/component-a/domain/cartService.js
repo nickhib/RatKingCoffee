@@ -1,6 +1,6 @@
 import * as Repo from '../data-access/cartRepository.js';
 
-export async function checkCookie(req,res){
+export async function checkCookie(req,res){//must change to contain logic all services/ repos should just be database queries
    return await Repo.createCart(req,res);
 }
 

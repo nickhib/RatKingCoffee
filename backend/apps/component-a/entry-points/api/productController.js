@@ -14,6 +14,16 @@ router.get('/all-Products', async (req, res, next) => {
     next(err);
   }
 });
+router.get('/reviews',async (req,res,next) => {
+  try{
+  const reviews = await ProductService.getAllReviews();
+   return res.json({ reviews });
+  }
+  catch(err)
+  {
+    next(err);
+  }
+})
 router.get('/:id', async (req, res, next) => {
   try 
   {

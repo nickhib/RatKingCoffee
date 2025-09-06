@@ -14,6 +14,11 @@ export async function fetchAll() {//get all products
   }));
  
 }
+export async function fetchReviews() {
+    const db = await getDatabase();
+    const rows = await db.all('SELECT * FROM reviews');
+    return rows;
+}
 
 
 export async function fetchById(id) {
