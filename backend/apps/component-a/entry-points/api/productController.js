@@ -14,16 +14,7 @@ router.get('/all-Products', async (req, res, next) => {
     next(err);
   }
 });
-router.get('/reviews',async (req,res,next) => {
-  try{
-  const reviews = await ProductService.getAllReviews();
-   return res.json({ reviews });
-  }
-  catch(err)
-  {
-    next(err);
-  }
-})
+// /:id the colon to prefix capture dynamic segments of url so :id will be grabbed if i do params id 
 router.get('/:id', async (req, res, next) => {
   try 
   {
@@ -37,4 +28,25 @@ router.get('/:id', async (req, res, next) => {
     next(err);
   }
 });
+router.get('/:id/reviews',async (req,res,next) => {
+  try{
+    const reviews = await ProductService.getReviewsById(req.params.id);
+    return res.json({ reviews });
+  }
+  catch(err)
+  {
+    next(err);
+  }
+})
+router.get('/:id/reviews/summary',async (req,res,next) => {
+  try{
+    const summary = await ProductService.getSummaryById(req.params.id);
+    console.log(summary);
+    return res.json({ summary });
+  }
+  catch(err)
+  {
+    next(err);
+  }
+})
 export default router;

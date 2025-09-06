@@ -411,7 +411,7 @@ const reviews = [
 ];
     const insert = `INSERT OR IGNORE INTO products (id ,title, description,imageUrl ,price,category,rating,stock, isAvailable, createdAt, updatedAt, discountPercentage , sku ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
-    const reviewInsert = `INSERT OR IGNORE INTO reviews (id ,coffee_id, rating,comment ,reviewer,date) VALUES(?,?,?,?,?,?)`;
+    const reviewInsert = `INSERT OR IGNORE INTO reviews (id,coffee_id, rating,comment ,reviewer,date) VALUES(?,?,?,?,?,?)`;
 
     for(const r of reviews)
     {
@@ -492,9 +492,10 @@ export async function initDb() {
         rating INTEGER NOT NULL,
         comment TEXT,
         reviewer TEXT,
-        date TEXT
+        date TEXT,
+        UNIQUE(coffee_id,reviewer,comment,date)
       );
-    `);
+    `);//when finding correct reviews one needs to SELECT * FROM reviews WHERE coffee_id = value
     /* can add not null to make sure the values arent null*/
     await defaultProducts();
 }

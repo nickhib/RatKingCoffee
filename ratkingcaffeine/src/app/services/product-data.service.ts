@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Product, Filter, Coffee,Review, ApiProduct} from '../models/product.model';
+import { Product, Filter, Coffee,Review, ApiProduct,reviewSummary} from '../models/product.model';
 import { HttpClient } from '@angular/common/http';
 import { Subject,Observable,of,BehaviorSubject } from 'rxjs';
 import { tap,map, shareReplay, catchError } from 'rxjs/operators';
@@ -11,6 +11,19 @@ export class ProductDataService {
   private products: Product[] = [];
   private productCache: ApiProduct[] | null = null;
   private productSubject = new BehaviorSubject< ApiProduct[]>([]);
+  //create a subject for review summary so we can make sure we get the data when it changes. 
+  private summarySubject = new BehaviorSubject<reviewSummary>(
+    {
+      totalReviews: 0,
+      averageRating: 0,
+      fiveStar: 0,
+      fourStar: 0,
+      threeStar: 0,
+      twoStar: 0,
+      oneStar: 0
+    }
+  );
+  summaryChange$ = this.summarySubject.asObservable();
   productChanged$ = this.productSubject.asObservable();
    //$ is just part of the naming convention
   private prefetch$: Observable<ApiProduct[]> | null = null;
@@ -193,6 +206,7 @@ reviewsChanged$ = this.reviewsChanged.asObservable();
 //the line above should convert the subject into a plain observable, consumers can sub to it but cant call next
 // this can enforce encapsulation, only the service emits events
 getSortedReviews(id: string, sort: string) {//Sort by in pagination review component
+
   const coffee =this.coffees.find(index => index.id === id);
     if (coffee){
       if(sort === "rating")
@@ -220,11 +234,15 @@ getSortedReviews(id: string, sort: string) {//Sort by in pagination review compo
     }
   return [];
 }
-get_Total_Reviews_per_score(score: number, id: string){
-  const coffee =this.coffees.find(index => index.id === id);
-  if (coffee)
-   return coffee.reviews.filter(index => index.rating ===score).length;
-  return 0;
+get_ReviewSummary(productId: string) : Observable<reviewSummary>{
+  const url = `http://localhost:3000/api/products/${ productId }/reviews/summary`;
+  return this.http.get<{summary: reviewSummary []}>(url).pipe( 
+    map(res => res.summary[0]),
+        tap(summary => {
+          this.summarySubject.next(summary);
+          console.log("reviews summary",summary);
+        }
+      ));//get reactive updates.
 }
 get_Total_Reviews (id: string)
 {

@@ -1,7 +1,7 @@
 import { Component , Input,OnInit} from '@angular/core';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { ProductDataService } from '../services/product-data.service';
-import { Review } from '../models/product.model';
+import { Review,reviewSummary } from '../models/product.model';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -30,18 +30,20 @@ export class ProductPageReviewsComponent implements OnInit{
   threeStarPercent: number = 0;
   twoStarPercent: number = 0;
   oneStarPercent: number = 0;
-
-  getreviews(){
-         const productId = this.route.snapshot.paramMap.get('id');
-     if(productId)
-     {
-      this.fiveStar= this.productDataService.get_Total_Reviews_per_score(5,productId) ?? 5;
-      this.fourStar= this.productDataService.get_Total_Reviews_per_score(4,productId) ?? 5;
-      this.threeStar= this.productDataService.get_Total_Reviews_per_score(3,productId) ?? 5;
-      this.twoStar= this.productDataService.get_Total_Reviews_per_score(2,productId) ?? 5;
-      this.oneStar= this.productDataService.get_Total_Reviews_per_score(1,productId) ?? 5;
-      this.totalReviews = this.productDataService.get_Total_Reviews(productId);
-      const totalScore = (this.fiveStar*5) +(this.fourStar*4) +(this.threeStar*3) +(this.twoStar*2)+(this.oneStar*1);
+/* 
+this.productService.productChanged$.subscribe(() => {// user behaviorsubject to check when products change on change will change the length. this is because we use the backend to grab the product list
+      this.length = this.productService.getProductListLength();
+    });
+    */
+   private updateSummary(summary: reviewSummary)
+   {
+        this.fiveStar= summary.fiveStar;
+        this.fourStar= summary.fourStar;
+        this.threeStar= summary.threeStar;
+        this.twoStar= summary.twoStar;
+        this.oneStar= summary.oneStar;
+        this.totalReviews = summary.totalReviews;
+              const totalScore = (this.fiveStar*5) +(this.fourStar*4) +(this.threeStar*3) +(this.twoStar*2)+(this.oneStar*1);
       const maxScore = (5*this.totalReviews)
       //gather all percentages
       if(this.totalReviews > 0){
@@ -52,14 +54,21 @@ export class ProductPageReviewsComponent implements OnInit{
         this.oneStarPercent = (this.oneStar / this.totalReviews)*100;
         this.average = Math.round(((totalScore/maxScore)*5) * 100) / 100;
         this.averagePercentage = ((totalScore/maxScore)*100)
-        
-      }
-     }
-
+   }
   }
-
   ngOnInit(): void {
-     this.getreviews();
+     const productId = this.route.snapshot.paramMap.get('id');
+
+        this.productDataService.summaryChange$.subscribe(summary => {
+        if(summary.totalReviews > 0)
+        {
+          this.updateSummary(summary);
+        }
+      });
+      if(productId)
+     {
+       this.productDataService.get_ReviewSummary(productId).subscribe();
+    }
   };
 //get_Total_Reviews_Count(score: number, id: string)
 
@@ -82,9 +91,10 @@ openReviewForm(): void {
           date: currentDate.toISOString().split('T')[0]
         }
         const productId = this.route.snapshot.paramMap.get('id');
-        if(productId)
+        if(productId){
         this.productDataService.addReview(productId ,newReview);
-        this.getreviews();
+        this.productDataService.get_ReviewSummary(productId).subscribe();
+        }
         // toISOString().split('T')[0] should convert into two parts
         // time comes in something like this "2025-06-06T22:04:00.000Z" we split at T
       }

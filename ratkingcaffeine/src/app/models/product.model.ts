@@ -56,3 +56,14 @@ export interface shoppingCartItems {
   imageUrl: string;
   description?: string;
 }
+
+export interface reviewSummary
+{
+  totalReviews: number,
+  averageRating: number,
+  fiveStar: number,
+  fourStar: number,
+  threeStar: number,
+  twoStar: number,
+  oneStar: number
+}

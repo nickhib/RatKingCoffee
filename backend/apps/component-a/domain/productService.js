@@ -7,8 +7,13 @@ export async function getAllProducts() {
 export async function getProductById(id) {
   return Repo.fetchById(id);
 }
-export async function getAllReviews() {
-  const rows = await Repo.fetchReviews();
+export async function getReviewsById(id) {
+  const rows = await Repo.fetchReviewsById(id);
   console.log(rows);
+  return rows;
+}
+
+export async function getSummaryById(id) {
+  const rows = await Repo.fetchSummaryById(id);
   return rows;
 }
