@@ -30,6 +30,7 @@ router.get('/:id', async (req, res, next) => {
 });
 router.get('/:id/reviews',async (req,res,next) => {
   try{
+    const {sort , page} = req.query;
     const reviews = await ProductService.getReviewsById(req.params.id);
     return res.json({ reviews });
   }

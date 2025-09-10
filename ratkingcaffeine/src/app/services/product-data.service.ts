@@ -11,6 +11,7 @@ export class ProductDataService {
   private products: Product[] = [];
   private productCache: ApiProduct[] | null = null;
   private productSubject = new BehaviorSubject< ApiProduct[]>([]);
+  private reviewSubject = new BehaviorSubject< Review []>([]);
   //create a subject for review summary so we can make sure we get the data when it changes. 
   private summarySubject = new BehaviorSubject<reviewSummary>(
     {
@@ -25,6 +26,7 @@ export class ProductDataService {
   );
   summaryChange$ = this.summarySubject.asObservable();
   productChanged$ = this.productSubject.asObservable();
+  reviewChanged$ = this.reviewSubject.asObservable();
    //$ is just part of the naming convention
   private prefetch$: Observable<ApiProduct[]> | null = null;
   
@@ -244,6 +246,7 @@ get_ReviewSummary(productId: string) : Observable<reviewSummary>{
         }
       ));//get reactive updates.
 }
+
 get_Total_Reviews (id: string)
 {
   const coffee =this.coffees.find(index => index.id === id);
@@ -252,10 +255,14 @@ get_Total_Reviews (id: string)
   return 0;
 }
 getReviewsById(id: string) {
-  const coffee =this.coffees.find(index => index.id === id);
-  if (coffee)
-    return coffee.reviews;
-  return [];
+   const url = `http://localhost:3000/api/products/${ id }/reviews`;
+     return this.http.get<{reviews: Review []}>(url).pipe( 
+    map(res => res.reviews),
+        tap(reviews=> {
+          console.log("reviews summary",reviews);
+          this.reviewSubject.next(reviews);
+        }
+      ));
 }
 
 getProduct(id: string) : Observable<ApiProduct>

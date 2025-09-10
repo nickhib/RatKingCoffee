@@ -49,7 +49,12 @@ onSortChange(newSortValue: string) {
   }
   ngOnInit(): void {
      const productId = this.route.snapshot.paramMap.get('id');
-     
+      this.productDataService.reviewChanged$.subscribe(reviews => {
+        console.log("reviews",reviews);
+      });
+      if(productId)
+       this.productDataService.getReviewsById(productId).subscribe();
+
      this.productItem = productId;
      if(productId)
      {
