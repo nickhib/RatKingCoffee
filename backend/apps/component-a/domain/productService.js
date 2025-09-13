@@ -7,8 +7,9 @@ export async function getAllProducts() {
 export async function getProductById(id) {
   return Repo.fetchById(id);
 }
-export async function getReviewsById(id) {
-  const rows = await Repo.fetchReviewsById(id);
+export async function getReviewsById(id,sort) {
+  
+  const rows = await Repo.fetchReviewsByReviewer(id,sort);
   console.log(rows);
   return rows;
 }
@@ -16,4 +17,7 @@ export async function getReviewsById(id) {
 export async function getSummaryById(id) {
   const rows = await Repo.fetchSummaryById(id);
   return rows;
+}
+export async function postReviewById(item,id){
+  return await Repo.postReview(item,id);
 }

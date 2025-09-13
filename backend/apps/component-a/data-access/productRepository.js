@@ -17,9 +17,19 @@ export async function fetchAll() {//get all products
   }));
  
 }
-export async function fetchReviewsById(id) {
+export async function fetchReviewsByReviewer(id) {
     const db = await getDatabase();
-    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ?', [id]);
+    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ? ORDER BY reviewer ASC', [id]);
+    return rows;
+}
+export async function fetchReviewsByDate(id) {
+    const db = await getDatabase();
+    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ? ORDER BY date ASC', [id]);
+    return rows;
+}
+export async function fetchReviewsByRating(id) {
+    const db = await getDatabase();
+    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ? ORDER BY rating ASC', [id]);
     return rows;
 }
 export async function fetchSummaryById(id) {
@@ -38,7 +48,46 @@ export async function fetchSummaryById(id) {
 
     return rows;
 }
+export async function postReview(item,id) {
+  /* 
+        CREATE TABLE IF NOT EXISTS reviews (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        coffee_id TEXT NOT NULL,
+        rating INTEGER NOT NULL,
+        comment TEXT,
+        reviewer TEXT,
+        date TEXT,
+        UNIQUE(coffee_id,reviewer,comment,date)
+      );
 
+    await db.run('INSERT INTO cart_items (cart_id,product_id, quantity) VALUES ($cartId, $productId,$quantity) ON CONFLICT(cart_id,product_id) DO UPDATE SET quantity= excluded.quantity',
+    {
+      $cartId: cartId,
+      $productId: item.id,
+      $quantity: item.quantity,
+    });
+  
+  */
+ try{
+  const db = await getDatabase();
+  await db.run('INSERT INTO reviews (coffee_id , rating, comment, reviewer, date ) VALUES ($coffee_id, $rating,$comment,$reviewer,$date)',
+    {
+      $coffee_id: id,
+      $rating: item.rating,
+      $comment: item.comment,
+      $reviewer: item.reviewer,
+      $date: item.date
+    }
+  );
+  return { success: true, message: "review added"};
+ }
+ catch(err)
+ {
+    console.error("error review couldnt add" ,err);
+    return {success: false, message: err};
+ }
+
+}
 
 export async function fetchById(id) {
   const db = await getDatabase();

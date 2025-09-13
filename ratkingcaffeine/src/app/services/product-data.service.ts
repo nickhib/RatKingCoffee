@@ -27,6 +27,8 @@ export class ProductDataService {
   summaryChange$ = this.summarySubject.asObservable();
   productChanged$ = this.productSubject.asObservable();
   reviewChanged$ = this.reviewSubject.asObservable();
+  private reviewsChanged = new Subject<void>();  
+  reviewsChanged$ = this.reviewsChanged.asObservable();
    //$ is just part of the naming convention
   private prefetch$: Observable<ApiProduct[]> | null = null;
   
@@ -97,145 +99,12 @@ filters: Filter [] = [
   // Cached Observable for products
 
 ///////////Coffee review dummy data /////////////////////////
-coffees: Coffee[] = [
-  {
-    id: "coffee001",
-    reviews: [
-      { rating: 4, comment: "Smooth and rich.", reviewer: "Alice", date: "2025-06-01" },
-      { rating: 5, comment: "Amazing flavor!", reviewer: "Bob", date: "2025-06-02" }
-    ]
-  },
-  {
-    id: "coffee002",
-    reviews: []
-  },
-  {
-    id: "coffee003",
-    reviews: [
-      { rating: 3, comment: "A bit too acidic.", reviewer: "Charlie", date: "2025-06-03" }
-    ]
-  },
-  {
-    id: "coffee004",
-    reviews: []
-  },
-  {
-    id: "coffee005",
-    reviews: [
-      { rating: 2, comment: "Not my favorite.", reviewer: "Diana", date: "2025-06-03" }
-    ]
-  },
-  {
-    id: "coffee006",
-    reviews: []
-  },
-  {
-    id: "coffee007",
-    reviews: [
-      { rating: 5, comment: "Perfect with breakfast!", reviewer: "Eli", date: "2025-06-04" },
-      { rating: 4, comment: "Really good balance.", reviewer: "Frank", date: "2025-06-04" }
-    ]
-  },
-  {
-    id: "coffee008",
-    reviews: []
-  },
-  {
-    id: "coffee009",
-    reviews: [
-      { rating: 3, comment: "Decent, not amazing.", reviewer: "Grace", date: "2025-06-05" }
-    ]
-  },
-  {
-    id: "coffee010",
-    reviews: []
-  },
-  {
-    id: "coffee011",
-    reviews: [
-      { rating: 4, comment: "Nice body and aroma.", reviewer: "Hannah", date: "2025-06-06" }
-    ]
-  },
-  {
-    id: "coffee012",
-    reviews: []
-  },
-  {
-    id: "coffee013",
-    reviews: []
-  },
-  {
-    id: "coffee014",
-    reviews: [
-      { rating: 2, comment: "Too strong for me.", reviewer: "Ian", date: "2025-06-07" }
-    ]
-  },
-  {
-    id: "coffee015",
-    reviews: []
-  },
-  {
-    id: "coffee016",
-    reviews: [
-      { rating: 5, comment: "Best I've ever had.", reviewer: "Jane", date: "2025-06-07" }
-    ]
-  },
-  {
-    id: "coffee017",
-    reviews: []
-  },
-  {
-    id: "coffee018",
-    reviews: [
-      { rating: 3, comment: "Okay taste, good price.", reviewer: "Kyle", date: "2025-06-08" }
-    ]
-  },
-  {
-    id: "coffee019",
-    reviews: []
-  },
-  {
-    id: "coffee020",
-    reviews: [
-      { rating: 4, comment: "Smooth with chocolate notes.", reviewer: "Laura", date: "2025-06-08" }
-    ]
-  }
-];
-private reviewsChanged = new Subject<string>();
+
 // reviewsChanged is both an observable which mean one can subscribe to it and an observer one can push to it
 //every event pushed will be a string 
-reviewsChanged$ = this.reviewsChanged.asObservable();
 //the line above should convert the subject into a plain observable, consumers can sub to it but cant call next
 // this can enforce encapsulation, only the service emits events
-getSortedReviews(id: string, sort: string) {//Sort by in pagination review component
 
-  const coffee =this.coffees.find(index => index.id === id);
-    if (coffee){
-      if(sort === "rating")
-      {
-        const reviewCopy =  coffee.reviews.slice();//not mutating original
-        return reviewCopy.sort((a, b) => b.rating - a.rating);
-        //sorts based on greater rating
-        
-      }
-      else if(sort === "date")
-      {
-        const reviewCopy =  coffee.reviews.slice();
-        return reviewCopy.sort((a, b) => { 
-          const timeA = new Date(a.date).getTime();//determines the number of milliseconds since the epoch 
-          const timeB = new Date(b.date).getTime();//sorts based off that
-          return timeB - timeA;
-        });
-      }
-      else {
-        const reviewCopy =  coffee.reviews.slice();
-        //this sorts A-Z, localeCompare returns a number based on if the string comes before or after.
-        //make sure both a and b are lowercase because this could effect the ascii
-        return reviewCopy.sort((a, b) => a.reviewer.toLowerCase().localeCompare(b.reviewer.toLowerCase()));
-      }
-    }
-  return [];
-}
 get_ReviewSummary(productId: string) : Observable<reviewSummary>{
   const url = `http://localhost:3000/api/products/${ productId }/reviews/summary`;
   return this.http.get<{summary: reviewSummary []}>(url).pipe( 
@@ -247,19 +116,12 @@ get_ReviewSummary(productId: string) : Observable<reviewSummary>{
       ));//get reactive updates.
 }
 
-get_Total_Reviews (id: string)
-{
-  const coffee =this.coffees.find(index => index.id === id);
-  if (coffee)
-    return coffee.reviews.length;
-  return 0;
-}
-getReviewsById(id: string) {
-   const url = `http://localhost:3000/api/products/${ id }/reviews`;
+
+getReviewsById(id: string , sort: string) {
+   const url = `http://localhost:3000/api/products/${ id }/reviews?sort=${sort}`;
      return this.http.get<{reviews: Review []}>(url).pipe( 
     map(res => res.reviews),
         tap(reviews=> {
-          console.log("reviews summary",reviews);
           this.reviewSubject.next(reviews);
         }
       ));
@@ -280,13 +142,11 @@ getProduct(id: string) : Observable<ApiProduct>
 }
 addReview(id:string ,rev: Review)
 {
-  const coffee =this.coffees.find(index => index.id === id);
-  if (coffee)
-    {
-    coffee.reviews.push(rev);
-    console.log(coffee.reviews);
-    this.reviewsChanged.next(id);
-  }
+  const url = `http://localhost:3000/api/products/${ id }/reviews`;
+      this.http.post<Review>(url ,rev  ).pipe(
+      tap((newReview) => {
+        this.reviewSubject.next([...this.reviewSubject.getValue(),rev]);
+      })).subscribe();
 }
 
 getFilter() {

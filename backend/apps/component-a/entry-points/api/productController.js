@@ -28,10 +28,22 @@ router.get('/:id', async (req, res, next) => {
     next(err);
   }
 });
-router.get('/:id/reviews',async (req,res,next) => {
+router.post('/:id/reviews',async (req,res,next) => {
   try{
-    const {sort , page} = req.query;
-    const reviews = await ProductService.getReviewsById(req.params.id);
+    console.log(req.body);
+    let message = await ProductService.postReviewById(req.body,req.params.id);
+    console.log(message);
+  }
+  catch(err)
+  {
+    next(err);
+  }
+})
+router.get('/:id/reviews',async (req,res,next) => {
+  try
+  {
+    const {sort} = req.query;
+    const reviews = await ProductService.getReviewsById(req.params.id,sort);
     return res.json({ reviews });
   }
   catch(err)

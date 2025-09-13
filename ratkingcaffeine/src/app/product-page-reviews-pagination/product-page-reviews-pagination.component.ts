@@ -43,28 +43,32 @@ export class ProductPageReviewsPaginationComponent implements OnInit,OnChanges{
   }
 currentSort: string = 'date'; //default sort 
 onSortChange(newSortValue: string) {
+    const productId = this.route.snapshot.paramMap.get('id');
     this.currentSort = newSortValue;
-    if(this.productItem)
-      this.reviews = this.productDataService.getSortedReviews(this.productItem,this.currentSort); 
+    if(productId){
+      this.productDataService.getReviewsById(productId, this.currentSort).subscribe(
+      reviews => {
+         this.reviews = reviews;
+         this.length = this.reviews.length;
+      });
+    }
   }
   ngOnInit(): void {
      const productId = this.route.snapshot.paramMap.get('id');
-      this.productDataService.reviewChanged$.subscribe(reviews => {
-        console.log("reviews",reviews);
-      });
       if(productId)
-       this.productDataService.getReviewsById(productId).subscribe();
-
-     this.productItem = productId;
+       this.productDataService.getReviewsById(productId,"reviewer").subscribe(
+      reviews => {
+         this.reviews = reviews;
+         this.length = this.reviews.length;
+      });
      if(productId)
      {
-      this.totalReviews = this.productDataService.get_Total_Reviews(productId);
-      this.length = this.totalReviews;
-      this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
-      this.productDataService.reviewsChanged$.subscribe(changedProductId => {
-      if (changedProductId === productId) {
-          this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
-      }
+      this.productDataService.reviewChanged$.subscribe(reviews => {
+           this.productDataService.getReviewsById(productId,this.currentSort).subscribe(
+      reviews => {
+         this.reviews = reviews;
+         this.length = this.reviews.length;
+      });
      });
     }
      
@@ -76,9 +80,10 @@ onSortChange(newSortValue: string) {
      this.productItem = productId;
      if(productId)
      {
-      this.totalReviews = this.productDataService.get_Total_Reviews(productId);
-      this.length = this.totalReviews;
-      this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
+        this.productDataService.getReviewsById(productId,this.currentSort).subscribe( reviews => {
+          this.reviews = reviews;
+          this.length = this.reviews.length;
+        });
      }
 
   };
