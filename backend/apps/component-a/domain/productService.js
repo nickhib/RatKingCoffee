@@ -10,7 +10,7 @@ export async function getProductById(id) {
 export async function getReviewsById(id,sort) {
   
   const rows = await Repo.fetchReviewsByReviewer(id,sort);
-  console.log(rows);
+
   return rows;
 }
 

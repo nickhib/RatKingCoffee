@@ -24,12 +24,12 @@
     </mat-paginator>
 </div>
 <div>
-    <div *ngIf="reviews.length === 0">
+    <div *ngIf="displayedReviews.length === 0">
         <div>
             <h3 style="color: white;">  No Reviews found.</h3>
         </div>
     </div>
-    <div *ngFor="let product of reviews"  >
+    <div *ngFor="let product of displayedReviews"  >
         <div class="card">
             <div class="title">
                 <h3 style="color: white;">{{ product.reviewer }}</h3>

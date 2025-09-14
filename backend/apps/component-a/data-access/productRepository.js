@@ -70,7 +70,7 @@ export async function postReview(item,id) {
   */
  try{
   const db = await getDatabase();
-  await db.run('INSERT INTO reviews (coffee_id , rating, comment, reviewer, date ) VALUES ($coffee_id, $rating,$comment,$reviewer,$date)',
+await db.run('INSERT INTO reviews (coffee_id , rating, comment, reviewer, date ) VALUES ($coffee_id, $rating,$comment,$reviewer,$date)',
     {
       $coffee_id: id,
       $rating: item.rating,
@@ -79,7 +79,7 @@ export async function postReview(item,id) {
       $date: item.date
     }
   );
-  return { success: true, message: "review added"};
+  return { success: true, message: "insertion succeded"};
  }
  catch(err)
  {

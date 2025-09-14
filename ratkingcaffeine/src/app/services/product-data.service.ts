@@ -145,7 +145,7 @@ addReview(id:string ,rev: Review)
   const url = `http://localhost:3000/api/products/${ id }/reviews`;
       this.http.post<Review>(url ,rev  ).pipe(
       tap((newReview) => {
-        this.reviewSubject.next([...this.reviewSubject.getValue(),rev]);
+        this.reviewSubject.next([...this.reviewSubject.getValue(),newReview]);
       })).subscribe();
 }
 

@@ -33,6 +33,13 @@ router.post('/:id/reviews',async (req,res,next) => {
     console.log(req.body);
     let message = await ProductService.postReviewById(req.body,req.params.id);
     console.log(message);
+     return res.json( {
+      coffee_id: req.params.id,
+      rating: req.body.rating,
+      comment: req.body.comment,
+      reviewer: req.body.reviewer,
+      date: req.body.date
+    })
   }
   catch(err)
   {

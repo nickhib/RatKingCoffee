@@ -80,9 +80,7 @@ export class ProductsPaginationComponent implements OnInit,OnChanges {
     this.endIndex = (this.pageIndex+1)*this.pageSize;
     this.displayedProducts = this.allProducts.slice(this.startIndex, this.endIndex);
     this.length = this.allProducts.length;
-    this.productService.productChanged$.subscribe(() => {// user behaviorsubject to check when products change on change will change the length. this is because we use the backend to grab the product list
-      this.length = this.productService.getProductListLength();
-    });
+ 
     this.length = this.productService.getProductListLength();
 }
 ngOnChanges(changes: SimpleChanges): void {
@@ -90,6 +88,7 @@ ngOnChanges(changes: SimpleChanges): void {
     this.filterbyCategory();
   }
   if (changes['allProducts']) {//check for changes since we are waiting for array to filled/ unwraping the observable
+    this.length = this.productService.getProductListLength();
       this.updateDisplayedProducts();
   }
   console.log(this.length);
