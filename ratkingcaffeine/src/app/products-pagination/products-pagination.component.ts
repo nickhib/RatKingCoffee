@@ -1,7 +1,9 @@
 import { Component, Input , OnInit,OnChanges, SimpleChanges} from '@angular/core';
 import {PageEvent,MatPaginatorModule} from '@angular/material/paginator';
-import { Product, Filter } from '../models/product.model';
+import { Product, Filter, ApiProduct } from '../models/product.model';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../services/cart.service';
+import { ProductDataService } from '../services/product-data.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -15,12 +17,13 @@ import { RouterModule } from '@angular/router';
   styleUrl: './products-pagination.component.css'
 })
 export class ProductsPaginationComponent implements OnInit,OnChanges {
+  constructor(private cartData: CartService,private productService: ProductDataService) {}
 
 //uses model to export product interface, then we import it here and use it like so
-  @Input() testProducts: Product[] = [];
+  @Input() allProducts: ApiProduct[] = [];
   @Input() filters: Filter[] = [];
 
-  length = this.testProducts.length;
+  length = this.allProducts.length;
   pageSize = 10;
   pageIndex = 0; 
    hidePageSize = false;
@@ -43,12 +46,12 @@ export class ProductsPaginationComponent implements OnInit,OnChanges {
     this.pageIndex = e.pageIndex;
     this.updatePaginationProducts();
   }
-  displayedProducts: Product[] = [];
+  displayedProducts: ApiProduct[] = [];
   updatePaginationProducts() {
     this.startIndex = (this.pageIndex*this.pageSize);
     this.endIndex = (this.pageIndex+1)*this.pageSize;
     //slice should take a range of products.
-    this.displayedProducts = this.testProducts.slice(this.startIndex, this.endIndex);
+    this.displayedProducts = this.allProducts.slice(this.startIndex, this.endIndex);
   }
   filterbyCategory() {
     const selecteditems: string[] = [];
@@ -59,13 +62,13 @@ export class ProductsPaginationComponent implements OnInit,OnChanges {
       selecteditems.push(...selectedcategories);
     }
 
-  this.displayedProducts = this.testProducts.filter(product =>
+  this.displayedProducts = this.allProducts.filter(product =>
   selecteditems.includes(product.category ?? ''));
   
   if(selecteditems.length ===0)
   {
-    this.length = this.testProducts.length;
-    this.displayedProducts = this.testProducts.slice(this.startIndex, this.endIndex);
+    this.length = this.allProducts.length;
+    this.displayedProducts = this.allProducts.slice(this.startIndex, this.endIndex);
   }
   else {
     this.length = this.displayedProducts.length;
@@ -73,16 +76,25 @@ export class ProductsPaginationComponent implements OnInit,OnChanges {
 
   }
   ngOnInit(){
-  this.startIndex = (this.pageIndex*this.pageSize);
+    this.startIndex = (this.pageIndex*this.pageSize);
     this.endIndex = (this.pageIndex+1)*this.pageSize;
-    this.displayedProducts = this.testProducts.slice(this.startIndex, this.endIndex);
-    this.length = this.testProducts.length;
+    this.displayedProducts = this.allProducts.slice(this.startIndex, this.endIndex);
+    this.length = this.allProducts.length;
+ 
+    this.length = this.productService.getProductListLength();
 }
 ngOnChanges(changes: SimpleChanges): void {
   if (changes['filters']) {
     this.filterbyCategory();
   }
+  if (changes['allProducts']) {//check for changes since we are waiting for array to filled/ unwraping the observable
+    this.length = this.productService.getProductListLength();
+      this.updateDisplayedProducts();
+  }
   console.log(this.length);
 }
+  updateDisplayedProducts(): void {
+    this.displayedProducts = [...this.allProducts];//use spread
+  }
 
 }

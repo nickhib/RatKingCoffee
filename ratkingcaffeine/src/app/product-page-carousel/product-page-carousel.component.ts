@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductDataService } from '../services/product-data.service';
 import { CartService } from '../services/cart.service';
-import { Product } from '../models/product.model';
+import { ApiProduct, Product } from '../models/product.model';
 
 @Component({
   selector: 'app-product-page-carousel',
@@ -14,7 +14,7 @@ import { Product } from '../models/product.model';
   styleUrl: './product-page-carousel.component.css'
 })
 export class ProductPageCarouselComponent implements OnInit, OnChanges {
-  testProduct?: Product;
+  testProduct?: ApiProduct;
   currentDate: string;
   productId: string = "";
   currentIndex = 0;
@@ -31,22 +31,36 @@ export class ProductPageCarouselComponent implements OnInit, OnChanges {
     this.currentDate  = new Date().toISOString();
    }
   addToCart() {
-    const productId = this.route.snapshot.paramMap.get('id');
-    if(productId)
-    this.cartData.addToCart(productId, this.quantity)
+    if(this.testProduct){
+      console.log("adding to cart page carousel", this.testProduct);
+      this.cartData.addToCart(this.testProduct, this.quantity);
+    }
   }
   skipToImage(indexnumber: number)
   {
     this.currentIndex = indexnumber;
   }
 
+
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
-    if(productId)
-    this.testProduct = this.productData.getProduct(productId);
+    if(productId) 
+       this.productData.getProduct(productId).subscribe({
+    next: (product) => {
+      this.testProduct = product;
+      console.log('Loaded product:', this.testProduct);
+    },
+    error: (err) => {
+      console.error('Error loading product:', err);
+    }
+});
+  console.log(this.testProduct?.imageUrl);
 
+     
+      console.log("CAR",productId);
     }
     ngOnChanges(changes: SimpleChanges): void {
+
 
     }
 }

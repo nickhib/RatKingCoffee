@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {PageEvent,MatPaginatorModule} from '@angular/material/paginator';
 import { Product,Filter ,Review} from '../models/product.model';
+import { switchMap } from 'rxjs/operators';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 @Component({
   selector: 'app-product-page-reviews-pagination',
@@ -17,6 +18,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 export class ProductPageReviewsPaginationComponent implements OnInit,OnChanges{
   constructor(private route: ActivatedRoute,private productDataService: ProductDataService,public dialog: MatDialog) {}
   reviews: Review[] =[];
+  displayedReviews: Review[] = [];
   totalReviews: number = 0;
   length = 0;
   pageSize = 5;
@@ -25,8 +27,8 @@ export class ProductPageReviewsPaginationComponent implements OnInit,OnChanges{
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   disabled = false;
-  startIndex = 1;
-  endIndex = 10 ;
+  startIndex = 0;
+  endIndex = 1*this.pageSize ;
   productItem?: string | null = "";
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent = {
@@ -40,27 +42,42 @@ export class ProductPageReviewsPaginationComponent implements OnInit,OnChanges{
     this.length = e.length;
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
+    this.updatePaginationProducts()
   }
 currentSort: string = 'date'; //default sort 
 onSortChange(newSortValue: string) {
+    const productId = this.route.snapshot.paramMap.get('id');
     this.currentSort = newSortValue;
-    if(this.productItem)
-      this.reviews = this.productDataService.getSortedReviews(this.productItem,this.currentSort); 
+    if(productId){
+      this.productDataService.getReviewsById(productId, this.currentSort).subscribe(
+      reviews => {
+         this.reviews = reviews;
+         this.length = this.reviews.length;
+          this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
+      });
+    }
   }
+  updatePaginationProducts() {
+      this.startIndex = (this.pageIndex*this.pageSize);
+      this.endIndex = (this.pageIndex+1)*this.pageSize;
+      this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
+    }
   ngOnInit(): void {
      const productId = this.route.snapshot.paramMap.get('id');
-     
-     this.productItem = productId;
+      if(productId)
+       this.productDataService.getReviewsById(productId,"reviewer").subscribe(
+      reviews => {
+         this.reviews = reviews;
+         this.length = this.reviews.length;
+          this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
+      });
      if(productId)
      {
-      this.totalReviews = this.productDataService.get_Total_Reviews(productId);
-      this.length = this.totalReviews;
-      this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
-      this.productDataService.reviewsChanged$.subscribe(changedProductId => {
-      if (changedProductId === productId) {
-          this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
-      }
-     });
+this.productDataService.reviewChanged$.subscribe((reviews) => {
+          this.reviews = reviews;
+          this.length = reviews.length;
+           this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
+        });
     }
      
   };
@@ -71,9 +88,11 @@ onSortChange(newSortValue: string) {
      this.productItem = productId;
      if(productId)
      {
-      this.totalReviews = this.productDataService.get_Total_Reviews(productId);
-      this.length = this.totalReviews;
-      this.reviews = this.productDataService.getSortedReviews(productId,this.currentSort); 
+        this.productDataService.getReviewsById(productId,this.currentSort).subscribe( reviews => {
+          this.reviews = reviews;
+          this.length = this.reviews.length;
+           this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
+        });
      }
 
   };

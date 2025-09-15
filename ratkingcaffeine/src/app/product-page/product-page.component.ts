@@ -21,6 +21,7 @@ interface products {
   discountPercentage?: number;
   sku?: string;
 }
+// make api call to get individual products. instead of grabing from array
 @Component({
     selector: 'app-product-page',
     templateUrl: './product-page.component.html',
@@ -47,8 +48,6 @@ productId: string | null = null;
    }
   ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id');
-    console.log(this.productId);
-   
-    }
   }
+}
 

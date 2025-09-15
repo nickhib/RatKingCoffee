@@ -7,6 +7,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatBadgeModule} from '@angular/material/badge';
 import { CartService } from '../services/cart.service';
+import { ProductDataService } from '../services/product-data.service';
 @Component({
     selector: 'app-navigation',
     templateUrl: './navigation.component.html',
@@ -23,7 +24,7 @@ import { CartService } from '../services/cart.service';
 ,})
 export class NavigationComponent implements OnInit {
   quantity: number = 0;
-  constructor(private cartData: CartService) {}
+  constructor(private cartData: CartService,private productService: ProductDataService) {}
   faHome = faHome;
   faUser = faUser;
 
@@ -37,9 +38,16 @@ export class NavigationComponent implements OnInit {
   homePage = "/home";
   cartPage = "/cart";
   ngOnInit(): void {
+    console.log("initcart");
+    this.cartData.initcart();
     this.cartData.cartChanged$.subscribe(() => {
       this.quantity = this.cartData.getCartQuantity();
     });
     this.quantity = this.cartData.getCartQuantity();
   }
+  onProductsHover() {
+    this.productService.preFetchProducts(); 
+    console.log("prefetch");
+  }
+
 }
