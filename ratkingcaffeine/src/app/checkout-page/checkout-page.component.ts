@@ -40,6 +40,7 @@ export class CheckoutPageComponent implements OnInit{
   @ViewChild('expireElement') expireElement!: ElementRef;
   @ViewChild('paymentElement') paymentElement!: ElementRef;
   stripe!: Stripe | null;
+  
   elements!: StripeElements | null;
   cvc!: StripeCardCvcElement | null;
   cardNumber!:  StripeCardNumberElement | null;
@@ -53,6 +54,7 @@ clientSecret: string | null = null;
   paymentSucceeded = false;
   cartItems: any[] = [];
   total = 0;
+  selectedOption = '';
   private _formBuilder = inject(FormBuilder);
 
   firstFormGroup = this._formBuilder.group({
@@ -97,6 +99,7 @@ clientSecret: string | null = null;
     private router: Router,
     private cartService: CartService
   ) { }
+  
   onShipTo(){
     if(this.secondFormGroup.valid){
     console.log("Form Values:", this.secondFormGroup.value);
@@ -115,7 +118,8 @@ clientSecret: string | null = null;
     }
 
   }
-  onSubmit(){
+  
+ async onSubmit(){
     //show shipping choice
     if(this.thirdFormGroup.valid)
     {
@@ -125,9 +129,40 @@ clientSecret: string | null = null;
       console.log("third form group invalid")
     }
     const selectedOption = this.shippingOptions.find(option => option.value === this.thirdFormGroup.value.shippingMethod);
-    if(selectedOption)
-    this.total += selectedOption.price;
-
+  
+    if(selectedOption){
+      this.total += selectedOption.price;
+      this.selectedOption = selectedOption.value;
+      const appearance: Appearance = {
+        theme: 'stripe',
+        variables: {
+          colorPrimary: 'white',
+          colorBackground: 'rgb(30, 30, 30)',
+          colorText: 'white',
+          colorDanger: '#df1b41',
+          fontFamily: 'Ideal Sans, system-ui, sans-serif',
+          spacingUnit: '2px',
+          borderRadius: '4px',
+        }
+      };
+      this.stripe = await this.stripeService.getStripe();
+      const createResp = await this.stripeService.createPaymentIntentMock(this.cartItems, this.selectedOption);
+      const clientSecret = createResp.clientSecret;
+      this.stripe = await this.stripeService.getStripe();
+      if (!this.stripe) {
+        console.error('Stripe.js failed to load.');
+        this.generalError = 'Payment system unavailable. Please try later.';
+        return;
+      }
+      console.log(clientSecret);
+      if (!clientSecret) {
+        this.generalError = 'Failed to initialize payment.';
+        return;
+      }
+      this.elements = this.stripe.elements({ clientSecret: clientSecret, appearance});
+      this.payment = this.elements.create('payment');
+      this.payment.mount(this.paymentElement.nativeElement);
+  }
   }
 
   ngOnInit() {
@@ -138,35 +173,7 @@ clientSecret: string | null = null;
 
   async ngAfterViewInit() {
 
-    const appearance: Appearance = {
-      theme: 'stripe',
-      variables: {
-        colorPrimary: 'white',
-        colorBackground: 'rgb(30, 30, 30)',
-        colorText: 'white',
-        colorDanger: '#df1b41',
-        fontFamily: 'Ideal Sans, system-ui, sans-serif',
-        spacingUnit: '2px',
-        borderRadius: '4px',
-      }
-    };
-    this.stripe = await this.stripeService.getStripe();
-    const createResp = await this.stripeService.createPaymentIntentMock();
-    const clientSecret = createResp.clientSecret;
-    this.stripe = await this.stripeService.getStripe();
-    if (!this.stripe) {
-      console.error('Stripe.js failed to load.');
-      this.generalError = 'Payment system unavailable. Please try later.';
-      return;
-    }
-    console.log(clientSecret);
-    if (!clientSecret) {
-      this.generalError = 'Failed to initialize payment.';
-      return;
-    }
-    this.elements = this.stripe.elements({ clientSecret: clientSecret, appearance});
-    this.payment = this.elements.create('payment');
-    this.payment.mount(this.paymentElement.nativeElement);
+    
   }
 
   ngOnDestroy() {
@@ -181,7 +188,6 @@ clientSecret: string | null = null;
     this.isProcessing = true;
 
     try {
-      console.log("ASd");
       await this.elements.submit();//validate the form fields and collect any data required for wallets 
       const result = await this.stripe.confirmPayment({//
         elements: this.elements,
@@ -240,18 +246,3 @@ clientSecret: string | null = null;
 
   }
 }
-
-
-
-   /* this.address = this.elements.create('address',{ 
-      mode : 'shipping',
-      allowedCountries: ['US'],
-    } );
-    if(this.addressInfo)
-    this.address.mount(this.addressInfo.nativeElement);
-    this.cardNumber= this.elements.create('cardNumber');
-    this.cardNumber.mount(this.cardNumberElement.nativeElement);
-    this.cvc = this.elements.create('cardCvc');
-    this.cvc.mount(this.cvcElement.nativeElement);
-    this.expireDate = this.elements.create('cardExpiry');
-    this.expireDate.mount(this.expireElement.nativeElement);*/
