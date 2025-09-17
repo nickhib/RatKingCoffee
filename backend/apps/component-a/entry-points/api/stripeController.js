@@ -1,10 +1,10 @@
 import * as stripeService from '../../domain/stripeService.js'
-import bodyParser from 'body-parser';
+import { Router } from 'express';
+const router = Router();
 //https://docs.stripe.com/payments/quickstart?lang=node
-app.use(bodyParser.json());
-app.post("/create-payment-intent", async (req, res) => {
+router.post("/create-payment-intent", async (req, res) => {
     try{
-        const paymentIntent = stripeService.createPaymentIntent(req);
+        const paymentIntent = await stripeService.createPaymentIntent(req);
         res.send({
             clientSecret: paymentIntent.client_secret,
         })
@@ -14,3 +14,5 @@ app.post("/create-payment-intent", async (req, res) => {
         res.status(500).send({error: err.message });
     }
 });
+
+export default router;
