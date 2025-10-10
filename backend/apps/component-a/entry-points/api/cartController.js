@@ -9,6 +9,14 @@ try
   {
      const cartId = await cartService.checkCookie(req,res);//can check if the cart is in the database
      let cart = await cartService.fetchCart(cartId);
+     for(let i of cart)
+     {
+      if (typeof i.imageUrl === 'string') {
+        i.imageUrl = JSON.parse(i.imageUrl);
+      }
+     }
+     console.log("cart = ",cart);
+
      return res.json({ items: cart });
   } 
   catch (err) 

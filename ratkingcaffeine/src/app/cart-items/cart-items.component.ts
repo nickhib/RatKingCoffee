@@ -23,9 +23,20 @@ constructor(private productData: ProductDataService, private cartData: CartServi
   quantity: number = 0;
   checkOutPage = "/checkout";
 
+  /*
+  when cart is changed we will update the cart with the subscribe all this does is when cart changes it will emit
+  the value to subscribers and when that happens we will change the cart.
 
+  signals could be better and more intuitive
+  */
    ngOnInit(): void {
-    this.refreshEnrichedCart()
+    this.cartData.cartChanged$.subscribe( () => {
+        this.refreshEnrichedCart();
+    });
+  /*
+    currently total is calculated in the backend however i also do it in the front end
+  */
+    this.total = 0;
     for( const item of this.cart)
     {
       this.total = this.total +  (item.price * item.quantity);
