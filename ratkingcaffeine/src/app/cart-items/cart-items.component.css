@@ -39,9 +39,13 @@ hr {
 .item2
 {
     flex: 2;
+    min-width:  200px;
+    height: auto;
 }
 .item {
      flex: 1;
+     min-width: 60px;
+     height: auto;
 }
 
 .title-wrapper h3 {
@@ -66,14 +70,16 @@ below is from the review portion
     gap: 1vw;
 }
 .product-portion {
+    flex: 2;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    box-sizing: border-box;
-    align-items: center;
-    width: 30vw;
     gap: 1vw;
 }
+.product-portion img {
+    width: 80px;  /* fixed or max-width */
+    height: auto;
+    object-fit: contain;
+}
+
 .title p {
     color: white;
     margin: 0;
