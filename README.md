@@ -33,9 +33,9 @@ The application will collect payment information, process it, and then return an
 
 
 
-  Adding in animations here and there,<br>
+  i believe most of the core functionality of the site seems to be done. i must focus more on ux and how everything works and looks <br>
 Next steps: <br>
 more ui overhauls:<br>
 deal with potential bugs with UI, such as sizing<br>
-Update api / redesign it to work with Stripe and all other functions of the website.<br>
-Integrate Woocommerce, send receipts to users' emails on purchase<br>
+potentially switch to signals instead of rxjs for better response.<br>
+add hover menus, make sure home page is more responsive<br>
