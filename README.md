@@ -39,3 +39,4 @@ more ui overhauls:<br>
 deal with potential bugs with UI, such as sizing<br>
 potentially switch to signals instead of rxjs for better response.<br>
 add hover menus, make sure home page is more responsive<br>
+potentially switch to tailwind for easier css use<br>
