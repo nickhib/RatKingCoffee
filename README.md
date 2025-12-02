@@ -1,7 +1,5 @@
 # ecommerce-full-stack - under development,
 There have been a lot of updates!<br>
-Note:<br>
-Stripe is not implemented on the backend yet, so one will have to provide a client secret and api key for some features. Refer to environment, and stripe service in app
 1. Updated to the most recent Angular version.
 2. Changed all components to be standalone and split up features for a more modular design
 3. Rehaul of home page design: 
