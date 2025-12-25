@@ -15,4 +15,17 @@ router.post("/create-payment-intent", async (req, res) => {
     }
 });
 
+router.post("/webhook", async (req, res) => {
+
+    /* 
+    webhook should handle creating the order, clearing the cart and enqueuing the email that will be sent. 
+    
+    
+    */
+
+    
+
+
+});
+
 export default router;
