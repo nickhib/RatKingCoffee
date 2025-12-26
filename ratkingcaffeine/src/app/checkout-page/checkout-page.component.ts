@@ -1,10 +1,8 @@
-import { provideHttpClient } from '@angular/common/http';
-import { HttpClient } from '@angular/common/http';
+
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, NgZone, inject } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StripeService } from '../services/stripe.service';
-import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { Stripe, StripeElements, StripeAddressElement,StripeCardCvcElement, StripeCardNumberElement, StripeCardExpiryElement, StripePaymentElement,Appearance } from '@stripe/stripe-js';
 import { CommonModule } from '@angular/common';
@@ -223,12 +221,19 @@ clientSecret: string | null = null;
 
       if(result.paymentIntent&&result.paymentIntent.status ==="succeeded")
       {
+        this.router.navigate(['/home']);
         console.log("payment succeded");
+
+        /* 
+        clear cart after payment was successful
+        ideally put the fully paid for cart in a table before this for history
+        */
+        this.cartService.clearCart();
+
         this.paymentSucceeded = true;
         this.isProcessing = false;
         setTimeout(() => {
         alert('Payment successful!');
-        this.router.navigate(['/home']);
 }, 10);
       }
     if (result.error) {

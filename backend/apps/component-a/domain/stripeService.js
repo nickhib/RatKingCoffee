@@ -25,11 +25,22 @@ const calculateOrderAmount = (items) => {
 
 export async function createPaymentIntent(req)
 {
-    const { allItems } = req.body;
+  const { allItems } = req.body;   
+  const cartId = req.cookies?.cart_id;
+  if (!cartId) {
+    return {
+      //returns this object if we cannot find the cookie. 
+      ok: false,
+      error: "missing cart cookie" 
+    }
+  }
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(allItems),
     currency: "usd",
+    metadata: {
+      cart_id: cartId, 
+    },
     automatic_payment_methods: {
       enabled: true,
     },
