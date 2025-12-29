@@ -486,6 +486,18 @@ export async function initDb() {
         FOREIGN KEY (product_id) REFERENCES products(id),
         UNIQUE(cart_id, product_id)
       );
+      CREATE TABLE IF NOT EXISTS orders (
+        id TEXT PRIMARY KEY,
+        cart_id TEXT,
+        total_amount INTEGER,
+        currency TEXT DEFAULT 'usd',
+        status TEXT CHECK(status IN ('pending', 'paid','cancelled', 'refunded')),
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+      CREATE TABLE IF NOT EXISTS payments 
+      (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+      )
       CREATE TABLE IF NOT EXISTS reviews (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         coffee_id TEXT NOT NULL,
