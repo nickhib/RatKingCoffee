@@ -488,7 +488,6 @@ export async function initDb() {
       );
       CREATE TABLE IF NOT EXISTS orders (
         id TEXT PRIMARY KEY,
-        customer_id TEXT,
         cart_id TEXT,
         total_amount INTEGER,
         currency TEXT DEFAULT 'usd',

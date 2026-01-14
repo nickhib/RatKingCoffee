@@ -29,6 +29,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
   templateUrl: './checkout-page.component.html',
   styleUrl: './checkout-page.component.css',
 })
+// value: Abstractcontrol value gives you current value https://v17.angular.io/api/forms/AbstractControl#description
 export class CheckoutPageComponent implements OnInit{
   
   @ViewChild('cardInfo') cardInfo!: ElementRef;
@@ -144,7 +145,7 @@ clientSecret: string | null = null;
         }
       };
       this.stripe = await this.stripeService.getStripe();
-      const createResp = await this.stripeService.createPaymentIntentMock(this.cartItems, this.selectedOption);
+      const createResp = await this.stripeService.createPaymentIntentMock(this.firstFormGroup.value,this.secondFormGroup.value,this.cartItems, this.selectedOption);
       const clientSecret = createResp.clientSecret;
       this.stripe = await this.stripeService.getStripe();
       if (!this.stripe) {

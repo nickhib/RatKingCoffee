@@ -56,7 +56,27 @@ export interface shoppingCartItems {
   imageUrl: string;
   description?: string;
 }
+export interface emailData {
+  EmailCtrl?: string | null | undefined;
+}
 
+export interface addressData {
+   firstNameCtrl?: string | null | undefined,
+    lastNameCtrl?: string | null | undefined,
+    countryOrRegionCtrl?: string | null | undefined,
+    Addressline1Ctrl?: string | null | undefined,
+    Addressline2Ctrl?: string | null | undefined,
+    cityCtrl?: string | null | undefined,
+    StateCtrl?: string | null | undefined,
+    zipCodeCtrl?: string | null | undefined,
+    phoneNumber?: string | null | undefined,
+}
+export interface AllItems {
+  products: shoppingCartItems[];
+  shippingMethod: string;
+  addressData: addressData;
+  EmailData: emailData;
+}
 export interface reviewSummary
 {
   totalReviews: number,

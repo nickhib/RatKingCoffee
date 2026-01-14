@@ -1,13 +1,13 @@
 import * as stripeService from '../../domain/stripeService.js'
 import { clearCart } from '../../data-access/cartRepository.js';
-import { Router } from 'express';
+import express, { Router } from 'express';
+
 const router = Router();
 /* 
     If you are testing with the CLI, find the secret by running 'stripe listen'
     If you are using an endpoint defined with the API or dashboard, look in your webhook settings
     at https://dashboard.stripe.com/webhooks
  */
-const endpointSecret = 'mykey';
 //https://docs.stripe.com/payments/quickstart?lang=node
 router.post("/create-payment-intent", async (req, res) => {
     try{
@@ -22,47 +22,32 @@ router.post("/create-payment-intent", async (req, res) => {
     }
 });
 /* 
+
     If you are testing with the CLI, find the secret by running 'stripe listen'
     If you are using an endpoint defined with the API or dashboard, look in your webhook settings
     at https://dashboard.stripe.com/webhooks
  */
-    router.post("/webhook", express.raw({type: 'application/json'}), (req, res) => {
+    router.post("/webhook", express.raw({type: 'application/json'}), async (req, res) => {
     // Get the signature sent by Stripe
-    const signature = req.headers['stripe-signature'];
-    let event = req.body;
-    if(!endpointSecret)
-    {
-        console.error("Missing webhook secret!");
-        return res.sendStatus(500);
-    }
-    if(!signature)
-    {
-        console.warn("missing stripe signature in header")
-        return res.sendStatus(400);
-    }
+    let event;
+    let cartId
     try 
     {
-        event = stripeService.webhooks.constructEvent(req.body,signature, endpointSecret);
+        event = verifyStripe(req);//stripe verification
+        cartId = await stripeEvent(event);//payment verification
+        if(!cartId){
+            throw new Error(`payment intent metadata did not contain cart id`);
+        }
+        await clearCart(cartId);//clearing cart
+
+
     }
     catch(e)
     {
-        console.error("Stripe varification failed", e.message);
+        console.error("Stripe webhook failed", e.message);
         return res.sendStatus(400)
     }
-
-    const intent = event.data.object;
-    switch (event.type){
-        case "payment_intent.payment_failed":
-            //access the stripe object
-            //log that the payment has failed
-            console.error("payment failed", intent.id);
-            res.sendStatus(200);
-            break;
-        case "payment_intent.succeeded":
-            const cart_id = intent.metadata.cart_id;
-             clearCart(cart_id);//clears cart
-             break;
-    }
+    return res.sendStatus(200);
     /* 
     webhook should handle creating the order, clearing the cart and enqueuing the email that will be sent.
     */
