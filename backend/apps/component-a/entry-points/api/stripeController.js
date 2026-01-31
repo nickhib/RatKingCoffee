@@ -1,5 +1,6 @@
 import * as stripeService from '../../domain/stripeService.js'
 import { clearCart } from '../../data-access/cartRepository.js';
+import * as orderService from '../../domain/orderService.js'
 import express, { Router } from 'express';
 
 const router = Router();
@@ -35,9 +36,13 @@ router.post("/create-payment-intent", async (req, res) => {
     {
         event = verifyStripe(req);//stripe verification
         cartId = await stripeEvent(event);//payment verification
+        const orderId = intent.metadata.order_id;
         if(!cartId){
             throw new Error(`payment intent metadata did not contain cart id`);
         }
+        orderService.editOrder(orderId,"confirmed")
+
+
         await clearCart(cartId);//clearing cart
 
 

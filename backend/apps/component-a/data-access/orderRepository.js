@@ -39,3 +39,24 @@ export async function createOrder(req,cartId,cashAmount) {
     )
     return orderId;
 }
+
+
+export async function editOrder(orderID, task) {
+    let db = await getDatabase(); 
+
+    //need to make sure order items are recorded right now orders is the only thing changed and payments need to be logged
+    //this is to make sure that we can view how users paid what they paid for and delivery address.,
+    let status;
+    try{
+        if(task == "confirmed")
+        {
+            status = "complete";
+            await db.run(`
+            UPDATE orders SET status = 'paid' WHERE id = ?`,[orderID]);
+        }
+    }
+    catch(e)
+    {
+        throw new Error(`orders table update failed task = ${task} - error:${ e } `);
+    }
+}
