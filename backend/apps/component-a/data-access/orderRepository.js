@@ -1,11 +1,24 @@
 import { getDatabase } from './getDatabase.js';
 import crypto from 'crypto';
 export async function createOrder(req,cartId,cashAmount) {
-    let db = getDatabase();
+    let db = await getDatabase();
     const {allItems} = req.body;
     let address = allItems.addressData;
-    let email = allItems.emailData;
+    let email = allItems.EmailData?.EmailCtrl ? allItems.EmailData.EmailCtrl : " " ;
     let orderId = `ord_${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
+    console.log(
+            orderId, 
+            cartId, 
+            cashAmount ,
+             `${address.firstNameCtrl} ${address.lastNameCtrl}`,
+            email , 
+            address.phoneNumber, 
+            address.Addressline1Ctrl, 
+            address.cityCtrl, 
+            address.StateCtrl, 
+            address.zipCodeCtrl
+
+    );
     await db.run(`
         INSERT INTO orders (
             id, cart_id, total_amount, status, name,
@@ -15,9 +28,8 @@ export async function createOrder(req,cartId,cashAmount) {
             orderId, 
             cartId, 
             cashAmount ,
-             'pending', 
              `${address.firstNameCtrl} ${address.lastNameCtrl}`,
-            email.EmailCtrl , 
+            email , 
             address.phoneNumber, 
             address.Addressline1Ctrl, 
             address.cityCtrl, 
@@ -25,6 +37,5 @@ export async function createOrder(req,cartId,cashAmount) {
             address.zipCodeCtrl
         ]
     )
-
     return orderId;
 }

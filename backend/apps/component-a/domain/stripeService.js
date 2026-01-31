@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import dotenv from 'dotenv';
-import { createOrder } from "./orderService";
+import { createOrder } from "./orderService.js";
 dotenv.config();
 const endpointSecret = 'mykey';
 //process.env.STRIPE_webhook_secret
@@ -26,7 +26,7 @@ const calculateOrderAmount = (items) => {
 
 export async function createPaymentIntent(req)
 {
-  const { allItems } = req.body;   
+  const { allItems } = req.body;
   const cartId = req.cookies?.cart_id;
   if (!cartId) {
     return {
@@ -36,7 +36,9 @@ export async function createPaymentIntent(req)
     }
   }
     const cashAmount =calculateOrderAmount(allItems);
+   
     const orderId = await createOrder(req, cartId,cashAmount);
+     console.log("yes");
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const paymentIntent = await stripe.paymentIntents.create({
     amount: cashAmount,
@@ -49,7 +51,6 @@ export async function createPaymentIntent(req)
       enabled: true,
     },
   });
-  
     return paymentIntent;
 }
 
