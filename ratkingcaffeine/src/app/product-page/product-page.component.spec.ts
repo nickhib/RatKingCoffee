@@ -1,5 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Component, Input,OnInit, } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Product } from '../models/product.model';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ProductPageCarouselComponent } from '../product-page-carousel/product-page-carousel.component';
+import { ProductPageReviewsComponent } from '../product-page-reviews/product-page-reviews.component';
+import { ProductPageReviewsPaginationComponent } from '../product-page-reviews-pagination/product-page-reviews-pagination.component';
 import { ProductPageComponent } from './product-page.component';
 
 describe('ProductPageComponent', () => {
@@ -8,8 +15,22 @@ describe('ProductPageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProductPageComponent]
+      imports: [FormsModule,ProductPageComponent],
     });
+    providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: {
+                get: (key: string) => (key === 'id' ? '123' : null),
+              },
+            },
+            // If you ever use route.params observable instead of snapshot:
+            // params: of({ id: '123' })
+          }
+        }
+    ]
     fixture = TestBed.createComponent(ProductPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
