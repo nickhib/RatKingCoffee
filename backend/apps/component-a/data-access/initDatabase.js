@@ -486,6 +486,42 @@ export async function initDb() {
         FOREIGN KEY (product_id) REFERENCES products(id),
         UNIQUE(cart_id, product_id)
       );
+      CREATE TABLE IF NOT EXISTS orders (
+        id TEXT PRIMARY KEY,
+        cart_id TEXT,
+        total_amount INTEGER,
+        currency TEXT DEFAULT 'usd',
+        name TEXT,
+        email TEXT,
+        phone TEXT,
+        address TEXT,
+        city TEXT,
+        state TEXT,
+        zipcode TEXT,
+        status TEXT CHECK(status IN ('pending', 'paid','cancelled', 'refunded')),
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+        CREATE TABLE IF NOT EXISTS order_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id TEXT,
+        product_id TEXT,
+        quantity INTEGER,
+        price_at_purchase INTEGER,
+        FOREIGN KEY (order_id) REFERENCES orders(id)
+        );
+      CREATE TABLE IF NOT EXISTS payments 
+      (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id TEXT,
+        stripe_payment_intent TEXT UNIQUE,
+        status TEXT CHECK (status IN ('created', 'succeeded', 'failed', 'refunded')),
+        amount INTEGER,
+        currency TEXT DEFAULT 'usd',
+        failure_reason TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (order_id) REFERENCES orders(id)
+      );
       CREATE TABLE IF NOT EXISTS reviews (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         coffee_id TEXT NOT NULL,
@@ -495,8 +531,7 @@ export async function initDb() {
         date TEXT,
         UNIQUE(coffee_id,reviewer,comment,date)
       );
-    `);//when finding correct reviews one needs to SELECT * FROM reviews WHERE coffee_id = value
-    /* can add not null to make sure the values arent null*/
+    `);
     await defaultProducts();
 }
 

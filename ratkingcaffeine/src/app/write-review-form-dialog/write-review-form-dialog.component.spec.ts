@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Component,Inject } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { Review } from '../models/product.model';
 import { WriteReviewFormDialogComponent } from './write-review-form-dialog.component';
 
 describe('WriteReviewFormDialogComponent', () => {

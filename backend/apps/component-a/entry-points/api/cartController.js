@@ -7,7 +7,7 @@ router.get('/', async (req,res,next)  =>
 { 
 try 
   {
-     const cartId = await cartService.checkCookie(req,res);//can check if the cart is in the database
+     const cartId = await cartService.checkCookie(req,res);//can check if the cart is in the data    base
      let cart = await cartService.fetchCart(cartId);
      for(let i of cart)
      {

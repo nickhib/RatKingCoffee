@@ -1,5 +1,5 @@
 import { getDatabase } from './getDatabase.js';
-
+import crypto from 'crypto';
 //reference https://expressjs.com/en/5x/api.html
 // helper function
 
@@ -15,6 +15,19 @@ export async function createCart(req,res) {
        console.log("cart exists" , cartId);
     }
     return cartId;
+}
+export async function clearCart(cartId)
+{
+  const db = await getDatabase();
+  try{
+    db.run('DELETE FROM cart WHERE id = ?', [cartId]);
+    db.run('DELETE FROM cart_items WHERE cart_id = ?', [cartId]);
+  }
+  catch(e)
+  {
+    console.error(`failed to clear cart ${cartId} `,e);
+    throw e;
+  }
 }
 export async function syncCart(req,cartId) {
   const db = await getDatabase();

@@ -83,6 +83,12 @@ export class CartService
       console.warn('Error loaded parsed cart data may be melformed, attempting to sync with backend ',e);
     }
   }
+
+  clearCart(){
+    this.cart = [];
+    this.cartSubject.next([...this.cart]);
+    this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
+  }
   addToCart(product: ApiProduct, productQuantity: number){
     //get product from backend
     console.log("checking" , product , "checked");

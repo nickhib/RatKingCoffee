@@ -1,10 +1,8 @@
-import { provideHttpClient } from '@angular/common/http';
-import { HttpClient } from '@angular/common/http';
+
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, NgZone, inject } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StripeService } from '../services/stripe.service';
-import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { Stripe, StripeElements, StripeAddressElement,StripeCardCvcElement, StripeCardNumberElement, StripeCardExpiryElement, StripePaymentElement,Appearance } from '@stripe/stripe-js';
 import { CommonModule } from '@angular/common';
@@ -31,6 +29,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
   templateUrl: './checkout-page.component.html',
   styleUrl: './checkout-page.component.css',
 })
+// value: Abstractcontrol value gives you current value https://v17.angular.io/api/forms/AbstractControl#description
 export class CheckoutPageComponent implements OnInit{
   
   @ViewChild('cardInfo') cardInfo!: ElementRef;
@@ -146,7 +145,7 @@ clientSecret: string | null = null;
         }
       };
       this.stripe = await this.stripeService.getStripe();
-      const createResp = await this.stripeService.createPaymentIntentMock(this.cartItems, this.selectedOption);
+      const createResp = await this.stripeService.createPaymentIntentMock(this.firstFormGroup.value,this.secondFormGroup.value,this.cartItems, this.selectedOption);
       const clientSecret = createResp.clientSecret;
       this.stripe = await this.stripeService.getStripe();
       if (!this.stripe) {
@@ -223,12 +222,19 @@ clientSecret: string | null = null;
 
       if(result.paymentIntent&&result.paymentIntent.status ==="succeeded")
       {
+        this.router.navigate(['/home']);
         console.log("payment succeded");
+
+        /* 
+        clear cart after payment was successful
+        ideally put the fully paid for cart in a table before this for history
+        */
+        this.cartService.clearCart();
+
         this.paymentSucceeded = true;
         this.isProcessing = false;
         setTimeout(() => {
         alert('Payment successful!');
-        this.router.navigate(['/home']);
 }, 10);
       }
     if (result.error) {
