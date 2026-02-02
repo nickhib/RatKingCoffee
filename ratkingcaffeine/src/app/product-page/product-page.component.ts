@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ProductPageCarouselComponent } from '../product-page-carousel/product-page-carousel.component';
 import { ProductPageReviewsComponent } from '../product-page-reviews/product-page-reviews.component';
 import { ProductPageReviewsPaginationComponent } from '../product-page-reviews-pagination/product-page-reviews-pagination.component';
+
 interface products {
   title: string;
   description: string;
