@@ -1,4 +1,4 @@
-# ecommerce-full-stack - under development,
+# ecommerce-full-stack
 There have been a lot of updates!<br>
 1. Updated to the most recent Angular version.
 2. Changed all components to be standalone and split up features for a more modular design
