@@ -37,6 +37,16 @@ export async function createOrder(req,cartId,cashAmount) {
             address.zipCodeCtrl
         ]
     )
+    const cart_items = await db.all(`SELECT ci.product_id, ci.quantity, p.price FROM cart_items ci 
+        JOIN products p ON ci.product_id = p.id WHERE ci.cart_id = ?`, [cartId]);
+    for (const item of cart_items) {
+        console.log(orderId, item.product_id, item.quantity, item.price);
+        await db.run(`
+        INSERT INTO order_items
+        (order_id, product_id, quantity, price_at_purchase)
+        VALUES (?, ?, ?, ?)
+    `, [orderId, item.product_id, item.quantity, item.price]);
+    }
     return orderId;
 }
 

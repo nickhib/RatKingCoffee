@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import dotenv from 'dotenv';
 import { createOrder } from "./orderService.js";
+import { createPayment } from "./paymentService.js";
 dotenv.config();
 const endpointSecret = 'mykey';
 //process.env.STRIPE_webhook_secret
@@ -51,7 +52,8 @@ export async function createPaymentIntent(req)
       enabled: true,
     },
   });
-    return paymentIntent;
+  await createPayment(paymentIntent);
+  return paymentIntent;
 }
 
 export function verifyStripe(req)

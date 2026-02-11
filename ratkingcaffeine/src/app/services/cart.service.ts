@@ -90,10 +90,8 @@ export class CartService
     this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
   }
   addToCart(product: ApiProduct, productQuantity: number){
-    //get product from backend
-    console.log("checking" , product , "checked");
   
-  const exists = this.cart.find(item => item.id === product.id);
+    const exists = this.cart.find(item => item.id === product.id);
 
     if(exists)
     {
