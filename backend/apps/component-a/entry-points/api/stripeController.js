@@ -29,12 +29,23 @@ router.post("/create-payment-intent", async (req, res) => {
     at https://dashboard.stripe.com/webhooks
  */
     router.post("/webhook", express.raw({type: 'application/json'}), async (req, res) => {
-    // Get the signature sent by Stripe
+    // verify stripe
+    // determine the event payment successful/failed
+    // edit order based on payment event
+    // edit payment in database to event
+    // clear cart
     let event;
     let cartId
+    try{
+        event = verifyStripe(req);//stripe verification
+    }
+    catch(e)
+    {
+        console.error("Verification Failed:",e.message);
+        return res.status(400).send("invalid webhook");
+    }
     try 
     {
-        event = verifyStripe(req);//stripe verification
         cartId = await stripeEvent(event);//payment verification
         const orderId = intent.metadata.order_id;
         if(!cartId){
