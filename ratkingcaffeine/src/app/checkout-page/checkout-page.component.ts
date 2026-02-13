@@ -145,7 +145,7 @@ clientSecret: string | null = null;
         }
       };
       this.stripe = await this.stripeService.getStripe();
-      const createResp = await this.stripeService.createPaymentIntentMock(this.firstFormGroup.value,this.secondFormGroup.value,this.cartItems, this.selectedOption);
+      const createResp = await this.stripeService.createPaymentIntent(this.firstFormGroup.value,this.secondFormGroup.value,this.cartItems, this.selectedOption);
       const clientSecret = createResp.clientSecret;
       this.stripe = await this.stripeService.getStripe();
       if (!this.stripe) {

@@ -16,7 +16,7 @@ export class StripeService {
   async getStripe(): Promise<Stripe | null> {
     return await this.stripePromise;
   }
-  async createPaymentIntentMock(customerEmailData: emailData,customerAddressData: addressData,items: shoppingCartItems[], shipping: string): Promise<{ clientSecret: string }> {
+  async createPaymentIntent(customerEmailData: emailData,customerAddressData: addressData,items: shoppingCartItems[], shipping: string): Promise<{ clientSecret: string; orderId: string }> {
     const allItems: AllItems = {
       products: items,
       shippingMethod: shipping,
@@ -24,9 +24,9 @@ export class StripeService {
       EmailData: customerEmailData
     }
     //https://rxjs.dev/api/index/function/firstValueFrom
-    const response = await firstValueFrom(this.http.post<{clientSecret: string}>(`${this.stripeUrl}`, { allItems },{ withCredentials: true }));
+    const response = await firstValueFrom(this.http.post<{clientSecret: string; orderId: string }>(`${this.stripeUrl}`, { allItems },{ withCredentials: true }));
     console.log("response" , response);
     
-    return {clientSecret: response.clientSecret};
+    return {clientSecret: response.clientSecret, orderId: response.orderId};
 }
 }

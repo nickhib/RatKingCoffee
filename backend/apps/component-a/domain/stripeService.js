@@ -80,15 +80,11 @@ export async function stripeEvent(event)
       switch (event.type){
           case "payment_intent.payment_failed":
               console.error("payment failed", intent.id);
-              throw new Error("payment failed");
+              return "failed";
           case "payment_intent.succeeded":
-              const cartId = intent.metadata.cart_id;
-              if(!cartId)
-              {
-                throw new Error("missing cart_id in payment intent metadata");
-              }
-              return cartId; 
+              console.error("payment succeeded", intent.id);
+              return "confirmed"; 
           default:
-            throw new Error(`unhandled stripe event: ${event}`);
+            return "undefined";
       }
 }

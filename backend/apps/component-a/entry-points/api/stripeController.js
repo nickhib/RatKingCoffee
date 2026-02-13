@@ -15,6 +15,7 @@ router.post("/create-payment-intent", async (req, res) => {
         const paymentIntent = await stripeService.createPaymentIntent(req);
         res.send({
             clientSecret: paymentIntent.client_secret,
+            orderId: paymentIntent.metadata.order_id
         })
     }
     catch (err)
@@ -46,7 +47,7 @@ router.post("/create-payment-intent", async (req, res) => {
     }
     try 
     {
-        cartId = await stripeEvent(event);//payment verification
+        task = await stripeEvent(event);//payment verification
         const orderId = intent.metadata.order_id;
         if(!cartId){
             throw new Error(`payment intent metadata did not contain cart id`);
