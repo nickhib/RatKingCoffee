@@ -145,6 +145,11 @@ clientSecret: string | null = null;
         }
       };
       this.stripe = await this.stripeService.getStripe();
+      //if orderid cookie doesnt exist 
+      //create paymentintent
+      //create orderid cookie
+      // if paymentintent is paid delete orderid cookie
+      // if one leaves checkout delete orderid  cookie as well
       const createResp = await this.stripeService.createPaymentIntent(this.firstFormGroup.value,this.secondFormGroup.value,this.cartItems, this.selectedOption);
       const clientSecret = createResp.clientSecret;
       this.stripe = await this.stripeService.getStripe();

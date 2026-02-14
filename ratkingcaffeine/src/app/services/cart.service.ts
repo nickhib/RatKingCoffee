@@ -50,7 +50,7 @@ export class CartService
   {
      return this.http.get<shoppingCartItems[]>(`${this.baseUrl}/`,{ withCredentials: true });
   }
-  initcart() 
+  initcart()//on navbar creation we do init cart so we grab from the backend if local is gone. 
   {
     const savedCart = this.localStorageService.getItem('localCart');
     if(!savedCart){
