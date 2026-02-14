@@ -13,7 +13,8 @@ const router = Router();
 router.post("/create-payment-intent", async (req, res) => {
     try{
         const paymentIntent = await stripeService.createPaymentIntent(req);
-        res.send({
+        res.cookie('order_id', paymentIntent.metadata.order_id, { httpOnly: true, secure: false });
+        res.status(200)({
             clientSecret: paymentIntent.client_secret,
             orderId: paymentIntent.metadata.order_id
         })

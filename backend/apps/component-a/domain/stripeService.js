@@ -25,7 +25,7 @@ const calculateOrderAmount = (items) => {
   return total;
 };
 
-export async function createPaymentIntent(req)
+export async function createPaymentIntent(req,res)
 {
   const { allItems } = req.body;
   const cartId = req.cookies?.cart_id;
