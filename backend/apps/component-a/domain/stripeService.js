@@ -39,7 +39,6 @@ export async function createPaymentIntent(req,res)
     const cashAmount =calculateOrderAmount(allItems);
    
     const orderId = await createOrder(req, cartId,cashAmount);
-     console.log("yes");
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const paymentIntent = await stripe.paymentIntents.create({
     amount: cashAmount,
@@ -54,6 +53,25 @@ export async function createPaymentIntent(req,res)
   });
   await createPayment(paymentIntent);
   return paymentIntent;
+}
+export async function editPaymentIntent(req, paymentIntentId)
+{
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const { allItems } = req.body;
+    const cartId = req.cookies?.cart_id;
+    if (!cartId) {
+      return {
+        ok: false,
+        error: "missing cart cookie" 
+      }
+    }
+    const cashAmount =calculateOrderAmount(allItems);
+    const paymentIntent =await stripe.paymentIntents.update(
+      paymentIntentId,
+      {
+      amount: cashAmount
+    });
+    return paymentIntent;
 }
 
 export function verifyStripe(req)

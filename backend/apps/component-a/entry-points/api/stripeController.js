@@ -1,6 +1,7 @@
 import * as stripeService from '../../domain/stripeService.js'
 import { clearCart } from '../../data-access/cartRepository.js';
 import * as orderService from '../../domain/orderService.js'
+import * as paymentService from '../../domain/paymentService.js'
 import express, { Router } from 'express';
 
 const router = Router();
@@ -11,18 +12,32 @@ const router = Router();
  */
 //https://docs.stripe.com/payments/quickstart?lang=node
 router.post("/create-payment-intent", async (req, res) => {
-    try{
-        const paymentIntent = await stripeService.createPaymentIntent(req);
-        res.cookie('order_id', paymentIntent.metadata.order_id, { httpOnly: true, secure: false });
-        res.status(200)({
-            clientSecret: paymentIntent.client_secret,
-            orderId: paymentIntent.metadata.order_id
-        })
+    /*
+    if order does not exist then we must create one
+    else it does exist
+    if does exist we must just edit the payment intent 
+    */
+    let orderId = req.cookies.order_id;
+    if(!orderId){
+        try{
+            const paymentIntent = await stripeService.createPaymentIntent(req);
+            res.cookie('order_id', paymentIntent.metadata.order_id, { httpOnly: true, secure: false });
+            res.status(200).json({
+                clientSecret: paymentIntent.client_secret,
+                orderId: paymentIntent.metadata.order_id
+            })
+        }
+        catch (err)
+        {
+            res.status(500).send({error: err.message });
+        }
     }
-    catch (err)
-    {
-        res.status(500).send({error: err.message });
-    }
+ 
+    const paymentIntent = paymentService.useExistingPaymentIntent(req);
+    res.status(200).json({
+        clientSecret: paymentIntent.client_secret,
+        orderId: paymentIntent.metadata.order_id
+    })
 });
 /* 
 

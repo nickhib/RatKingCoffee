@@ -17,7 +17,6 @@ export async function createOrder(req,cartId,cashAmount) {
             address.cityCtrl, 
             address.StateCtrl, 
             address.zipCodeCtrl
-
     );
     await db.run(`
         INSERT INTO orders (
