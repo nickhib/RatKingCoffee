@@ -22,19 +22,19 @@ router.post("/create-payment-intent", async (req, res) => {
         try{
             const paymentIntent = await stripeService.createPaymentIntent(req);
             res.cookie('order_id', paymentIntent.metadata.order_id, { httpOnly: true, secure: false });
-            res.status(200).json({
+            return res.status(200).json({
                 clientSecret: paymentIntent.client_secret,
                 orderId: paymentIntent.metadata.order_id
             })
         }
         catch (err)
         {
-            res.status(500).send({error: err.message });
+           return res.status(500).send({error: err.message });
         }
     }
  
     const paymentIntent = paymentService.useExistingPaymentIntent(req);
-    res.status(200).json({
+    return res.status(200).json({
         clientSecret: paymentIntent.client_secret,
         orderId: paymentIntent.metadata.order_id
     })
@@ -51,36 +51,37 @@ router.post("/create-payment-intent", async (req, res) => {
     // edit order based on payment event
     // edit payment in database to event
     // clear cart
-    let event;
-    let cartId
-    try{
-        event = verifyStripe(req);//stripe verification
-    }
-    catch(e)
-    {
-        console.error("Verification Failed:",e.message);
-        return res.status(400).send("invalid webhook");
-    }
-    try 
-    {
-        task = await stripeEvent(event);//payment verification
-        const orderId = intent.metadata.order_id;
-        if(!cartId){
-            throw new Error(`payment intent metadata did not contain cart id`);
+        let event;
+        let cartId
+        try{
+            event = verifyStripe(req);//stripe verification
         }
-        orderService.editOrder(orderId,"confirmed")
+        catch(e)
+        {
+            console.error("Verification Failed:",e.message);
+            return res.status(400).send("invalid webhook");
+        }
+        try 
+        {
+            task = await stripeEvent(event);//payment verification
+            const orderId = intent.metadata.order_id;
+            if(!cartId){
+                throw new Error(`payment intent metadata did not contain cart id`);
+            }
+
+            orderService.editOrder(orderId,"confirmed")
 
 
-        await clearCart(cartId);//clearing cart
+            await clearCart(cartId);//clearing cart
 
 
-    }
-    catch(e)
-    {
-        console.error("Stripe webhook failed", e.message);
-        return res.sendStatus(400)
-    }
-    return res.sendStatus(200);
+        }
+        catch(e)
+        {
+            console.error("Stripe webhook failed", e.message);
+            return res.sendStatus(400)
+        }
+        return res.sendStatus(200);
     /* 
     webhook should handle creating the order, clearing the cart and enqueuing the email that will be sent.
     */
