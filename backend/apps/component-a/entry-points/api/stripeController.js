@@ -45,14 +45,13 @@ router.post("/create-payment-intent", async (req, res) => {
     If you are using an endpoint defined with the API or dashboard, look in your webhook settings
     at https://dashboard.stripe.com/webhooks
  */
-    router.post("/webhook", express.raw({type: 'application/json'}), async (req, res) => {
+router.post("/webhook", express.raw({type: 'application/json'}), async (req, res) => {
     // verify stripe
     // determine the event payment successful/failed
     // edit order based on payment event
     // edit payment in database to event
     // clear cart
         let event;
-        let cartId
         try{
             event = verifyStripe(req);//stripe verification
         }
@@ -61,20 +60,18 @@ router.post("/create-payment-intent", async (req, res) => {
             console.error("Verification Failed:",e.message);
             return res.status(400).send("invalid webhook");
         }
+        const intent = event.data.object;
         try 
         {
-            task = await stripeEvent(event);//payment verification
+            const task = await stripeEvent(event);//payment verification
             const orderId = intent.metadata.order_id;
-            if(!cartId){
-                throw new Error(`payment intent metadata did not contain cart id`);
+            if(!orderId){
+                throw new Error("Missing orderId or cartId in metadata");
             }
-
-            orderService.editOrder(orderId,"confirmed")
-
-
-            await clearCart(cartId);//clearing cart
-
-
+           await orderService.editOrder(orderId,task)
+           await paymentService.editPayment(orderId, task);
+            if(task ==="confirmed")
+                await clearCart(cartId);//clearing cart
         }
         catch(e)
         {
@@ -82,9 +79,7 @@ router.post("/create-payment-intent", async (req, res) => {
             return res.sendStatus(400)
         }
         return res.sendStatus(200);
-    /* 
-    webhook should handle creating the order, clearing the cart and enqueuing the email that will be sent.
-    */
+
 });
 
 export default router;

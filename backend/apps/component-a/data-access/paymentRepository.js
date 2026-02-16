@@ -17,7 +17,26 @@ export async function createPayment(paymentIntent) {
     return;
 }
 export async function editPayment(orderID, task) {
-
+    let db = await getDatabase();
+    if(!orderID)
+    {
+        console.error("editPayment: order id is undefined.");
+        return;
+    }
+    let status;
+    
+    if (task === "confirmed") {
+        status = "succeeded";
+    } else if (task === "failed") {
+        status = "failed";
+    } else {
+        console.error("editPayment: invalid task:", task);
+        return;
+    }
+    const result = await db.run(`UPDATE payments SET status = ? WHERE order_id = ?`,[status, orderID]);
+    if (result.changes === 0) {
+        console.warn("editPayment: no rows updated for order", orderID);
+    }
 
 }
 
