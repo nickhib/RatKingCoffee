@@ -60,12 +60,24 @@ router.post("/webhook", express.raw({type: 'application/json'}), async (req, res
             console.error("Verification Failed:",e.message);
             return res.status(400).send("invalid webhook");
         }
+        res.status(200).send();
+        /* 
+        send status code 200 response early must be done. if stripe doesnt receive a timely response
+        it may attempt to retry the webhook.
+
+        helps with preventing retries, long running processes, idempotency concerns asynchronous processing.
+        
+        since we respond early we can now comprehensively log errors since stripe will no longer retry
+        the webhook no matter what error you throw since we already sent it back 200. 
+        
+        */
         const intent = event.data.object;
         try 
         {
             const task = await stripeEvent(event);//payment verification
             const orderId = intent.metadata.order_id;
-            if(!orderId){
+            const cartId = intent.metadata.cart_id;
+            if(!orderId || !cartId){
                 throw new Error("Missing orderId or cartId in metadata");
             }
            await orderService.editOrder(orderId,task)
@@ -75,7 +87,7 @@ router.post("/webhook", express.raw({type: 'application/json'}), async (req, res
         }
         catch(e)
         {
-            console.error("Stripe webhook failed", e.message);
+            console.error(`Stripe webhook failed (event type: ${event.type}):`, e.message);
             return res.sendStatus(400)
         }
         return res.sendStatus(200);

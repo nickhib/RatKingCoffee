@@ -97,10 +97,10 @@ export async function stripeEvent(event)
       const intent = event.data.object;
       switch (event.type){
           case "payment_intent.payment_failed":
-              console.error("payment failed", intent.id);
+              console.log("payment failed", intent.id);
               return "failed";
           case "payment_intent.succeeded":
-              console.error("payment succeeded", intent.id);
+              console.log("payment succeeded", intent.id);
               return "confirmed"; 
           default:
             return "undefined";

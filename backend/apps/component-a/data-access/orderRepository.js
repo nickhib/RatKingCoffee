@@ -50,12 +50,12 @@ export async function createOrder(req,cartId,cashAmount) {
 }
 
 
-export async function editOrder(orderID, task) {
-    let db = await getDatabase(); 
-    let status;
-    if(task == "confirmed")
-    {
-        status = "complete";
-        await db.run(`UPDATE orders SET status = 'paid' WHERE id = ?`,[orderID]);
-    }
+    export async function editOrder(orderID, task) {
+        let db = await getDatabase(); 
+        let status;
+        if(task == "confirmed")
+        {
+            status = "complete";
+            await db.run(`UPDATE orders SET status = 'paid' WHERE id = ?`,[orderID]);
+        }
 }
