@@ -35,9 +35,11 @@ export async function editPayment(orderID, task) {
     }
     const result = await db.run(`UPDATE payments SET status = ? WHERE order_id = ?`,[status, orderID]);
     if (result.changes === 0) {
-        console.warn("editPayment: no rows updated for order", orderID);
+        console.warn("could not find payment with order id", orderID);
+        return false;
     }
-
+    console.log(`Payment with ${ orderID } status marked as paid`);
+    return true;
 }
 
 export async function fetchPaymentIntent(req, orderId){

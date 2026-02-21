@@ -50,12 +50,30 @@ export async function createOrder(req,cartId,cashAmount) {
 }
 
 
-    export async function editOrder(orderID, task) {
-        let db = await getDatabase(); 
-        let status;
+export async function editOrder(orderID, task) {
+    let db = await getDatabase(); 
+    let status;
+
+    try{
         if(task == "confirmed")
         {
             status = "complete";
-            await db.run(`UPDATE orders SET status = 'paid' WHERE id = ?`,[orderID]);
+            let check = await db.run(`UPDATE orders SET status = 'paid' WHERE id = ?`,[orderID]);
+            if(check.changes === 0)
+            {
+                console.warn(`no roder found with id ${orderID}`);
+                return false;
+            }
+            console.log(`Order ${orderID} marked as paid`);
+            return true;
         }
+    }
+    catch(e)
+    {
+
+        console.error("failed to update order",e)
+        return false;
+
+    }
 }
+        

@@ -51,16 +51,16 @@ router.post("/webhook", express.raw({type: 'application/json'}), async (req, res
     // edit order based on payment event
     // edit payment in database to event
     // clear cart
-        let event;
-        try{
-            event = verifyStripe(req);//stripe verification
-        }
-        catch(e)
-        {
-            console.error("Verification Failed:",e.message);
-            return res.status(400).send("invalid webhook");
-        }
-        res.status(200).send();
+    let event;
+    try{
+        event = verifyStripe(req);//stripe verification
+    }
+    catch(e)
+    {
+        console.error("Verification Failed:",e.message);
+        return res.status(400).send("invalid webhook");
+    }
+    res.status(200).send();
         /* 
         send status code 200 response early must be done. if stripe doesnt receive a timely response
         it may attempt to retry the webhook.
@@ -71,26 +71,26 @@ router.post("/webhook", express.raw({type: 'application/json'}), async (req, res
         the webhook no matter what error you throw since we already sent it back 200. 
         
         */
-        const intent = event.data.object;
-        try 
-        {
-            const task = await stripeEvent(event);//payment verification
-            const orderId = intent.metadata.order_id;
-            const cartId = intent.metadata.cart_id;
-            if(!orderId || !cartId){
-                throw new Error("Missing orderId or cartId in metadata");
-            }
-           await orderService.editOrder(orderId,task)
-           await paymentService.editPayment(orderId, task);
-            if(task ==="confirmed")
-                await clearCart(cartId);//clearing cart
+    const intent = event.data.object;
+    try 
+    {
+        const task = await stripeEvent(event);//payment verification
+        const orderId = intent.metadata.order_id;
+        const cartId = intent.metadata.cart_id;
+        if(!orderId || !cartId){
+            throw new Error("Missing orderId or cartId in metadata");
         }
-        catch(e)
-        {
-            console.error(`Stripe webhook failed (event type: ${event.type}):`, e.message);
-            return res.sendStatus(400)
-        }
-        return res.sendStatus(200);
+        await orderService.editOrder(orderId,task)
+        await paymentService.editPayment(orderId, task);
+        if(task ==="confirmed")
+            await clearCart(cartId);//clearing cart
+    }
+    catch(e)
+    {
+        console.error(`Stripe webhook failed (event type: ${event.type}):`, e.message);
+        return res.sendStatus(400)
+    }
+    return res.sendStatus(200);
 
 });
 
