@@ -17,11 +17,22 @@ router.post("/create-payment-intent", async (req, res) => {
     else it does exist
     if does exist we must just edit the payment intent 
     */
+   console.log(req.cookies.cart_id);
     let orderId = req.cookies.order_id;
-    if(!orderId){
-        try{
-            const paymentIntent = await stripeService.createPaymentIntent(req);
+    if(orderId){
+
+        const paymentIntent =await paymentService.useExistingPaymentIntent(req, orderId);
+        if(paymentIntent)
+        return res.status(200).json({
+            clientSecret: paymentIntent.client_secret,
+            orderId: paymentIntent.metadata.order_id
+        })
+    }
+
+    try{
+        const paymentIntent = await stripeService.createPaymentIntent(req);
             res.cookie('order_id', paymentIntent.metadata.order_id, { httpOnly: true, secure: false });
+            console.log("sadas")
             return res.status(200).json({
                 clientSecret: paymentIntent.client_secret,
                 orderId: paymentIntent.metadata.order_id
@@ -31,13 +42,6 @@ router.post("/create-payment-intent", async (req, res) => {
         {
            return res.status(500).send({error: err.message });
         }
-    }
- 
-    const paymentIntent = paymentService.useExistingPaymentIntent(req);
-    return res.status(200).json({
-        clientSecret: paymentIntent.client_secret,
-        orderId: paymentIntent.metadata.order_id
-    })
 });
 /* 
 
@@ -51,6 +55,7 @@ router.post("/webhook", express.raw({type: 'application/json'}), async (req, res
     // edit order based on payment event
     // edit payment in database to event
     // clear cart
+    console.log("webhook");
     let event;
     try{
         event = verifyStripe(req);//stripe verification

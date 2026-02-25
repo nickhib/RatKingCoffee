@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { createOrder } from "./orderService.js";
 import { createPayment } from "./paymentService.js";
 dotenv.config();
-const endpointSecret = 'mykey';
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 //process.env.STRIPE_webhook_secret
 const calculateOrderAmount = (items) => {
   console.log(items);
@@ -30,6 +30,7 @@ export async function createPaymentIntent(req,res)
   const { allItems } = req.body;
   const cartId = req.cookies?.cart_id;
   if (!cartId) {
+    console.log("o");
     return {
       //returns this object if we cannot find the cookie. 
       ok: false,
@@ -37,8 +38,9 @@ export async function createPaymentIntent(req,res)
     }
   }
     const cashAmount =calculateOrderAmount(allItems);
-   
     const orderId = await createOrder(req, cartId,cashAmount);
+    if(!orderId)
+      console.log("orderid not found");
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const paymentIntent = await stripe.paymentIntents.create({
     amount: cashAmount,
@@ -76,6 +78,7 @@ export async function editPaymentIntent(req, paymentIntentId)
 
 export function verifyStripe(req)
 {
+   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = req.headers['stripe-signature'];
   let event = req.body;
   if(!endpointSecret)
@@ -88,7 +91,7 @@ export function verifyStripe(req)
     console.warn("missing stripe signature in header");
     throw new Error("Missing Stripe signature");
   }
-  return stripeService.webhooks.constructEvent(event,signature, endpointSecret);
+  return stripe.webhooks.constructEvent(event,signature, endpointSecret);
 }
 
 export async function stripeEvent(event)

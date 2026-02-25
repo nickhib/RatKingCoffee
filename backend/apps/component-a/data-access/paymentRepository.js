@@ -45,7 +45,7 @@ export async function editPayment(orderID, task) {
 export async function fetchPaymentIntent(req, orderId){
     let db = await getDatabase();
     //db.get returns the row as an object
-    const paymentIntentId = await db.get(`SELECT stripe_payment_intent FROM payment WHERE order_id = ? `,[orderId]);
+    const paymentIntentId = await db.get(`SELECT stripe_payment_intent FROM payments WHERE order_id = ? `,[orderId]);
     return paymentIntentId?.stripe_payment_intent;
 }
 

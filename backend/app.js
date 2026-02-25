@@ -17,7 +17,6 @@ app.use(cors({
 })); // https://www.npmjs.com/package/cors
 app.use(cookieParser());//https://www.npmjs.com/package/cookie-parser
 app.use(cookieHandler);//middleware to create cookie if user does not have one.
-app.use(bodyParser.json());
 app.get('/', (req, res) => res.send('API is running'));
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
