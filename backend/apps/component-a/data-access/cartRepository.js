@@ -17,12 +17,13 @@ export async function createCart(req,res) {
 
     return cartId;
 }
-export async function clearCart(cartId)
+export async function clearCart(cartId,res)
 {
   const db = await getDatabase();
   try{
     db.run('DELETE FROM cart WHERE id = ?', [cartId]);
     db.run('DELETE FROM cart_items WHERE cart_id = ?', [cartId]);
+    res.clearCookie('cart_id', cartId, { httpOnly: true, secure: false });
   }
   catch(e)
   {

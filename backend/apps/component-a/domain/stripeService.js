@@ -28,9 +28,10 @@ const calculateOrderAmount = (items) => {
 export async function createPaymentIntent(req,res)
 {
   const { allItems } = req.body;
+
   const cartId = req.cookies?.cart_id;
-  if (!cartId) {
     console.log("o");
+  if (!cartId) {
     return {
       //returns this object if we cannot find the cookie. 
       ok: false,

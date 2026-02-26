@@ -5,11 +5,11 @@ import { logRequests } from './libraries/logger/src/index.js';
 import productRouter from './apps/component-a/entry-points/api/productController.js';
 import cartRouter from './apps/component-a/entry-points/api/cartController.js';
 import stripeRouter  from  './apps/component-a/entry-points/api/stripeController.js';
+import stripeWebhookRouter  from  './apps/component-a/entry-points/api/stripeWebhookController.js';
 import cookieHandler from './middlewares/cookieHandler.js';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 const app = express();
-app.use(express.json());
 app.use(logRequests);
 app.use(cors({
     origin: "http://localhost:4200",   // your Angular frontend URL
@@ -17,6 +17,8 @@ app.use(cors({
 })); // https://www.npmjs.com/package/cors
 app.use(cookieParser());//https://www.npmjs.com/package/cookie-parser
 app.use(cookieHandler);//middleware to create cookie if user does not have one.
+app.use('/api/stripe/webhook',stripeWebhookRouter)
+app.use(express.json());
 app.get('/', (req, res) => res.send('API is running'));
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
