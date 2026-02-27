@@ -30,7 +30,6 @@ export async function createPaymentIntent(req,res)
   const { allItems } = req.body;
 
   const cartId = req.cookies?.cart_id;
-    console.log("o");
   if (!cartId) {
     return {
       //returns this object if we cannot find the cookie. 
@@ -79,7 +78,8 @@ export async function editPaymentIntent(req, paymentIntentId)
 
 export function verifyStripe(req)
 {
-   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  console.log("verify stripe = 1");
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = req.headers['stripe-signature'];
   let event = req.body;
   if(!endpointSecret)
@@ -98,6 +98,7 @@ export function verifyStripe(req)
 export async function stripeEvent(event)
 {
 
+    console.log("entered stripeEvent();");
       const intent = event.data.object;
       switch (event.type){
           case "payment_intent.payment_failed":

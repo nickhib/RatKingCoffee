@@ -10,6 +10,6 @@ export async function fetchCart(cartId){
 export async function syncitems(req,cartId){
    return await Repo.syncCart(req,cartId);
 }
-export async function clearCart(cartId,res){
-   return await Repo.clearCart(cartId,res);
+export async function clearCart(cartId){
+   return await Repo.clearCart(cartId);
 }

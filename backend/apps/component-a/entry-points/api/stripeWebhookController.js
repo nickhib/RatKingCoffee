@@ -15,7 +15,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     console.log("webhook");
     let event;
     try{
-        event = verifyStripe(req);//stripe verification
+        event = stripeService.verifyStripe(req);//stripe verification
     }
     catch(e)
     {
@@ -36,7 +36,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     const intent = event.data.object;
     try 
     {
-        const task = await stripeEvent(event);//payment verification
+        const task = await stripeService.stripeEvent(event);//payment verification
         const orderId = intent.metadata.order_id;
         const cartId = intent.metadata.cart_id;
         if(!orderId || !cartId){
@@ -44,15 +44,17 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
         }
         await orderService.editOrder(orderId,task)
         await paymentService.editPayment(orderId, task);
-        if(task ==="confirmed")
-            await clearCart(cartId,res);//clearing cart
+        if(task ==="confirmed"){
+            await clearCart(cartId);//clearing cart
+            res.clearCookie('cart_id', cartId, { httpOnly: true, secure: false });
+        }
     }
     catch(e)
     {
         console.error(`Stripe webhook failed (event type: ${event.type}):`, e.message);
         return res.sendStatus(400)
     }
-    return res.sendStatus(200);
+    return;
 
 });
 
