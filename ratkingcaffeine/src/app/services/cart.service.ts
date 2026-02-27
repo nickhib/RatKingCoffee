@@ -50,7 +50,7 @@ export class CartService
   {
      return this.http.get<shoppingCartItems[]>(`${this.baseUrl}/`,{ withCredentials: true });
   }
-  initcart() 
+  initcart()//on navbar creation we do init cart so we grab from the backend if local is gone. 
   {
     const savedCart = this.localStorageService.getItem('localCart');
     if(!savedCart){
@@ -90,10 +90,8 @@ export class CartService
     this.localStorageService.setItem('localCart',JSON.stringify(this.cart));
   }
   addToCart(product: ApiProduct, productQuantity: number){
-    //get product from backend
-    console.log("checking" , product , "checked");
   
-  const exists = this.cart.find(item => item.id === product.id);
+    const exists = this.cart.find(item => item.id === product.id);
 
     if(exists)
     {

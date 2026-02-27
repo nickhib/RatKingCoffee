@@ -11,13 +11,12 @@ try
      let cart = await cartService.fetchCart(cartId);
      for(let i of cart)
      {
-      if (typeof i.imageUrl === 'string') {
-        i.imageUrl = JSON.parse(i.imageUrl);
-      }
+        if (typeof i.imageUrl === 'string') 
+        {
+          i.imageUrl = JSON.parse(i.imageUrl);
+        }
      }
-     console.log("cart = ",cart);
-
-     return res.json({ items: cart });
+     return res.status(200).json({ items: cart });
   } 
   catch (err) 
   {

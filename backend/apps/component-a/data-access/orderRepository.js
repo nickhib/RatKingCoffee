@@ -17,7 +17,6 @@ export async function createOrder(req,cartId,cashAmount) {
             address.cityCtrl, 
             address.StateCtrl, 
             address.zipCodeCtrl
-
     );
     await db.run(`
         INSERT INTO orders (
@@ -37,26 +36,44 @@ export async function createOrder(req,cartId,cashAmount) {
             address.zipCodeCtrl
         ]
     )
+    const cart_items = await db.all(`SELECT ci.product_id, ci.quantity, p.price FROM cart_items ci 
+        JOIN products p ON ci.product_id = p.id WHERE ci.cart_id = ?`, [cartId]);
+    for (const item of cart_items) {
+        console.log(orderId, item.product_id, item.quantity, item.price);
+        await db.run(`
+        INSERT INTO order_items
+        (order_id, product_id, quantity, price_at_purchase)
+        VALUES (?, ?, ?, ?)
+    `, [orderId, item.product_id, item.quantity, item.price]);
+    }
     return orderId;
 }
 
 
 export async function editOrder(orderID, task) {
     let db = await getDatabase(); 
-
-    //need to make sure order items are recorded right now orders is the only thing changed and payments need to be logged
-    //this is to make sure that we can view how users paid what they paid for and delivery address.,
     let status;
+
     try{
         if(task == "confirmed")
         {
             status = "complete";
-            await db.run(`
-            UPDATE orders SET status = 'paid' WHERE id = ?`,[orderID]);
+            let check = await db.run(`UPDATE orders SET status = 'paid' WHERE id = ?`,[orderID]);
+            if(check.changes === 0)
+            {
+                console.warn(`no roder found with id ${orderID}`);
+                return false;
+            }
+            console.log(`Order ${orderID} marked as paid`);
+            return true;
         }
     }
     catch(e)
     {
-        throw new Error(`orders table update failed task = ${task} - error:${ e } `);
+
+        console.error("failed to update order",e)
+        return false;
+
     }
 }
+        

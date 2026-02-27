@@ -14,6 +14,7 @@ export async function createCart(req,res) {
     else{
        console.log("cart exists" , cartId);
     }
+
     return cartId;
 }
 export async function clearCart(cartId)

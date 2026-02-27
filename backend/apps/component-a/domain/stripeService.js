@@ -1,8 +1,9 @@
 import Stripe from "stripe";
 import dotenv from 'dotenv';
 import { createOrder } from "./orderService.js";
+import { createPayment } from "./paymentService.js";
 dotenv.config();
-const endpointSecret = 'mykey';
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 //process.env.STRIPE_webhook_secret
 const calculateOrderAmount = (items) => {
   console.log(items);
@@ -24,9 +25,10 @@ const calculateOrderAmount = (items) => {
   return total;
 };
 
-export async function createPaymentIntent(req)
+export async function createPaymentIntent(req,res)
 {
   const { allItems } = req.body;
+
   const cartId = req.cookies?.cart_id;
   if (!cartId) {
     return {
@@ -36,9 +38,9 @@ export async function createPaymentIntent(req)
     }
   }
     const cashAmount =calculateOrderAmount(allItems);
-   
     const orderId = await createOrder(req, cartId,cashAmount);
-     console.log("yes");
+    if(!orderId)
+      console.log("orderid not found");
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const paymentIntent = await stripe.paymentIntents.create({
     amount: cashAmount,
@@ -51,11 +53,33 @@ export async function createPaymentIntent(req)
       enabled: true,
     },
   });
+  await createPayment(paymentIntent);
+  return paymentIntent;
+}
+export async function editPaymentIntent(req, paymentIntentId)
+{
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const { allItems } = req.body;
+    const cartId = req.cookies?.cart_id;
+    if (!cartId) {
+      return {
+        ok: false,
+        error: "missing cart cookie" 
+      }
+    }
+    const cashAmount =calculateOrderAmount(allItems);
+    const paymentIntent =await stripe.paymentIntents.update(
+      paymentIntentId,
+      {
+      amount: cashAmount
+    });
     return paymentIntent;
 }
 
 export function verifyStripe(req)
 {
+  console.log("verify stripe = 1");
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = req.headers['stripe-signature'];
   let event = req.body;
   if(!endpointSecret)
@@ -68,25 +92,22 @@ export function verifyStripe(req)
     console.warn("missing stripe signature in header");
     throw new Error("Missing Stripe signature");
   }
-  return stripeService.webhooks.constructEvent(event,signature, endpointSecret);
+  return stripe.webhooks.constructEvent(event,signature, endpointSecret);
 }
 
 export async function stripeEvent(event)
 {
 
+    console.log("entered stripeEvent();");
       const intent = event.data.object;
       switch (event.type){
           case "payment_intent.payment_failed":
-              console.error("payment failed", intent.id);
-              throw new Error("payment failed");
+              console.log("payment failed", intent.id);
+              return "failed";
           case "payment_intent.succeeded":
-              const cartId = intent.metadata.cart_id;
-              if(!cartId)
-              {
-                throw new Error("missing cart_id in payment intent metadata");
-              }
-              return cartId; 
+              console.log("payment succeeded", intent.id);
+              return "confirmed"; 
           default:
-            throw new Error(`unhandled stripe event: ${event}`);
+            return "undefined";
       }
 }
