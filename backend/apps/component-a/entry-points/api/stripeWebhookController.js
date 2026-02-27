@@ -12,6 +12,8 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     // edit order based on payment event
     // edit payment in database to event
     // clear cart
+    // add queue 
+    // prevent duplicate events
     console.log("webhook");
     let event;
     try{
@@ -20,7 +22,8 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     catch(e)
     {
         console.error("Verification Failed:",e.message);
-        return res.status(400).send("invalid webhook");
+        
+        return;// res.status(400).send("invalid webhook");
     }
     res.status(200).send();
         /* 
@@ -52,7 +55,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     catch(e)
     {
         console.error(`Stripe webhook failed (event type: ${event.type}):`, e.message);
-        return res.sendStatus(400)
+        return;// res.sendStatus(400)
     }
     return;
 
