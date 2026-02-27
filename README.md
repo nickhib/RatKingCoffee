@@ -1,7 +1,5 @@
-# ecommerce-full-stack - under development,
+# ecommerce-full-stack
 There have been a lot of updates!<br>
-Note:<br>
-Stripe is not implemented on the backend yet, so one will have to provide a client secret and api key for some features. Refer to environment, and stripe service in app
 1. Updated to the most recent Angular version.
 2. Changed all components to be standalone and split up features for a more modular design
 3. Rehaul of home page design: 
@@ -35,9 +33,10 @@ The application will collect payment information, process it, and then return an
 
 
 
-  Adding in animations here and there,<br>
+  i believe most of the core functionality of the site seems to be done. i must focus more on ux and how everything works and looks <br>
 Next steps: <br>
 more ui overhauls:<br>
 deal with potential bugs with UI, such as sizing<br>
-Update api / redesign it to work with Stripe and all other functions of the website.<br>
-Integrate Woocommerce, send receipts to users' emails on purchase<br>
+potentially switch to signals instead of rxjs for better response.<br>
+add hover menus, make sure home page is more responsive<br>
+potentially switch to tailwind for easier css use<br>
