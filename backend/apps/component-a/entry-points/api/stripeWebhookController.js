@@ -3,8 +3,10 @@ import { clearCart } from '../../data-access/cartRepository.js';
 import * as orderService from '../../domain/orderService.js'
 import * as paymentService from '../../domain/paymentService.js'
 import express, { Router } from 'express';
-
+import Queue from "bull";
 const router = Router();
+const paymentSuccessQueue = new Queue('payment-success-processing', process.env.REDIS_URL);
+const paymentFailedQueue = new Queue('payment-failed-processing', process.env.REDIS_URL);
 
 router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     // verify stripe
@@ -60,5 +62,4 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     return;
 
 });
-
 export default router;
