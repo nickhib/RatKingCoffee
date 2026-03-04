@@ -1,12 +1,13 @@
 import * as stripeService from '../../domain/stripeService.js'
-import { clearCart } from '../../data-access/cartRepository.js';
-import * as orderService from '../../domain/orderService.js'
-import * as paymentService from '../../domain/paymentService.js'
 import express, { Router } from 'express';
+import { processPaymentSuccess } from'../../jobs/paymentSuccessJob.js';
+import { processPaymentFailed } from'../../jobs/paymentFailedJob.js';
 import Queue from "bull";
 const router = Router();
 const paymentSuccessQueue = new Queue('payment-success-processing', process.env.REDIS_URL);
 const paymentFailedQueue = new Queue('payment-failed-processing', process.env.REDIS_URL);
+paymentSuccessQueue.process(5, processPaymentSuccess);
+paymentFailedQueue.process(3, processPaymentFailed);
 
 router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     // verify stripe
@@ -20,14 +21,43 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     let event;
     try{
         event = stripeService.verifyStripe(req);//stripe verification
+        const intent = event.data.object;
+        switch (event.type){
+            case "payment_intent.payment_failed":
+                console.log("payment failed", intent.id);
+                await paymentFailedQueue.add(
+                {
+                    eventId: event.id,
+                    paymentIntent: event.data.object
+                },
+                {
+                    jobId: event.id,
+                    removeOnComplete: true,
+                    attempts: 3
+                });
+                break;
+            case "payment_intent.succeeded":
+                console.log("payment succeeded", intent.id);
+                await paymentSuccessQueue.add(
+                {
+                    eventId: event.id,
+                    paymentIntent: event.data.object
+                },
+                {
+                    jobId: event.id,
+                    removeOnComplete: true,
+                    attempts: 3
+                });
+                break; 
+            default:
+                break;
+      }
     }
     catch(e)
     {
         console.error("Verification Failed:",e.message);
-        
-        return;// res.status(400).send("invalid webhook");
     }
-    res.status(200).send();
+    return res.status(200).send();
         /* 
         send status code 200 response early must be done. if stripe doesnt receive a timely response
         it may attempt to retry the webhook.
@@ -38,28 +68,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
         the webhook no matter what error you throw since we already sent it back 200. 
         
         */
-    const intent = event.data.object;
-    try 
-    {
-        const task = await stripeService.stripeEvent(event);//payment verification
-        const orderId = intent.metadata.order_id;
-        const cartId = intent.metadata.cart_id;
-        if(!orderId || !cartId){
-            throw new Error("Missing orderId or cartId in metadata");
-        }
-        await orderService.editOrder(orderId,task)
-        await paymentService.editPayment(orderId, task);
-        if(task ==="confirmed"){
-            await clearCart(cartId);//clearing cart
-            res.clearCookie('cart_id', cartId, { httpOnly: true, secure: false });
-        }
-    }
-    catch(e)
-    {
-        console.error(`Stripe webhook failed (event type: ${event.type}):`, e.message);
-        return;// res.sendStatus(400)
-    }
-    return;
 
 });
+
 export default router;

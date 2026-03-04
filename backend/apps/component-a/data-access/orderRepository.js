@@ -76,4 +76,8 @@ export async function editOrder(orderID, task) {
 
     }
 }
-        
+      export async function orderStatusLookup(orderID)
+      {
+        let db = await getDatabase(); 
+        return await db.get(`SELECT status FROM orders WHERE id = ?`,[orderID]);
+      }
