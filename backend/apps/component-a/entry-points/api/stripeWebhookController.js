@@ -70,5 +70,4 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
         */
 
 });
-
 export default router;
