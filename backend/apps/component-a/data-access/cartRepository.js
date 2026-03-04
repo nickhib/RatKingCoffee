@@ -4,6 +4,7 @@ import crypto from 'crypto';
 // helper function
 
 export async function createCart(req,res) {
+  //look up order from cart id orders check status if paid make new cart. 
     const db = await getDatabase();
     let cartId = req.cookies.cart_id;
     if (!cartId) {
