@@ -1,9 +1,9 @@
 # Use an official Node.js runtime as the base image
-FROM node:latest
+FROM node:alpine
 
 # Set the working directory
-WORKDIR /ratkingcaffeine
-
+WORKDIR /usr/src/app
+COPY . /usr/src/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
@@ -13,11 +13,8 @@ RUN npm install -g @angular/cli
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
-COPY . .
-
 # Expose port 4200
 EXPOSE 4200
 
 # Command to serve the Angular app
-CMD ["ng", "serve"]
+CMD ["ng", "serve","--host", "0.0.0.0"]
