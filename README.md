@@ -1,4 +1,9 @@
 # ecommerce-full-stack
+# run app
+docker compose up -d --build
+# location
+http://localhost:4201
+# info
 There have been a lot of updates!<br>
 1. Updated to the most recent Angular version.
 2. Changed all components to be standalone and split up features for a more modular design
