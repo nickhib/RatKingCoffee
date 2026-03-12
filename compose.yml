@@ -9,7 +9,16 @@ services:
     build: ./backend
     ports:
       - "3000:3000"
+    depends_on:
+      - redis
   redis:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend

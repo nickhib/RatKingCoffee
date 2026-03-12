@@ -12,7 +12,7 @@ import bodyParser from 'body-parser';
 const app = express();
 app.use(logRequests);
 app.use(cors({
-    origin: "http://localhost:4200",   // your Angular frontend URL
+    origin: ["http://localhost", "http://localhost:4200"],    // your Angular frontend URL
     credentials: true                  // allow cookies / auth headers
 })); // https://www.npmjs.com/package/cors
 app.use(cookieParser());//https://www.npmjs.com/package/cookie-parser
