@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 (async () => {
   await initDb();
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server listening on http://localhost:${PORT}`);
 });})();
 

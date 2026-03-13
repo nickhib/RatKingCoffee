@@ -12,8 +12,8 @@ import bodyParser from 'body-parser';
 const app = express();
 app.use(logRequests);
 app.use(cors({
-    origin: "http://localhost:4200",   // your Angular frontend URL
-    credentials: true                  // allow cookies / auth headers
+    origin: ["http://localhost", "http://localhost:4200","http://127.0.0.1:4201"],
+    credentials: true
 })); // https://www.npmjs.com/package/cors
 app.use(cookieParser());//https://www.npmjs.com/package/cookie-parser
 app.use(cookieHandler);//middleware to create cookie if user does not have one.
