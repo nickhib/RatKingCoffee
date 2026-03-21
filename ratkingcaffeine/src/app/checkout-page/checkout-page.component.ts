@@ -168,11 +168,9 @@ clientSecret: string | null = null;
       this.payment.mount(this.paymentElement.nativeElement);
   }
   }
-
   ngOnInit() {
-
-    this.cartItems = this.cartService.getFullCart(); 
-    this.total = this.cartService.getCashTotal();     
+    this.cartItems = this.cartService.getFullCart();
+    this.total = this.cartService.getCashTotal();    
   }
 
   async ngAfterViewInit() {
@@ -234,7 +232,6 @@ clientSecret: string | null = null;
         clear cart after payment was successful
         ideally put the fully paid for cart in a table before this for history
         */
-        this.cartService.clearCart();
 
         this.paymentSucceeded = true;
         this.isProcessing = false;

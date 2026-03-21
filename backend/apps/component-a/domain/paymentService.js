@@ -14,6 +14,7 @@ export async function useExistingPaymentIntent(req,orderId){
 
 
     */
+
    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     let paymentIntentId = await Repo.fetchPaymentIntent(req, orderId);
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);

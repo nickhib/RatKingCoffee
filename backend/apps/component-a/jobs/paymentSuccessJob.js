@@ -10,7 +10,7 @@ export async function processPaymentSuccess(job) {
             if(!orderId || !cartId){
                 throw new Error("Missing orderId or cartId in metadata");
             }
-            await orderService.editOrder(orderId,"confirmed")
+            await orderService.editOrder(orderId,"confirmed");
             await paymentService.editPayment(orderId, "confirmed");
             await clearCart(cartId);//clearing cart
         }
