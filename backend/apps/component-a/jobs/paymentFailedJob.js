@@ -19,6 +19,7 @@ export async function processPaymentFailed(job) {
         {
             console.error(`process payment successful failed: `, e.message);
         }
+        console.log(`Processing failed payment Complete: ${job.data.eventId}`);
         return;
 
 }

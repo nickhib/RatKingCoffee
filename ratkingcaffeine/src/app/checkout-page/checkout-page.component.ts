@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Stripe, StripeElements, StripeAddressElement,StripeCardCvcElement, StripeCardNumberElement, StripeCardExpiryElement, StripePaymentElement,Appearance } from '@stripe/stripe-js';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../services/cart.service'; 
-import {MatFormFieldModule} from '@angular/material/form-field'
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatStepperModule} from '@angular/material/stepper';
@@ -226,7 +226,10 @@ clientSecret: string | null = null;
       if(result.paymentIntent&&result.paymentIntent.status ==="succeeded")
       {
         this.router.navigate(['/home']);
+        this.cartService.clearCart();
+
         console.log("payment succeded");
+        
 
         /* 
         clear cart after payment was successful
