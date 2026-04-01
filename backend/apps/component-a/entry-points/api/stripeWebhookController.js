@@ -56,6 +56,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     catch(e)
     {
         console.error("Verification Failed:",e.message);
+        console.log("Verification Failed:",e.message);
     }
     return res.status(200).send();
         /* 
