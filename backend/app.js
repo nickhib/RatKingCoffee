@@ -6,7 +6,6 @@ import productRouter from './apps/component-a/entry-points/api/productController
 import cartRouter from './apps/component-a/entry-points/api/cartController.js';
 import stripeRouter  from  './apps/component-a/entry-points/api/stripeController.js';
 import webhookRouter  from  './apps/component-a/entry-points/api/stripeWebhookController.js';
-import stripeWebhookRouter  from  './apps/component-a/entry-points/api/stripeWebhookController.js';
 import cookieHandler from './middlewares/cookieHandler.js';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
