@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  stripePublishableKey: 'pk_test_51S7qDzRo9iJb8iV0IR3kJ64TZqRBasSvZyYY4SoCmWh4qux5xegZWq72CSe8kSrQNjZBCcNba3lESMO1D2UGZ6FQ001rcUvQCA',
+  stripePublishableKey: 'pk_test_51Ra5sBPwx5oTz4IRycQYyQK8wt8pMgFcEBT8xvKTacBSgi5nVepHaC4MoXOLdZ5jEJMgJxpfnm1khdqPDq4QbfBa00kxoUhpm0',
   backendUrl: 'http://localhost:3000'
 };

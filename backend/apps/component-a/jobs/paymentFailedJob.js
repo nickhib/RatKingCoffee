@@ -11,7 +11,7 @@ export async function processPaymentFailed(job) {
             if(!orderId || !cartId){
                 throw new Error("Missing orderId or cartId in metadata");
             }
-            await orderService.editOrder(orderId,"failed")
+            await orderService.editOrder(orderId,"failed");
             await paymentService.editPayment(orderId, "failed");
             await clearCart(cartId);//clearing cart
         }
@@ -19,6 +19,7 @@ export async function processPaymentFailed(job) {
         {
             console.error(`process payment successful failed: `, e.message);
         }
+        console.log(`Processing failed payment Complete: ${job.data.eventId}`);
         return;
 
 }

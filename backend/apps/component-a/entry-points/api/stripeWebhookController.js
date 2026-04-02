@@ -25,7 +25,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
         switch (event.type){
             case "payment_intent.payment_failed":
                 console.log("payment failed", intent.id);
-                await paymentFailedQueue.add(
+                 paymentFailedQueue.add(
                 {
                     eventId: event.id,
                     paymentIntent: event.data.object
@@ -38,7 +38,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
                 break;
             case "payment_intent.succeeded":
                 console.log("payment succeeded", intent.id);
-                await paymentSuccessQueue.add(
+                paymentSuccessQueue.add(
                 {
                     eventId: event.id,
                     paymentIntent: event.data.object
@@ -56,6 +56,7 @@ router.post("/", express.raw({type: 'application/json'}), async (req, res) => {
     catch(e)
     {
         console.error("Verification Failed:",e.message);
+        console.log("Verification Failed:",e.message);
     }
     return res.status(200).send();
         /* 

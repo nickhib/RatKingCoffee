@@ -78,7 +78,6 @@ export async function editPaymentIntent(req, paymentIntentId)
 
 export function verifyStripe(req)
 {
-  console.log("verify stripe = 1");
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = req.headers['stripe-signature'];
   let event = req.body;

@@ -1,9 +1,8 @@
 import * as stripeService from '../../domain/stripeService.js'
-import { clearCart } from '../../data-access/cartRepository.js';
-import * as orderService from '../../domain/orderService.js'
+
 import * as paymentService from '../../domain/paymentService.js'
 import { orderStatusLookup } from "../../data-access/orderRepository.js";
-import express, { Router } from 'express';
+import { Router } from 'express';
 
 const router = Router();
 /* 
@@ -14,7 +13,7 @@ const router = Router();
 //https://docs.stripe.com/payments/quickstart?lang=node
 router.post("/create-payment-intent", async (req, res) => {
     //perhaps run cron job to check if orders are expired?
-
+    res.clearCookie('order_id');
     let orderId = req.cookies.order_id;
     if(orderId){
         if(orderStatusLookup(orderId).status !='paid')
