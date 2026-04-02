@@ -1,8 +1,6 @@
 # ecommerce-full-stack
 # run app
 docker compose up -d --build
-# location
-http://localhost:4201
 # info
 There have been a lot of updates!<br>
 1. Updated to the most recent Angular version.
