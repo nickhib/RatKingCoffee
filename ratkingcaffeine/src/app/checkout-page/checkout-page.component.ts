@@ -59,7 +59,7 @@ clientSecret: string | null = null;
   firstFormGroup = this._formBuilder.group({
     EmailCtrl: ['', [Validators.required, Validators.email]],
   });
-  isLinear = false;
+  isLinear = true;
   secondFormGroup = this._formBuilder.group({
     firstNameCtrl: ['', [Validators.required]],
     lastNameCtrl: ['', [Validators.required]],
@@ -130,7 +130,7 @@ clientSecret: string | null = null;
     const selectedOption = this.shippingOptions.find(option => option.value === this.thirdFormGroup.value.shippingMethod);
   
     if(selectedOption){
-      this.total += selectedOption.price;
+      this.total = this.cartService.getCashTotal() + selectedOption.price;
       this.selectedOption = selectedOption.value;
       const appearance: Appearance = {
         theme: 'stripe',
@@ -152,7 +152,6 @@ clientSecret: string | null = null;
       // if one leaves checkout delete orderid  cookie as well
       const createResp = await this.stripeService.createPaymentIntent(this.firstFormGroup.value,this.secondFormGroup.value,this.cartItems, this.selectedOption);
       const clientSecret = createResp.clientSecret;
-      this.stripe = await this.stripeService.getStripe();
       if (!this.stripe) {
         console.error('Stripe.js failed to load.');
         this.generalError = 'Payment system unavailable. Please try later.';
