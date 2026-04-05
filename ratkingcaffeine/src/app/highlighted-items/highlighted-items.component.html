@@ -2,10 +2,9 @@
     <div class="highlighted-Items-Container">
         <h1>Featured Products!</h1>
        <div class="card-row">
-        <div class="card" *ngFor="let car of cards">
-           
-             <img [src]="car.imageUrl" alt="">
-             <h3>{{car.title}}</h3>
-        </div>
+        <a class="card" *ngFor="let c of cards" [routerLink]="['/products', c.id]">
+             <img [src]="c.imageUrl[0]" alt="{{ c.title }}">
+             <h3>{{c.title}}</h3>
+        </a>
        </div>
     </div>

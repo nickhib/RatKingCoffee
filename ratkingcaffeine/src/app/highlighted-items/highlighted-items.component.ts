@@ -1,45 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-interface Cards {
-  title: string;
-  description: string;
-  imageUrl: string;
-}
+import { RouterModule } from '@angular/router';
+import { ProductDataService } from '../services/product-data.service';
+import { ApiProduct } from '../models/product.model';
 
 @Component({
   selector: 'app-highlighted-items',
-  imports: [CommonModule,],
+  imports: [CommonModule, RouterModule],
   templateUrl: './highlighted-items.component.html',
   styleUrl: './highlighted-items.component.css'
 })
-export class HighlightedItemsComponent {
-  currentIndex = 0;
-  cards: Cards[] = [
-{
-      title: "Ethiopian Sunrise",
-      description: "A vibrant, fruity coffee with floral notes, perfect for a refreshing morning boost...",
-      imageUrl: "assets/image3.jpg"
-},
-{
-      title: "Colombian Dark Roast",
-      description: "Rich and bold, this full-bodied brew is ideal for espresso lovers and afternoon pick-me-ups...",
-      imageUrl: "assets/image3.jpg"
-},
-{
-      title: "Colombian Dark Roast",
-      description: "Rich and bold, this full-bodied brew is ideal for espresso lovers and afternoon pick-me-ups...",
-      imageUrl: "assets/image3.jpg"
-},
-{
-      title: "Colombian Dark Roast",
-      description: "Rich and bold, this full-bodied brew is ideal for espresso lovers and afternoon pick-me-ups...",
-      imageUrl: "assets/image3.jpg"
-},
-{
-      title: "Colombian Dark Roast",
-      description: "Rich and bold, this full-bodied brew is ideal for espresso lovers and afternoon pick-me-ups...",
-      imageUrl: "assets/image3.jpg"
-},
-];
+export class HighlightedItemsComponent implements OnInit {
+  cards: ApiProduct[] = [];
 
+  constructor(private productDataService: ProductDataService) {}
+
+  ngOnInit(): void {
+    this.productDataService.getProducts().subscribe(products => {
+      this.cards = products.slice(0, 5);
+    });
+  }
 }
