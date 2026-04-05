@@ -12,7 +12,7 @@ import bodyParser from 'body-parser';
 const app = express();
 app.use(logRequests);
 app.use(cors({
-    origin: ["http://localhost", "http://localhost:4200","http://127.0.0.1:4201","https://frontend-production-7a26.up.railway.app"],
+    origin: ["http://localhost", "http://localhost:4200","http://127.0.0.1:4201","https://ratkingcoffee-frontend-production.up.railway.app"],
     credentials: true
 })); // https://www.npmjs.com/package/cors
 app.use(cookieParser());//https://www.npmjs.com/package/cookie-parser
