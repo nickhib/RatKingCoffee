@@ -13,6 +13,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { environment } from 'src/environments/environment';
 @Component({
   standalone: true,
   selector: 'app-checkout-page',
@@ -193,7 +194,7 @@ clientSecret: string | null = null;
       const result = await this.stripe.confirmPayment({//
         elements: this.elements,
         confirmParams: {
-          return_url: 'http://localhost:4200/home',  // change as needed
+          return_url: `${environment.frontendUrl}/home`,  // change as needed
           payment_method_data: {
       billing_details: {
         name: `${this.secondFormGroup.value.firstNameCtrl! ?? ' '}' '${this.secondFormGroup.value.lastNameCtrl ?? ' '}`,

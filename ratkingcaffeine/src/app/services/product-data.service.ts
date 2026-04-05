@@ -3,6 +3,7 @@ import { Product, Filter, Coffee,Review, ApiProduct,reviewSummary} from '../mode
 import { HttpClient } from '@angular/common/http';
 import { Subject,Observable,of,BehaviorSubject } from 'rxjs';
 import { tap,map, shareReplay, catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class ProductDataService {
    //$ is just part of the naming convention
   private prefetch$: Observable<ApiProduct[]> | null = null;
   
-  private baseUrl = 'http://localhost:3000/api/products/';
+  private baseUrl = `${environment.backendUrl}/api/products/`;
    
   constructor(private http: HttpClient) {}
    preFetchProducts(): void 
@@ -106,7 +107,7 @@ filters: Filter [] = [
 // this can enforce encapsulation, only the service emits events
 
 get_ReviewSummary(productId: string) : Observable<reviewSummary>{
-  const url = `http://localhost:3000/api/products/${ productId }/reviews/summary`;
+  const url = `${environment.backendUrl}/api/products/${ productId }/reviews/summary`;
   return this.http.get<{summary: reviewSummary []}>(url).pipe( 
     map(res => res.summary[0]),
         tap(summary => {
@@ -118,7 +119,7 @@ get_ReviewSummary(productId: string) : Observable<reviewSummary>{
 
 
 getReviewsById(id: string , sort: string) {
-   const url = `http://localhost:3000/api/products/${ id }/reviews?sort=${sort}`;
+   const url = `${environment.backendUrl}/api/products/${ id }/reviews?sort=${sort}`;
      return this.http.get<{reviews: Review []}>(url).pipe( 
     map(res => res.reviews),
         tap(reviews=> {
@@ -142,7 +143,7 @@ getProduct(id: string) : Observable<ApiProduct>
 }
 addReview(id:string ,rev: Review)
 {
-  const url = `http://localhost:3000/api/products/${ id }/reviews`;
+  const url = `${environment.backendUrl}/api/products/${ id }/reviews`;
       this.http.post<Review>(url ,rev  ).pipe(
       tap((newReview) => {
         this.reviewSubject.next([...this.reviewSubject.getValue(),newReview]);

@@ -3,6 +3,7 @@ import { ApiProduct, shoppingCartItems } from '../models/product.model';
 import { LocalStorageService } from './local-storage.service';
 import { ProductDataService } from '../services/product-data.service';
 import { BehaviorSubject, Subject , Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CartItemsComponent } from '../cart-items/cart-items.component';
 import { F } from '@angular/cdk/a11y-module.d-DBHGyKoh';
@@ -21,7 +22,7 @@ export class CartService
 
   productitem?: ApiProduct;
 
-  private baseUrl = 'http://localhost:3000/api/cart';
+  private baseUrl = `${environment.backendUrl}/api/cart`;
 
   cart: shoppingCartItems[] =[];
 

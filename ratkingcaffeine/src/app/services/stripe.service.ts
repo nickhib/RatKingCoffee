@@ -8,7 +8,7 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class StripeService {
-  stripeUrl = 'http://localhost:3000/api/stripe/create-payment-intent';
+  stripeUrl = `${environment.backendUrl}/api/stripe/create-payment-intent`;
 
  private stripePromise = loadStripe(environment.stripePublishableKey);
   constructor(private http: HttpClient) { }
