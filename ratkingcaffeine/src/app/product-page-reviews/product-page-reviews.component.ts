@@ -91,8 +91,9 @@ openReviewForm(): void {
         }
         const productId = this.route.snapshot.paramMap.get('id');
         if(productId){
-        this.productDataService.addReview(productId ,newReview);
-        this.productDataService.get_ReviewSummary(productId).subscribe();
+        this.productDataService.addReview(productId ,newReview).subscribe(() => {
+          this.productDataService.get_ReviewSummary(productId).subscribe();
+        });
         }
         // toISOString().split('T')[0] should convert into two parts
         // time comes in something like this "2025-06-06T22:04:00.000Z" we split at T

@@ -15,7 +15,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
   templateUrl: './product-page-reviews-pagination.component.html',
   styleUrl: './product-page-reviews-pagination.component.css'
 })
-export class ProductPageReviewsPaginationComponent implements OnInit,OnChanges{
+export class ProductPageReviewsPaginationComponent implements OnInit{
   constructor(private route: ActivatedRoute,private productDataService: ProductDataService,public dialog: MatDialog) {}
   reviews: Review[] =[];
   displayedReviews: Review[] = [];
@@ -62,38 +62,24 @@ onSortChange(newSortValue: string) {
       this.endIndex = (this.pageIndex+1)*this.pageSize;
       this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
     }
-  ngOnInit(): void {
-     const productId = this.route.snapshot.paramMap.get('id');
-      if(productId)
-       this.productDataService.getReviewsById(productId,"reviewer").subscribe(
+  private loadReviews(productId: string)
+  {
+    this.productDataService.getReviewsById(productId,this.currentSort).subscribe(
       reviews => {
          this.reviews = reviews;
          this.length = this.reviews.length;
           this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
       });
-     if(productId)
-     {
-this.productDataService.reviewChanged$.subscribe((reviews) => {
-          this.reviews = reviews;
-          this.length = reviews.length;
-           this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
-        });
-    }
-     
-  };
-  
-  ngOnChanges(changes: SimpleChanges): void {
-      const productId = this.route.snapshot.paramMap.get('id');
-     
-     this.productItem = productId;
-     if(productId)
-     {
-        this.productDataService.getReviewsById(productId,this.currentSort).subscribe( reviews => {
-          this.reviews = reviews;
-          this.length = this.reviews.length;
-           this.displayedReviews = this.reviews.slice(this.startIndex, this.endIndex);
-        });
-     }
+  }
+  ngOnInit(): void {
+     const productId = this.route.snapshot.paramMap.get('id');
 
+      if(productId){
+        this.loadReviews(productId);
+        this.productDataService.reviewsChanged$.subscribe(() => { this.loadReviews(productId);
+      });
+  }
+     
   };
+
 }

@@ -141,13 +141,10 @@ getProduct(id: string) : Observable<ApiProduct>
   tap(data => console.log('Fetched product:', data),
 ));
 }
-addReview(id:string ,rev: Review)
-{
+addReview(id:string ,rev: Review): Observable<Review>
+{//return the observable ton
   const url = `${environment.backendUrl}/api/products/${ id }/reviews`;
-      this.http.post<Review>(url ,rev  ).pipe(
-      tap((newReview) => {
-        this.reviewSubject.next([...this.reviewSubject.getValue(),newReview]);
-      })).subscribe();
+  return this.http.post<Review>(url ,rev  ).pipe( tap(() =>this.reviewsChanged.next()));
 }
 
 getFilter() {

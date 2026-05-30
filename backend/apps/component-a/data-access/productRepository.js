@@ -24,12 +24,12 @@ export async function fetchReviewsByReviewer(id) {
 }
 export async function fetchReviewsByDate(id) {
     const db = await getDatabase();
-    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ? ORDER BY date ASC', [id]);
+    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ? ORDER BY date DESC', [id]);
     return rows;
 }
 export async function fetchReviewsByRating(id) {
     const db = await getDatabase();
-    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ? ORDER BY rating ASC', [id]);
+    const rows = await db.all('SELECT * FROM reviews WHERE coffee_id = ? ORDER BY rating DESC', [id]);
     return rows;
 }
 export async function fetchSummaryById(id) {

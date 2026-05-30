@@ -8,10 +8,13 @@ export async function getProductById(id) {
   return Repo.fetchById(id);
 }
 export async function getReviewsById(id,sort) {
-  
-  const rows = await Repo.fetchReviewsByReviewer(id,sort);
-
-  return rows;
+  if(sort === "reviewer")
+    return await Repo.fetchReviewsByReviewer(id);
+  if(sort === "rating")
+    return await Repo.fetchReviewsByRating(id);
+  if(sort === "date")
+    return await Repo.fetchReviewsByDate(id);
+  return [];
 }
 
 export async function getSummaryById(id) {
